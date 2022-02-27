@@ -1,0 +1,44 @@
+{
+    "name": "@laurensdeb/authorization-agent-uma",
+    "version": "1.0.0",
+    "author": "Laurens Debackere <Laurens.Debackere@UGent.be> (https://thundr.be)",
+    "license": "AGPL-3.0-only",
+    "private": true,
+    "types": "./dist/index.d.ts",
+    "lsd:module": "https://linkedsoftwaredependencies.org/bundles/npm/authorization-agent-uma",
+    "lsd:components": "dist/components/components.jsonld",
+    "lsd:contexts": {
+      "https://linkedsoftwaredependencies.org/bundles/npm/authorization-agent-uma/^1.0.0/components/context.jsonld": "dist/components/context.jsonld"
+    },
+    "lsd:importPaths": {
+      "https://linkedsoftwaredependencies.org/bundles/npm/authorization-agent-uma/^1.0.0/components/": "dist/components/",
+      "https://linkedsoftwaredependencies.org/bundles/npm/authorization-agent-uma/^1.0.0/config/": "config/",
+      "https://linkedsoftwaredependencies.org/bundles/npm/authorization-agent-uma/^1.0.0/dist/": "dist/"
+    },
+    "scripts": {
+      "build": "npm run build:ts && npm run build:components",
+      "build:components": "componentsjs-generator -s lib -c dist/components -i .componentsignore --lenient",
+      "prepare": "npm run build",
+      "build:ts": "tsc",
+      "lint": "eslint . --ext .ts",
+      "lint:fix": "eslint . --ext .ts --fix",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+      "@tsconfig/node16": "^1.0.2",
+      "@typescript-eslint/eslint-plugin": "^5.12.1",
+      "@typescript-eslint/parser": "^5.12.1",
+      "componentsjs-generator": "^2.6.1",
+      "eslint": "^8.10.0",
+      "eslint-config-google": "^0.14.0",
+      "typescript": "^4.5.5"
+    },
+    "dependencies": {
+      "@digita-ai/handlersjs-http": "0.7.1",
+      "componentsjs": "^4.5.0"
+    },
+    "files": [
+      "dist"
+    ]
+  }
+  

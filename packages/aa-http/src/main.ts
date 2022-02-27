@@ -16,7 +16,7 @@ async (variables: Record<string, any>) => {
 
   const manager = await ComponentsManager.build({
     mainModulePath,
-    logLevel: 'silly'
+    logLevel: 'silly',
   });
 
   await manager.configRegistry.register(configPath);

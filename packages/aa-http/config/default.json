@@ -35,7 +35,7 @@
                                     "handler": {
                                       "@type": "MockHttpHandler"
                                     },
-                                    "path": "/mock"
+                                    "path": "/.well-known/uma2-configuration"
                                 }
                             ]
                         }

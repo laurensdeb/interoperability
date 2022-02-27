@@ -8,6 +8,14 @@
         "name": "server",
         "path": "./packages/aa-http"
       },
+      {
+        "name": "uma",
+        "path": "./packages/aa-uma"
+      },
+      {
+        "name": "interop",
+        "path": "./packages/aa-interop"
+      },
     ],
     "settings": {
       "eslint.format.enable": true,
