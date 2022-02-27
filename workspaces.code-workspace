@@ -4,6 +4,10 @@
         "name": "root",
         "path": "."
       },
+      {
+        "name": "server",
+        "path": "./packages/aa-http"
+      },
     ],
     "settings": {
       "eslint.format.enable": true,

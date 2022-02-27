@@ -1,0 +1,51 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-core/^0.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-agent:default:NodeHttpServer",
+            "@type": "NodeHttpServer",
+            "port": "4000",
+            "host": "localhost",
+            "nodeHttpStreamsHandler": {
+                "@id": "urn:authorization-agent:default:NodeHttpRequestResponseHandler",
+                "@type": "NodeHttpRequestResponseHandler",
+                "httpHandler": {
+                    "@id": "urn:authorization-agent:default:RoutedHttpRequestHandler",
+                    "@type": "RoutedHttpRequestHandler",
+                    "handlerControllerList": [
+                        {
+                            "@id": "urn:authorization-agent:default:HttpHandlerController",
+                            "@type": "HttpHandlerController",
+                            "label": "ControllerList",
+                            "routes": [
+                                {
+                                    "@id": "urn:authorization-agent:default:MockRoute1",
+                                    "@type": "HttpHandlerRoute",
+                                    "operations": [
+                                        {
+                                            "@id": "urn:authorization-agent:default:GetOperation",
+                                            "@type": "HttpHandlerOperation",
+                                            "method": "GET",
+                                            "publish": false
+                                        }
+                                    ],
+                                    "handler": {
+                                      "@type": "MockHttpHandler"
+                                    },
+                                    "path": "/mock"
+                                }
+                            ]
+                        }
+                    ],
+                    "defaultHandler": {
+                        "@type": "MockHttpHandler"
+                    }
+                }
+            }
+        
+        }
+    ]
+}
