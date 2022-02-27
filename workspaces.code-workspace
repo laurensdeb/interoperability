@@ -1,0 +1,22 @@
+{
+    "folders": [
+      {
+        "name": "root",
+        "path": "."
+      },
+    ],
+    "settings": {
+      "eslint.format.enable": true,
+      "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+      },
+      "files.eol": "\n",
+    },
+    "extensions": {
+      "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "humao.rest-client"
+      ]
+    }
+  }
