@@ -1,18 +1,38 @@
 import * as path from 'path';
 import {ComponentsManager} from 'componentsjs';
 import {NodeHttpServer} from '@digita-ai/handlersjs-http';
+import yargs from 'yargs';
 
-export const launch: (variables: Record<string, any>) => Promise<void> =
-async (variables: Record<string, any>) => {
-  const mainModulePath = variables['urn:authorization-agent:variables:mainModulePath'] ?
+const argv = yargs(process.argv.slice(2)).options({
+  config: {type: 'string'},
+  port: {type: 'number', default: 4000},
+  host: {type: 'string', default: 'localhost'},
+  protocol: {type: 'string', default: 'http'},
+  mainModulePath: {type: 'string'},
+  customConfigPath: {type: 'string'},
+}).parseSync();
+
+export const launch: () => Promise<void> =
+async () => {
+  const variables: Record<string, any> = {};
+
+  variables['urn:authorization-agent:variables:port'] = argv.port;
+  variables['urn:authorization-agent:variables:host'] = argv.host;
+  variables['urn:authorization-agent:variables:protocol'] = argv.protocol;
+  variables['urn:authorization-agent:variables:baseUrl'] = `${argv.protocol}://${argv.host}:${argv.port}`;
+
+  variables['urn:authorization-agent:variables:mainModulePath'] = argv.mainModulePath ?
     path.join(process.cwd(),
-        variables['urn:authorization-agent:variables:mainModulePath']) :
+        argv.mainModulePath) :
     path.join(__dirname, '../');
-
-  const configPath = variables['urn:authorization-agent:variables:customConfigPath'] ?
+  variables['urn:authorization-agent:variables:customConfigPath'] = argv.customConfigPath ?
     path.join(process.cwd(),
-        variables['urn:authorization-agent:variables:customConfigPath']) :
+        argv.customConfigPath) :
     path.join(__dirname, '../config/default.json');
+
+  const mainModulePath = variables['urn:authorization-agent:variables:mainModulePath'];
+
+  const configPath = variables['urn:authorization-agent:variables:customConfigPath'];
 
   const manager = await ComponentsManager.build({
     mainModulePath,
@@ -27,4 +47,4 @@ async (variables: Record<string, any>) => {
   server.start();
 };
 
-launch({});
+launch();
