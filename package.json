@@ -8,7 +8,9 @@
     "lint:all": "lerna run lint --parallel",
     "lint:fix:all": "lerna run lint:fix --parallel",
     "test:all": "lerna run test --parallel",
-    "build:all": "lerna run build"
+    "build:all": "lerna run build",
+    "commit": "commit",
+    "prepare": "husky install"
   },
   "workspaces": {
     "packages": [
