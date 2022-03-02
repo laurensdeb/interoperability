@@ -37,7 +37,7 @@ export class JwksRequestHandler extends HttpHandler {
       return of({body: '', headers: {allow: 'GET'}, status: 405});
     }
     return from(this.keyholder.getJwks()).pipe(map((data) => {
-      return {body: JSON.stringify(data), headers: {}, status: 200};
+      return {body: JSON.stringify(data), headers: {'content-type': 'application/json'}, status: 200};
     }));
   }
 }
