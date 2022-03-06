@@ -1,4 +1,5 @@
 # Authorization Agent for Community Solid Server
+[![CI/CD](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml)
 This repository implements an experimental Authorization Agent for the Community Solid Server.
 
 ## Architecture
