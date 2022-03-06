@@ -11,12 +11,6 @@ jobs:
       - uses: wagoid/commitlint-github-action@v4
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        package:
-          - aa-http
-          - aa-interop
-          - aa-uma
     steps:
       - name: Use Node.js 16.x
         uses: actions/setup-node@v2
@@ -29,5 +23,4 @@ jobs:
       - name: Build packages
         run: npm install && npm run bootstrap
       - name: Run tests
-        working-directory: ./packages/${{ matrix.package }}
-        run: npm test
+        run: npm run test:all
