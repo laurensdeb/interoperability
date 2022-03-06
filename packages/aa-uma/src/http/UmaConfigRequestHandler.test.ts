@@ -15,10 +15,6 @@ describe('Happy flows', () => {
       },
     };
   });
-
-  test('Can handle any request', async () => {
-    expect(await lastValueFrom(requestHandler.canHandle(requestContext))).toEqual(true);
-  });
   test('Handles GET request with configuration in body', async () => {
     const response = await lastValueFrom(requestHandler.handle(requestContext));
     expect(response.body).toEqual(JSON.stringify({

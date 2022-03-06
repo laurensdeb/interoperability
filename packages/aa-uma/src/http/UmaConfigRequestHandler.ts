@@ -12,17 +12,7 @@ export interface UmaConfiguration {
  * An HttpHandler used for returning the configuration
  * of the UMA Authorization Service.
  */
-export class UmaConfigRequestHandler extends HttpHandler {
-  /**
-   * Indicates this handler accepts any input.
-   *
-   * @param {HttpHandlerContext} context - the irrelevant incoming context
-   * @return {Observable<boolean>} always `of(true)`
-   */
-  canHandle(context: HttpHandlerContext): Observable<boolean> {
-    return of(true);
-  }
-
+export class UmaConfigRequestHandler implements HttpHandler {
   /**
    * Returns UMA Configuration for the AS
    * @return {UmaConfiguration} - AS Configuration

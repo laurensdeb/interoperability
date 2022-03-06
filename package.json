@@ -2,6 +2,7 @@
   "name": "@laurensdeb/authorization-agent",
   "private": true,
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "clean": "npm run clean:locks && npm run clean:modules",
     "clean:locks": "npm i --package-locks-only && lerna exec 'npm i --package-locks-only'",
     "clean:modules": "lerna clean && shx rm -rf ./node_modules/",
@@ -20,10 +21,10 @@
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
-    "@commitlint/prompt-cli": "^16.1.0",
     "@commitlint/config-lerna-scopes": "^16.0.0",
+    "@commitlint/prompt-cli": "^16.1.0",
     "husky": "^7.0.4",
-    "shx": "^0.3.3",
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "shx": "^0.3.3"
   }
 }

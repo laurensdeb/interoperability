@@ -3,8 +3,8 @@
       "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-http/^1.0.0/components/context.jsonld"
     ],
     "import": [
-        "files-laah:config/app/variables/default.json",
-        "files-laah:config/uma/default.json"
+        "laah:config/app/variables/default.json",
+        "laah:config/uma/default.json"
     ],
     "@graph": [
         {

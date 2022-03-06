@@ -35,14 +35,14 @@
       "@tsconfig/node16": "^1.0.2",
       "@typescript-eslint/eslint-plugin": "^5.12.1",
       "@typescript-eslint/parser": "^5.12.1",
-      "componentsjs-generator": "^2.6.1",
+      "componentsjs-generator": "3.0.0-beta.7",
       "eslint": "^8.10.0",
       "eslint-config-google": "^0.14.0",
       "typescript": "^4.5.5"
     },
     "dependencies": {
-      "componentsjs": "^4.5.0",
-      "@digita-ai/handlersjs-http": "0.7.1"
+      "@digita-ai/handlersjs-http": "0.8.5",
+      "componentsjs": "5.0.0-beta.7"
     },
     "files": [
         ".componentsignore",

@@ -7,6 +7,12 @@
     ],
     "@graph": [
         {
+            "@id": "urn:authorization-agent:default:GetOperation",
+            "@type": "HttpHandlerOperation",
+            "method": "GET",
+            "publish": false
+        },
+        {
             "@id": "urn:authorization-agent:default:NodeHttpServer",
             "@type": "NodeHttpServer",
             "port": { "@id": "urn:authorization-agent:variables:port" },
@@ -28,10 +34,7 @@
                                     "@type": "HttpHandlerRoute",
                                     "operations": [
                                         {
-                                            "@id": "urn:authorization-agent:default:GetOperation",
-                                            "@type": "HttpHandlerOperation",
-                                            "method": "GET",
-                                            "publish": false
+                                            "@id": "urn:authorization-agent:default:GetOperation"
                                         }
                                     ],
                                     "handler": {
@@ -44,10 +47,7 @@
                                     "@type": "HttpHandlerRoute",
                                     "operations": [
                                         {
-                                            "@id": "urn:authorization-agent:default:GetOperation",
-                                            "@type": "HttpHandlerOperation",
-                                            "method": "GET",
-                                            "publish": false
+                                            "@id": "urn:authorization-agent:default:GetOperation"
                                         }
                                     ],
                                     "handler": {
