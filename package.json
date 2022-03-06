@@ -2,7 +2,7 @@
   "name": "@laurensdeb/authorization-agent",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "npm ci && lerna bootstrap",
     "clean": "npm run clean:locks && npm run clean:modules",
     "clean:locks": "npm i --package-locks-only && lerna exec 'npm i --package-locks-only'",
     "clean:modules": "lerna clean && shx rm -rf ./node_modules/",

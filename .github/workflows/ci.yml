@@ -16,11 +16,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16.x
+          registry-url: https://npm.pkg.github.com
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm install
       - name: Build packages
-        run: npm install && npm run bootstrap
+        run: npm run bootstrap
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Run build
+        run: npm run build:all
       - name: Run tests
         run: npm run test:all
