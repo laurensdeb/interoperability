@@ -1,0 +1,29 @@
+name: Lint Commit Messages
+on: [pull_request, push]
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v4
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Build packages
+        run: npm run bootstrap
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Run build
+        run: npm run build:all
+      - name: Run tests
+        run: npm run test:all
