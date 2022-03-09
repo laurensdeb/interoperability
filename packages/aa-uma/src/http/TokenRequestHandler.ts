@@ -1,6 +1,7 @@
 import {UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
 import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
+import {throwError} from 'rxjs';
 import {from, map, Observable} from 'rxjs';
 
 export interface TokenResponse {
@@ -46,13 +47,13 @@ export class TokenRequestHandler implements HttpHandler {
    */
   handle(input: HttpHandlerContext): Observable<HttpHandlerResponse<any>> {
     if (input.request.headers['content-type'] !== 'application/x-www-form-urlencoded') {
-      throw new UnsupportedMediaTypeHttpError();
+      return throwError(() => new UnsupportedMediaTypeHttpError());
     }
 
     const bodyParams = new URLSearchParams(input.request.body);
 
     if (!bodyParams.has(GRANT_TYPE) || !bodyParams.get(GRANT_TYPE)) {
-      throw new BadRequestHttpError('Request body is missing required key \'grant_type\'.');
+      return throwError(() => new BadRequestHttpError('Request body is missing required key \'grant_type\'.'));
     }
     const grantType = bodyParams.get(GRANT_TYPE)!;
 
@@ -62,7 +63,7 @@ export class TokenRequestHandler implements HttpHandler {
     });
 
     if (!this.grantProcessors.has(grantType)) {
-      throw new BadRequestHttpError(`Unsupported grant type: '${grantType}'`);
+      return throwError(() => new BadRequestHttpError(`Unsupported grant type: '${grantType}'`));
     }
 
     const grantProcessor = this.grantProcessors.get(grantType)!;
@@ -74,3 +75,5 @@ export class TokenRequestHandler implements HttpHandler {
     }));
   }
 }
+
+

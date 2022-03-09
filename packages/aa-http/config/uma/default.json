@@ -10,7 +10,13 @@
             "@id": "urn:authorization-agent:default:GetOperation",
             "@type": "HttpHandlerOperation",
             "method": "GET",
-            "publish": false
+            "publish": true
+        },
+        {
+            "@id": "urn:authorization-agent:default:PostOperation",
+            "@type": "HttpHandlerOperation",
+            "method": "POST",
+            "publish": true
         },
         {
             "@id": "urn:authorization-agent:default:NodeHttpServer",
@@ -52,12 +58,32 @@
                                     ],
                                     "handler": {
                                       "@type": "JwksRequestHandler",
-                                      "JwksRequestHandler:_keyholder": {
+                                      "keyholder": {
                                           "@type": "InMemoryJwksKeyHolder",
-                                          "InMemoryJwksKeyHolder:_alg": "ES256"
+                                          "alg": "ES256"
                                       }
                                     },
                                     "path": "/keys"
+                                },
+                                {
+                                    "@id": "urn:authorization-agent:default:TokenRoute",
+                                    "@type": "HttpHandlerRoute",
+                                    "operations": [
+                                        {
+                                            "@id": "urn:authorization-agent:default:PostOperation"
+                                        }
+                                    ],
+                                    "handler": {
+                                      "@type": "JsonHttpErrorHandler",
+                                      "nestedHandler": {
+                                      "@type": "TokenRequestHandler",
+                                      "processors": [{
+                                          "@id": "urn:authorization-agent:default:UmaGrantProcessor",
+                                          "@type": "MockUmaGrantProcessor"
+                                      }]
+                                      }
+                                    },
+                                    "path": "/token"
                                 }
                             ]
                         }

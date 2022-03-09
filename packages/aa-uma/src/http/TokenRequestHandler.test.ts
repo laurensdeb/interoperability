@@ -1,32 +1,10 @@
-import {GrantTypeProcessor, TokenRequestHandler, TokenResponse} from './TokenRequestHandler';
+import {TokenRequestHandler} from './TokenRequestHandler';
 import {lastValueFrom} from 'rxjs';
 import {BadRequestHttpError, HttpHandlerContext, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
-
-/**
- * Simple Mocking Grant Processor
- */
-class MockGrantProcessor implements GrantTypeProcessor {
-  /**
-     * Get Supported Grant Type URI
-     * @return {string} Supported grant type URI
-     */
-  public getSupportedGrantType(): string {
-    return 'urn:ietf:params:oauth:grant-type:uma-ticket';
-  }
-  /**
-     * Mocks successfull grant processing.
-     *
-     * @param {TokenRequest} body - request body
-     * @param {HttpHandlerContext} context - request context
-     * @return {Promise<TokenResponse>} tokens
-     */
-  public async process(body: Map<string, string>, context: HttpHandlerContext): Promise<TokenResponse> {
-    return {token_type: 'Bearer', access_token: 'abc'};
-  }
-}
+import {MockUmaGrantProcessor} from '../token/MockUmaGrantProcessor';
 
 describe('Happy flows', () => {
-  const requestHandler = new TokenRequestHandler([new MockGrantProcessor()]);
+  const requestHandler = new TokenRequestHandler([new MockUmaGrantProcessor()]);
   let requestContext: HttpHandlerContext;
 
   beforeEach(() => {
@@ -51,45 +29,45 @@ describe('Happy flows', () => {
 });
 
 describe('Unhappy flows', () => {
-  const requestHandler = new TokenRequestHandler([new MockGrantProcessor()]);
+  const requestHandler = new TokenRequestHandler([new MockUmaGrantProcessor()]);
 
   test('Invalid media type', async () => {
-    expect(() => requestHandler.handle({
+    expect(lastValueFrom(requestHandler.handle({
       request: {
         url: new URL('http://localhost/token'),
         method: 'POST',
         headers: {'content-type': 'application/json'},
       },
-    })).toThrow(UnsupportedMediaTypeHttpError);
+    }))).rejects.toThrow(UnsupportedMediaTypeHttpError);
   });
   test('Missing \'grant_type\' in body.', async () => {
-    expect(() => requestHandler.handle({
+    expect(lastValueFrom(requestHandler.handle({
       request: {
         url: new URL('http://localhost/token'),
         method: 'POST',
         body: ``,
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       },
-    })).toThrow(BadRequestHttpError);
+    }))).rejects.toThrow(BadRequestHttpError);
   });
   test('Empty \'grant_type\' in body.', async () => {
-    expect(() => requestHandler.handle({
+    expect(lastValueFrom(requestHandler.handle({
       request: {
         url: new URL('http://localhost/token'),
         method: 'POST',
         body: `grant_type=`,
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       },
-    })).toThrow(BadRequestHttpError);
+    }))).rejects.toThrow(BadRequestHttpError);
   });
   test('Unsupported \'grant_type\' in body.', async () => {
-    expect(() => requestHandler.handle({
+    expect(lastValueFrom(requestHandler.handle({
       request: {
         url: new URL('http://localhost/token'),
         method: 'POST',
         body: `grant_type=abc`,
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       },
-    })).toThrow('Unsupported grant type: \'abc\'');
+    }))).rejects.toThrow('Unsupported grant type: \'abc\'');
   });
 });
