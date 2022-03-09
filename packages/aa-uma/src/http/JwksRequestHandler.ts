@@ -22,9 +22,6 @@ export class JwksRequestHandler implements HttpHandler {
      * @return {Observable<HttpHandlerResponse>} - the JWKS response
      */
   handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
-    if (context.request.method !== 'GET') {
-      return of({body: '', headers: {allow: 'GET'}, status: 405});
-    }
     return from(this.keyholder.getJwks()).pipe(map((data) => {
       return {body: JSON.stringify(data), headers: {'content-type': 'application/json'}, status: 200};
     }));

@@ -9,3 +9,5 @@ by the [Solid Application Interoperability Draft](https://solid.github.io/data-i
 and the UMA AS that is specified by the [Solid-OIDC specification](https://solid.github.io/solid-oidc/). Finally we
 wire together the functionality provided by the components in each of these packages in the [`authorization-agent-http`](/packages/aa-http/)
 module using [ComponentsJS dependency injection](https://componentsjs.readthedocs.io/en/latest/).
+
+For a more detailed architectural discussion, see [`docs/architecture.md`](/docs/architecture.md)
