@@ -1,5 +1,5 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {Observable, of, throwError} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 export const statusCodes: { [code: number]: string } = {
