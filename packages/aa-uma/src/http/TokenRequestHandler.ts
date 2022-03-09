@@ -1,7 +1,7 @@
 import {UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
 import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {from, map, Observable, of} from 'rxjs';
+import {from, map, Observable} from 'rxjs';
 
 export interface TokenResponse {
   access_token: string,
@@ -56,24 +56,19 @@ export class TokenRequestHandler implements HttpHandler {
     }
     const grantType = bodyParams.get(GRANT_TYPE)!;
 
-    // Collect body params in map
     const parsedRequestBody = new Map<string, string>();
     bodyParams.forEach((value, key) => {
       parsedRequestBody.set(key, value);
     });
 
-    // Get processor for grant type
     if (!this.grantProcessors.has(grantType)) {
       throw new BadRequestHttpError(`Unsupported grant type: '${grantType}'`);
     }
 
-    // Process grant type
     const grantProcessor = this.grantProcessors.get(grantType)!;
 
-    // Return token response
     const tokenResponse = from(grantProcessor.process(parsedRequestBody, input));
 
-    // Serialize response as JSON
     return tokenResponse.pipe(map((data) => {
       return {body: JSON.stringify(data), headers: {'content-type': 'application/json'}, status: 200};
     }));

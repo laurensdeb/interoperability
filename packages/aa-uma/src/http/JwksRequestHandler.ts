@@ -1,5 +1,5 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {Observable, of, from} from 'rxjs';
+import {Observable, from} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
 
