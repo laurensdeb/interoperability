@@ -25,25 +25,3 @@ describe('Happy flows', () => {
     expect(response.status).toEqual(200);
   });
 });
-
-describe('Unhappy flows', () => {
-  const requestHandler = new UmaConfigRequestHandler();
-  let requestContext: HttpHandlerContext;
-
-  beforeEach(() => {
-    requestContext = {
-      request: {
-        url: new URL('http://localhost/'),
-        method: 'POST',
-        headers: {},
-      },
-    };
-  });
-
-  test('Error for unsupported method', async () => {
-    const response = await lastValueFrom(requestHandler.handle(requestContext));
-    expect(response.body).toBeFalsy();
-    expect(response.status).toEqual(405);
-    expect(response.headers).toEqual({allow: 'GET'});
-  });
-});

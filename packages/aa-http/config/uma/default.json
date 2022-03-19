@@ -10,7 +10,18 @@
             "@id": "urn:authorization-agent:default:GetOperation",
             "@type": "HttpHandlerOperation",
             "method": "GET",
-            "publish": false
+            "publish": true
+        },
+        {
+            "@id": "urn:authorization-agent:default:PostOperation",
+            "@type": "HttpHandlerOperation",
+            "method": "POST",
+            "publish": true
+        },
+        {
+            "@id": "urn:authorization-agent:default:DefaultKeyholder",
+            "@type": "InMemoryJwksKeyHolder",
+            "alg": "ES256"
         },
         {
             "@id": "urn:authorization-agent:default:NodeHttpServer",
@@ -52,12 +63,48 @@
                                     ],
                                     "handler": {
                                       "@type": "JwksRequestHandler",
-                                      "JwksRequestHandler:_keyholder": {
-                                          "@type": "InMemoryJwksKeyHolder",
-                                          "InMemoryJwksKeyHolder:_alg": "ES256"
+                                      "keyholder": {
+                                         "@id": "urn:authorization-agent:default:DefaultKeyholder"
                                       }
                                     },
                                     "path": "/keys"
+                                },
+                                {
+                                    "@id": "urn:authorization-agent:default:TokenRoute",
+                                    "@type": "HttpHandlerRoute",
+                                    "operations": [
+                                        {
+                                            "@id": "urn:authorization-agent:default:PostOperation"
+                                        }
+                                    ],
+                                    "handler": {
+                                      "@type": "JsonHttpErrorHandler",
+                                      "nestedHandler": {
+                                      "@type": "TokenRequestHandler",
+                                      "processors": [{
+                                          "@id": "urn:authorization-agent:default:UmaGrantProcessor",
+                                          "@type": "UmaGrantProcessor",
+                                          "ticketFactory": {
+                                              "@type": "JwtTicketFactory",
+                                              "params_expirationTime": "5m",
+                                              "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                                              "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                                          },
+                                          "tokenFactory": {
+                                              "@type": "JwtTokenFactory",
+                                              "params_expirationTime": "5m",
+                                              "params_aud": "solid",
+                                              "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                                              "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                                          },
+                                          "claimTokenProcessors": [{
+                                              "@type": "DpopClaimTokenProcessor"
+                                          }],
+                                          "authorizers": [{"@type": "AllAuthorizer"}]
+                                      }]
+                                      }
+                                    },
+                                    "path": "/token"
                                 }
                             ]
                         }

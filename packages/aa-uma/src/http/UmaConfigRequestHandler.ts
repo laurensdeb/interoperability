@@ -28,10 +28,6 @@ export class UmaConfigRequestHandler implements HttpHandler {
    * @return {Observable<HttpHandlerResponse>} - the mock response
    */
   handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
-    if (context.request.method !== 'GET') {
-      return of({body: '', headers: {allow: 'GET'}, status: 405});
-    }
-
     const response: HttpHandlerResponse = {
       body: JSON.stringify(this.getUmaConfig()),
       headers: {'content-type': 'application/json'},

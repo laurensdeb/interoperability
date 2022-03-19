@@ -2,6 +2,9 @@ import {InMemoryJwksKeyHolder} from './InMemoryJwksKeyHolder';
 
 describe('Testing on empty holder', () => {
   const keyholder = new InMemoryJwksKeyHolder('ES256');
+  test('Keyholder should return algorithm', () => {
+    expect(keyholder.getAlg()).toEqual('ES256');
+  });
   test('Empty holder should have no Key Ids', async () => {
     expect(keyholder.getKids()).toStrictEqual([]);
   });
@@ -24,6 +27,10 @@ describe('Testing on empty holder', () => {
       expect(e.message).toEqual('The specified kid \'abc\' does not exist in the holder.');
     }
   });
+  test('Getting default signing key from holder should create keypair', async () => {
+    expect(await keyholder.getDefaultKey()).toBeTruthy();
+    expect(keyholder.getKids().length).toBeGreaterThan(0);
+  });
 });
 
 describe('Validity of constructor arguments', () => {
@@ -32,6 +39,7 @@ describe('Validity of constructor arguments', () => {
         .toThrowError('The chosen algorithm \'abc\' is not supported by the InMemoryJwksKeyHolder.');
   });
 });
+
 
 describe('Testing operations on filled holder.', () => {
   const keyholder = new InMemoryJwksKeyHolder('ES256');
@@ -43,6 +51,9 @@ describe('Testing operations on filled holder.', () => {
   });
   test('Holder should have one key ID', async () => {
     expect(keyholder.getKids()).toStrictEqual([kid]);
+  });
+  test('Holder should have a default key', async () => {
+    expect(await keyholder.getDefaultKey()).toStrictEqual(kid);
   });
   test('Holder should have one key in JWKS', async () => {
     expect((await keyholder.getJwks()).keys.length).toStrictEqual(1);

@@ -1,5 +1,5 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {Observable, of, from} from 'rxjs';
+import {Observable, from} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
 
@@ -22,9 +22,6 @@ export class JwksRequestHandler implements HttpHandler {
      * @return {Observable<HttpHandlerResponse>} - the JWKS response
      */
   handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
-    if (context.request.method !== 'GET') {
-      return of({body: '', headers: {allow: 'GET'}, status: 405});
-    }
     return from(this.keyholder.getJwks()).pipe(map((data) => {
       return {body: JSON.stringify(data), headers: {'content-type': 'application/json'}, status: 200};
     }));
