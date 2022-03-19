@@ -19,6 +19,11 @@
             "publish": true
         },
         {
+            "@id": "urn:authorization-agent:default:DefaultKeyholder",
+            "@type": "InMemoryJwksKeyHolder",
+            "alg": "ES256"
+        },
+        {
             "@id": "urn:authorization-agent:default:NodeHttpServer",
             "@type": "NodeHttpServer",
             "port": { "@id": "urn:authorization-agent:variables:port" },
@@ -59,8 +64,7 @@
                                     "handler": {
                                       "@type": "JwksRequestHandler",
                                       "keyholder": {
-                                          "@type": "InMemoryJwksKeyHolder",
-                                          "alg": "ES256"
+                                         "@id": "urn:authorization-agent:default:DefaultKeyholder"
                                       }
                                     },
                                     "path": "/keys"
@@ -79,7 +83,24 @@
                                       "@type": "TokenRequestHandler",
                                       "processors": [{
                                           "@id": "urn:authorization-agent:default:UmaGrantProcessor",
-                                          "@type": "MockUmaGrantProcessor"
+                                          "@type": "UmaGrantProcessor",
+                                          "ticketFactory": {
+                                              "@type": "JwtTicketFactory",
+                                              "params_expirationTime": "5m",
+                                              "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                                              "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                                          },
+                                          "tokenFactory": {
+                                              "@type": "JwtTokenFactory",
+                                              "params_expirationTime": "5m",
+                                              "params_aud": "solid",
+                                              "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                                              "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                                          },
+                                          "claimTokenProcessors": [{
+                                              "@type": "DpopClaimTokenProcessor"
+                                          }],
+                                          "authorizers": [{"@type": "AllAuthorizer"}]
                                       }]
                                       }
                                     },
