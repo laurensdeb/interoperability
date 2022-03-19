@@ -3,23 +3,8 @@ import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
 import {throwError} from 'rxjs';
 import {from, map, Observable} from 'rxjs';
+import {GrantTypeProcessor} from '../token/GrantTypeProcessor';
 
-export interface TokenResponse {
-  access_token: string,
-  refresh_token?: string,
-  id_token?: string,
-  token_type: string,
-  expires_in?: number
-}
-
-/**
- * A GrantTypeProcessor processes the token request
- * for a specific grant type.
- */
-export abstract class GrantTypeProcessor {
-  public abstract getSupportedGrantType(): string;
-  public abstract process(body: Map<string, string>, context: HttpHandlerContext): Promise<TokenResponse>;
-}
 
 const GRANT_TYPE = 'grant_type';
 /**
@@ -68,6 +53,7 @@ export class TokenRequestHandler implements HttpHandler {
 
     const grantProcessor = this.grantProcessors.get(grantType)!;
 
+    // TODO: What  if grant processor throws an error?
     const tokenResponse = from(grantProcessor.process(parsedRequestBody, input));
 
     return tokenResponse.pipe(map((data) => {

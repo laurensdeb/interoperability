@@ -14,6 +14,7 @@ export interface KeyPair {
  */
 export class InMemoryJwksKeyHolder extends JwksKeyHolder {
   private readonly keys: Map<string, KeyPair>;
+  private currentKid: undefined | string;
 
   /**
    * Yields a new instance of the InMemoryKeyholder
@@ -30,11 +31,31 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
   }
 
   /**
+   * Get algorithm used by keyholder.
+   *
+   * @return {string} - algorithm
+   */
+  getAlg(): string {
+    return this.alg;
+  }
+
+  /**
    * Get all key identifiers in holder
    * @return {string[]}
    */
   getKids(): string[] {
     return [...this.keys.keys()];
+  }
+
+  /**
+   * Get default private key
+   * @return {string} - default kid
+   */
+  async getDefaultKey(): Promise<string> {
+    if (!this.currentKid) {
+      await this.generateKeypair();
+    }
+    return this.currentKid!;
   }
 
   /**
@@ -70,7 +91,7 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
     if (!this.keys.has(kid)) {
       throw new Error(`The specified kid '${kid}' does not exist in the holder.`);
     }
-    return await exportJWK(this.keys.get(kid)!.publicKey);
+    return {kid: kid, ...await exportJWK(this.keys.get(kid)!.publicKey)};
   }
 
   /**
@@ -90,6 +111,7 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
     const kid = v4();
 
     this.keys.set(kid, key);
+    this.currentKid = kid;
     return kid;
   }
 }

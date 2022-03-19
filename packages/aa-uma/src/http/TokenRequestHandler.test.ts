@@ -1,13 +1,17 @@
 import {TokenRequestHandler} from './TokenRequestHandler';
 import {lastValueFrom} from 'rxjs';
 import {BadRequestHttpError, HttpHandlerContext, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
-import {MockUmaGrantProcessor} from '../token/MockUmaGrantProcessor';
 
 describe('Happy flows', () => {
-  const requestHandler = new TokenRequestHandler([new MockUmaGrantProcessor()]);
+  let requestHandler: TokenRequestHandler;
   let requestContext: HttpHandlerContext;
+  const getSupportedGrantType = jest.fn();
+  const process = jest.fn();
 
   beforeEach(() => {
+    jest.resetAllMocks();
+    getSupportedGrantType.mockReturnValue('urn:ietf:params:oauth:grant-type:uma-ticket');
+    requestHandler = new TokenRequestHandler([{process, getSupportedGrantType}]);
     requestContext = {
       request: {
         url: new URL('http://localhost/token'),
@@ -21,7 +25,10 @@ describe('Happy flows', () => {
     };
   });
 
-  test('Returns JWKS in response body', async () => {
+  test('Returns Token in response body', async () => {
+    process.mockReturnValueOnce(new Promise((resolve, reject) => {
+      resolve({token_type: 'Bearer', access_token: 'abc'});
+    }));
     const response = await lastValueFrom(requestHandler.handle(requestContext));
     expect(response.body).toEqual(JSON.stringify({token_type: 'Bearer', access_token: 'abc'}));
     expect(response.status).toEqual(200);
@@ -29,7 +36,15 @@ describe('Happy flows', () => {
 });
 
 describe('Unhappy flows', () => {
-  const requestHandler = new TokenRequestHandler([new MockUmaGrantProcessor()]);
+  let requestHandler: TokenRequestHandler;
+  const getSupportedGrantType = jest.fn();
+  const process = jest.fn();
+
+  beforeEach(() => {
+    jest.resetAllMocks();
+    getSupportedGrantType.mockReturnValue('urn:ietf:params:oauth:grant-type:uma-ticket');
+    requestHandler = new TokenRequestHandler([{process, getSupportedGrantType}]);
+  });
 
   test('Invalid media type', async () => {
     expect(lastValueFrom(requestHandler.handle({
@@ -69,5 +84,18 @@ describe('Unhappy flows', () => {
         headers: {'content-type': 'application/x-www-form-urlencoded'},
       },
     }))).rejects.toThrow('Unsupported grant type: \'abc\'');
+  });
+  test('When `process` throws an error, should rethrow it.', async () => {
+    process.mockReturnValue(new Promise((resolve, reject) => {
+      reject(new Error('Test'));
+    }));
+    expect(lastValueFrom(requestHandler.handle({
+      request: {
+        url: new URL('http://localhost/token'),
+        method: 'POST',
+        body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Auma-ticket`,
+        headers: {'content-type': 'application/x-www-form-urlencoded'},
+      },
+    }))).rejects.toThrow('Test');
   });
 });
