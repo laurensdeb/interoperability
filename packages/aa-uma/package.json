@@ -24,7 +24,7 @@
     },
     "scripts": {
         "build": "npm run build:ts && npm run build:components",
-        "build:components": "componentsjs-generator -s lib -c dist/components -i .componentsignore --lenient",
+        "build:components": "componentsjs-generator -s src -c dist/components -i .componentsignore --lenient",
         "prepare": "npm run build",
         "build:ts": "tsc",
         "lint": "eslint . --ext .ts",

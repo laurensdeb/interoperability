@@ -13,11 +13,6 @@
     "commit": "commit",
     "prepare": "husky install"
   },
-  "workspaces": {
-    "packages": [
-      "packages/**"
-    ]
-  },
   "devDependencies": {
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
