@@ -4,7 +4,7 @@
     ],
     "import": [
         "laah:config/app/variables/default.json",
-        "laah:config/uma/default.json"
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/config/default.json"
     ],
     "@graph": [
         {

@@ -45,7 +45,7 @@
     },
     "dependencies": {
         "@digita-ai/handlersjs-http": "0.8.5",
-		"componentsjs": "5.0.0-beta.7",
+        "componentsjs": "5.0.0-beta.7",
         "jest": "^27.5.1",
         "jose": "^4.5.1",
         "rxjs": "^7.5.4",

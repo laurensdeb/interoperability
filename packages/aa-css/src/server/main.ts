@@ -1,5 +1,4 @@
-import {absoluteFilePath, App, AppRunner} from '@solid/community-server';
-import {IComponentsManagerBuilderOptions} from 'componentsjs';
+import {absoluteFilePath, AppRunner} from '@solid/community-server';
 import * as path from 'path';
 
 export const runServer = async () => {
