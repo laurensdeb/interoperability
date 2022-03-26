@@ -11,9 +11,16 @@ const APPEND_METHODS = new Set(['POST']);
 
 const VALID_MODES = new Set(['read', 'write', 'create', 'delete', 'append']);
 
+/**
+ * Metadata Collector responsible for Metadata regarding Access Modes needed in a Permission Ticket
+ */
 export class TicketMetadataCollector extends ErrorMetadataCollector {
   protected readonly logger = getLoggerFor(this);
 
+  /**
+   * Adds metadata based on the request content
+   * @param {ErrorMetadataCollectorInput} param0
+   */
   public async handle({request, metadata}: ErrorMetadataCollectorInput): Promise<void> {
     this.logger.debug(`Invoked TicketMetadataCollector`);
 

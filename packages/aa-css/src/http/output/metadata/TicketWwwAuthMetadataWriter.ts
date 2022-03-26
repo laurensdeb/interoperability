@@ -16,6 +16,11 @@ export interface AsWwwAuthMetadataWriterArgs {
   baseUrl: string;
 }
 
+export interface AsWwwAuthHandlerArgs {
+  response: HttpResponse;
+  metadata: RepresentationMetadata;
+}
+
 /**
  * Adds the `WWW-Authenticate` header with the injected value in case the response status code is 401.
  */
@@ -25,13 +30,21 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
   private readonly asUrl: string;
   private readonly baseUrl: string;
 
+  /**
+   * Adds the `WWW-Authenticate` header with the injected value in case the response status code is 401.
+   * @param {AsWwwAuthMetadataWriterArgs} args
+   */
   public constructor(args: AsWwwAuthMetadataWriterArgs) {
     super();
     this.asUrl = args.asUrl;
     this.baseUrl = args.baseUrl;
   }
 
-  public async handle(input: { response: HttpResponse; metadata: RepresentationMetadata }): Promise<void> {
+  /**
+   * Add the WWW-Authenticate header to the response in case of a 401 error response
+   * @param {AsWwwAuthHandlerArgs} input
+   */
+  public async handle(input: AsWwwAuthHandlerArgs): Promise<void> {
     this.logger.info('Invoked AS WWW Auth writer');
     const statusLiteral = input.metadata.get(HTTP.terms.statusCodeNumber);
 
@@ -57,6 +70,11 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
     }
   }
 
+  /**
+   * Utility for converting an RDF term to a String value
+   * @param {Term} term
+   * @return {string}
+   */
   private termToString(term: Term): string {
     return term.value;
   }

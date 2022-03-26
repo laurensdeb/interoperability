@@ -41,6 +41,12 @@ export class ParsingHttpHandler extends HttpHandler {
   private readonly metadataCollector: OperationMetadataCollector;
   private readonly operationHandler: OperationHttpHandler;
 
+  /**
+   * Parses requests and sends the resulting Operation to wrapped operationHandler.
+   * Errors are caught and handled by the Errorhandler.
+   * In case the operationHandler returns a result it will be sent to the ResponseWriter.
+   * @param {ParsingHttpHandlerArgs} args
+   */
   public constructor(args: ParsingHttpHandlerArgs) {
     super();
     this.requestParser = args.requestParser;
@@ -50,6 +56,10 @@ export class ParsingHttpHandler extends HttpHandler {
     this.operationHandler = args.operationHandler;
   }
 
+  /**
+   *
+   * @param {HttpHandlerInput} param0
+   */
   public async handle({request, response}: HttpHandlerInput): Promise<void> {
     let result: ResponseDescription | undefined;
     let preferences: RepresentationPreferences = {type: {'text/plain': 1}};

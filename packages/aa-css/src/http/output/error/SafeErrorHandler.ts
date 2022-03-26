@@ -15,6 +15,13 @@ export class SafeErrorHandler extends ErrorHandler {
   private readonly showStackTrace: boolean;
   private readonly metadataCollector: ErrorMetadataCollector | undefined;
 
+  /**
+   * Returns a simple text description of an error.
+   * This class is a failsafe in case the wrapped error handler fails.
+   * @param {ErrorHandler} errorHandler
+   * @param {boolean} showStackTrace
+   * @param {ErrorMetadataCollector} metadataCollector
+   */
   public constructor(errorHandler: ErrorHandler,
       showStackTrace = false, metadataCollector?: ErrorMetadataCollector) {
     super();
@@ -23,6 +30,11 @@ export class SafeErrorHandler extends ErrorHandler {
     this.metadataCollector = metadataCollector;
   }
 
+  /**
+   * Failsafe error handler
+   * @param {ErrorHandlerArgs} input
+   * @return {Promise<ResponseDescription>}
+   */
   public async handle(input: ErrorHandlerArgs): Promise<ResponseDescription> {
     try {
       return await this.errorHandler.handleSafe(input);
