@@ -16,6 +16,10 @@
         "name": "interop",
         "path": "./packages/aa-interop"
       },
+      {
+        "name": "css",
+        "path": "./packages/aa-css"
+      }
     ],
     "settings": {
       "eslint.format.enable": true,

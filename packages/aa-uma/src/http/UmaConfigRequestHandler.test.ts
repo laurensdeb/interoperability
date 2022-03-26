@@ -3,7 +3,7 @@ import {lastValueFrom} from 'rxjs';
 import {HttpHandlerContext} from '@digita-ai/handlersjs-http';
 
 describe('Happy flows', () => {
-  const requestHandler = new UmaConfigRequestHandler();
+  const requestHandler = new UmaConfigRequestHandler('https://example.org');
   let requestContext: HttpHandlerContext;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('Happy flows', () => {
     expect(response.body).toEqual(JSON.stringify({
       'jwks_uri': '/keys', 'grant_types_supported': [
         'urn:ietf:params:oauth:grant-type:uma-ticket',
-      ],
+      ], 'issuer': 'https://example.org',
     }));
     expect(response.status).toEqual(200);
   });

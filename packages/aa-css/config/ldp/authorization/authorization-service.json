@@ -1,0 +1,46 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^3.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld"
+    ],
+    "import": [
+      "files-scs:config/ldp/authorization/readers/acl.json",
+      "files-scs:config/ldp/authorization/readers/ownership.json"
+    ],
+    "@graph": [
+      {
+        "comment": "Uses Web Access Control for authorization.",
+        "@id": "urn:solid-server:default:PermissionReader",
+        "@type": "UnionPermissionReader",
+        "readers": [
+          {
+            "comment": "This PermissionReader will be used to prevent external access to containers used for internal storage.",
+            "@id": "urn:solid-server:default:PathBasedReader",
+            "@type": "PathBasedReader",
+            "baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" }
+          },
+          { "@id": "urn:solid-server:default:OwnerPermissionReader" },
+          {
+            "comment": "This PermissionReader makes sure that for auxiliary resources, the main reader gets called with the associated identifier.",
+            "@type": "AuxiliaryReader",
+            "resourceReader": { "@id": "urn:solid-server:default:TicketPermissionReader" },
+            "auxiliaryStrategy": { "@id": "urn:solid-server:default:AuxiliaryStrategy" }
+          },
+          {
+            "@type": "TicketPermissionReader",
+            "@id": "urn:solid-server:default:TicketPermissionReader"
+          }
+        ]
+      },
+      {
+        "comment": "In case of WebACL authorization the ACL resources determine authorization.",
+        "@id": "urn:solid-server:default:AuthResourceHttpHandler",
+        "@type": "RouterHandler",
+        "args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" },
+        "args_targetExtractor": { "@id": "urn:solid-server:default:TargetExtractor" },
+        "args_allowedMethods": [ "*" ],
+        "args_allowedPathNames": [ "^/.*\\.acl$" ],
+        "args_handler": { "@id": "urn:solid-server:default:LdpHandler" }
+      }
+    ]
+  }

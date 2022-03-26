@@ -1,0 +1,21 @@
+{
+    "@context": [
+        "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^3.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+      {
+        "comment": "Extracts information from UMA access tokens.",
+        "@id": "urn:solid-server:default:CredentialsExtractor",
+        "@type": "UnionCredentialsExtractor",
+        "extractors": [
+          { "@type": "UMATicketExtractor",
+            "UMATicketExtractor:_args_asUrl": "https://localhost:4000",
+            "UMATicketExtractor:_args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" },
+            "UMATicketExtractor:_args_maxTokenAge": 60
+          },
+          { "@type": "PublicCredentialsExtractor" }
+        ]
+      }
+    ]
+  }

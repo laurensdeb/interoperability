@@ -1,0 +1,30 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^3.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+      {
+        "comment": "Wraps around the main error handler as a fallback in case something goes wrong.",
+        "@id": "urn:solid-server:default:ErrorHandler",
+        "@type": "laac:dist/http/output/error/SafeErrorHandler#SafeErrorHandler",
+        "laac:dist/http/output/error/SafeErrorHandler#SafeErrorHandler_showStackTrace": {
+          "@id": "urn:solid-server:default:variable:showStackTrace"
+        },
+        "laac:dist/http/output/error/SafeErrorHandler#SafeErrorHandler_metadataCollector": {
+          "@type": "TicketMetadataCollector"
+        },
+        "laac:dist/http/output/error/SafeErrorHandler#SafeErrorHandler_errorHandler": {
+          "comment": "Changes an error into a valid representation to send as a response.",
+          "@type": "laac:dist/http/output/error/ConvertingErrorHandler#ConvertingErrorHandler",
+          "laac:dist/http/output/error/ConvertingErrorHandler#ConvertingErrorHandler_converter": { "@id": "urn:solid-server:default:UiEnabledConverter" },
+          "laac:dist/http/output/error/ConvertingErrorHandler#ConvertingErrorHandler_metadataCollector": {
+            "@type": "TicketMetadataCollector"
+          },
+          "laac:dist/http/output/error/ConvertingErrorHandler#ConvertingErrorHandler_showStackTrace": {
+            "@id": "urn:solid-server:default:variable:showStackTrace"
+          }
+        }
+      }
+    ]
+  }

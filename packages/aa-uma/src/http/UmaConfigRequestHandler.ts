@@ -14,11 +14,23 @@ export interface UmaConfiguration {
  */
 export class UmaConfigRequestHandler implements HttpHandler {
   /**
+  * An HttpHandler used for returning the configuration
+  * of the UMA Authorization Service.
+   * @param {string} baseUrl - Base URL of the AS
+   */
+  constructor(private readonly baseUrl: string) {
+
+  }
+  /**
    * Returns UMA Configuration for the AS
    * @return {UmaConfiguration} - AS Configuration
    */
   private getUmaConfig(): UmaConfiguration {
-    return {jwks_uri: '/keys', grant_types_supported: ['urn:ietf:params:oauth:grant-type:uma-ticket']};
+    return {
+      jwks_uri: '/keys',
+      grant_types_supported: ['urn:ietf:params:oauth:grant-type:uma-ticket'],
+      issuer: this.baseUrl,
+    };
   }
 
   /**

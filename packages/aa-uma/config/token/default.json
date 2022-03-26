@@ -1,0 +1,47 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-agent:default:TokenRoute",
+            "@type": "HttpHandlerRoute",
+            "operations": [
+                {
+                    "@type": "HttpHandlerOperation",
+                    "method": "POST",
+                    "publish": true
+                }
+            ],
+            "handler": {
+              "@type": "JsonHttpErrorHandler",
+              "nestedHandler": {
+              "@type": "TokenRequestHandler",
+              "processors": [{
+                  "@id": "urn:authorization-agent:default:UmaGrantProcessor",
+                  "@type": "UmaGrantProcessor",
+                  "ticketFactory": {
+                      "@type": "JwtTicketFactory",
+                      "params_expirationTime": "5m",
+                      "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                      "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                  },
+                  "tokenFactory": {
+                      "@type": "JwtTokenFactory",
+                      "params_expirationTime": "5m",
+                      "params_aud": "solid",
+                      "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                      "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                  },
+                  "claimTokenProcessors": [{
+                      "@type": "DpopClaimTokenProcessor"
+                  }],
+                  "authorizers": [{"@type": "AllAuthorizer"}]
+              }]
+              }
+            },
+            "path": "/token"
+        }
+    ]
+}
