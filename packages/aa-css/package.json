@@ -6,6 +6,12 @@
     "private": true,
     "types": "./dist/index.d.ts",
     "main": "./dist/index.js",
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "require": "./dist/index.js"
+        }
+    },
     "lsd:module": "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css",
     "lsd:components": "dist/components/components.jsonld",
     "lsd:contexts": {
@@ -18,7 +24,7 @@
     },
     "scripts": {
       "build": "npm run build:ts && npm run build:components",
-      "build:components": "componentsjs-generator -s src -c dist/components -i .componentsignore --lenient",
+      "build:components": "componentsjs-generator -s src/ -c dist/components -i .componentsignore",
       "prepare": "npm run build",
       "build:ts": "tsc",
       "start": "node dist/server/main.js",

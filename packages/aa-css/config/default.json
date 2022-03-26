@@ -1,5 +1,8 @@
 {
-    "@context": "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^3.0.0/components/context.jsonld",
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^3.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld"
+    ],
     "import": [
       "files-scs:config/app/main/default.json",
       "files-scs:config/app/init/initialize-prefilled-root.json",
@@ -15,11 +18,11 @@
       "files-scs:config/identity/ownership/token.json",
       "files-scs:config/identity/pod/static.json",
       "files-scs:config/identity/registration/enabled.json",
-      "files-scs:config/ldp/authentication/dpop-bearer.json",
-      "files-scs:config/ldp/authorization/webacl.json",
-      "files-scs:config/ldp/handler/default.json",
+      "files-laac:config/ldp/authentication/uma-token.json",
+      "files-laac:config/ldp/authorization/authorization-service.json",
+      "files-laac:config/ldp/handler/default.json",
       "files-scs:config/ldp/metadata-parser/default.json",
-      "files-scs:config/ldp/metadata-writer/default.json",
+      "files-laac:config/ldp/metadata-writer/uma-ticket-header.json",
       "files-scs:config/ldp/modes/default.json",
       "files-scs:config/storage/backend/memory.json",
       "files-scs:config/storage/key-value/resource-store.json",
@@ -34,7 +37,7 @@
     ],
     "@graph": [
       {
-        "comment": "A single-pod server that stores its resources in memory."
+        "comment": "A single-pod server that trusts a pre-configured UMA AS."
       }
     ]
   }

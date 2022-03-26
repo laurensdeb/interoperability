@@ -9,7 +9,7 @@ export const runServer = async () => {
 
   const configVariables = {
     'urn:solid-server:default:variable:showStackTrace': true,
-    'urn:solid-server:default:variable:loggingLevel': 'Info',
+    'urn:solid-server:default:variable:loggingLevel': 'Debug',
     'urn:solid-server:default:variable:port': 3000,
     'urn:solid-server:default:variable:baseUrl': 'http://localhost:3000',
   };

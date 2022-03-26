@@ -10,9 +10,9 @@
         "@type": "UnionCredentialsExtractor",
         "extractors": [
           { "@type": "UMATicketExtractor",
-            "args_asUrl": "https://localhost:4000",
-            "args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" },
-            "args_maxTokenAge": 60
+            "UMATicketExtractor:_args_asUrl": "https://localhost:4000",
+            "UMATicketExtractor:_args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" },
+            "UMATicketExtractor:_args_maxTokenAge": 60
           },
           { "@type": "PublicCredentialsExtractor" }
         ]
