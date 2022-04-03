@@ -2,7 +2,7 @@
     "name": "@laurensdeb/authorization-agent-interop",
     "version": "1.0.0",
     "author": "Laurens Debackere <Laurens.Debackere@UGent.be> (https://thundr.be)",
-    "license": "AGPL-3.0-only",
+    "license": "MIT",
     "private": true,
     "types": "./dist/index.d.ts",
     "main": "./dist/index.js",
@@ -42,7 +42,8 @@
     },
     "dependencies": {
       "@digita-ai/handlersjs-http": "0.8.5",
-      "componentsjs": "5.0.0-beta.7"
+      "componentsjs": "5.0.0-beta.7",
+      "@laurensdeb/authorization-agent-uma": "^1.0.0"
     },
     "files": [
         ".componentsignore",

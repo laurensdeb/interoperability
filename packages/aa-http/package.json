@@ -2,7 +2,7 @@
 	"name": "@laurensdeb/authorization-agent-http",
 	"version": "1.0.0",
 	"author": "Laurens Debackere <Laurens.Debackere@UGent.be> (https://thundr.be)",
-	"license": "AGPL-3.0-only",
+	"license": "MIT",
 	"private": true,
 	"main": "./dist/main.js",
 	"types": "./dist/index.d.ts",
