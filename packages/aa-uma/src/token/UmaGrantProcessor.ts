@@ -1,4 +1,4 @@
-import {BadRequestHttpError, HttpHandlerContext, UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
+import {BadRequestHttpError, ForbiddenHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {AccessMode} from '../util/modes/AccessModes';
 import {ResourceIdentifier} from '../util/ResourceIdentifier';
 import {Authorizer} from './authz/Authorizer';
@@ -102,7 +102,7 @@ export class UmaGrantProcessor extends GrantTypeProcessor {
     const authorization = await this.authorize(ticket, principal);
 
     if (!authorization.modes.size) {
-      throw new UnauthorizedHttpError('Unable to authorize request.');
+      throw new ForbiddenHttpError('Unable to authorize request.');
     }
 
     // Serialize Authorization into Access Token

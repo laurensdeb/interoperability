@@ -1,4 +1,4 @@
-import {BadRequestHttpError, HttpHandlerContext, UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
+import {BadRequestHttpError, ForbiddenHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {AccessMode} from '../util/modes/AccessModes';
 import {Ticket} from './TicketFactory';
 import {Principal, UmaGrantProcessor} from './UmaGrantProcessor';
@@ -192,7 +192,7 @@ describe('Sad Flows', () => {
     try {
       await umaGrantProcessor.process(body, requestContext);
     } catch (e) {
-      expect(e).toBeInstanceOf(UnauthorizedHttpError);
+      expect(e).toBeInstanceOf(ForbiddenHttpError);
     }
 
     expect(mockClaimTokenProcessor.process).toHaveBeenCalledWith({url: TOKEN_URI, method: 'POST',

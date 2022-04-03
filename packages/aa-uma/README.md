@@ -8,3 +8,10 @@ along with Digita's [HandlersJS library](https://github.com/digita-ai/handlersjs
 
 ## Configurations
 A default configuration for ComponentsJS dependency injection is provided in [`config/default.json`](config/default.json).
+
+## Known limitations
+### Unused parameters in token request
+For token requests with grant_type `urn:ietf:params:oauth:grant-type:uma-ticket`, the token endpoint will ignore paramters `pct` and `scope` defined as optional in section 3.3.1 of the specification.
+
+### Error messages are not specification compliant
+The error messages returned by the UMA endpoint aren't in sync with the UMA specification. An issue exists to track this.

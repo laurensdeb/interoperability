@@ -1,4 +1,5 @@
 // HTTP
+export * from './http/OAuthConfigRequestHandler';
 export * from './http/UmaConfigRequestHandler';
 export * from './http/JwksRequestHandler';
 export * from './http/TokenRequestHandler';
