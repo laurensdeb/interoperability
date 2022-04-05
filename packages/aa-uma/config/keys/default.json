@@ -10,7 +10,7 @@
             "alg": "ES256"
         },
         {
-            "@id": "urn:authorization-agent:default:JwksRoute",
+            "@id": "urn:authorization-agent:uma:default:JwksRoute",
             "@type": "HttpHandlerRoute",
             "operations": [
                 {
@@ -25,7 +25,7 @@
                  "@id": "urn:authorization-agent:default:DefaultKeyholder"
               }
             },
-            "path": "/keys"
+            "path": "/uma/keys"
         }
     ]
 }

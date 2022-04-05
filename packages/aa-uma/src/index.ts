@@ -20,6 +20,7 @@ export * from './token/JwtTicketFactory';
 // Token/Authn
 export * from './token/authn/ClaimTokenProcessor';
 export * from './token/authn/DpopClaimTokenProcessor';
+export * from './token/authn/BasicClaimTokenProcessor';
 
 // Token/Authz
 export * from './token/authz/Authorizer';

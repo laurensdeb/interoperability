@@ -11,19 +11,20 @@ export enum ResponseType {
   }
 
 export type OAuthConfiguration = {
-    issuer?: string,
+    issuer: string,
     jwks_uri?: string,
     token_endpoint?: string,
     grant_types_supported?: string[],
     dpop_signing_alg_values_supported?: string[],
     response_types_supported?: ResponseType[]
-  }
+    scopes_supported?: string[]
+}
 
 /**
  * An HttpHandler used for returning the configuration
  * of the UMA Authorization Service.
  */
-export abstract class OAuthConfigRequestHandler<T extends OAuthConfiguration> extends HttpHandler {
+export abstract class OAuthConfigRequestHandler<T extends OAuthConfiguration = OAuthConfiguration> extends HttpHandler {
   /**
     * An HttpHandler used for returning the configuration
     * of the UMA Authorization Service.

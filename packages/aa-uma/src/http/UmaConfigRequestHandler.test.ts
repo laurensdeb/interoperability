@@ -20,8 +20,8 @@ describe('Happy flows', () => {
   test('Handles GET request with configuration in body', async () => {
     const response = await lastValueFrom(requestHandler.handle(requestContext));
     expect(JSON.parse(response.body)).toEqual({
-      'jwks_uri': `${BASE_URL}/keys`,
-      'token_endpoint': `${BASE_URL}/token`,
+      'jwks_uri': `${BASE_URL}/uma/keys`,
+      'token_endpoint': `${BASE_URL}/uma/token`,
       'grant_types_supported': [
         'urn:ietf:params:oauth:grant-type:uma-ticket',
       ],
@@ -36,7 +36,7 @@ describe('Happy flows', () => {
         'RS384',
         'RS512',
       ],
-      'issuer': 'https://example.org',
+      'issuer': 'https://example.org/uma',
       'response_types_supported': [
         'token',
       ],
