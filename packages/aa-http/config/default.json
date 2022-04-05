@@ -42,7 +42,7 @@
                         }
                     ],
                     "defaultHandler": {
-                        "@type": "MockHttpHandler"
+                        "@type": "DefaultRouteHandler"
                     }
                 }
             }
