@@ -1,4 +1,3 @@
-import {JwksKeyHolder} from '@laurensdeb/authorization-agent-uma';
 import {SolidAuthnTokenFactory} from './SolidAuthnTokenFactory';
 import * as jose from 'jose';
 
