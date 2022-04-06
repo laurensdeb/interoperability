@@ -29,11 +29,12 @@
       "build:ts": "tsc",
       "lint": "eslint . --ext .ts",
       "lint:fix": "eslint . --ext .ts --fix",
-      "test": "echo \"Error: no test specified\" && exit 0"
-    },
+      "test": "jest --coverage"
+        },
     "devDependencies": {
       "@tsconfig/node16": "^1.0.2",
       "@types/jest": "^27.4.1",
+      "@types/uuid": "^8.3.4",
       "@typescript-eslint/eslint-plugin": "^5.12.1",
       "@typescript-eslint/parser": "^5.12.1",
       "componentsjs-generator": "3.0.0-beta.7",
@@ -46,6 +47,7 @@
     "dependencies": {
       "@digita-ai/handlersjs-http": "0.8.5",
       "componentsjs": "5.0.0-beta.7",
+      "jose": "^4.5.1",
       "@laurensdeb/authorization-agent-uma": "^1.0.0",
       "uuid": "^8.3.2"
     },

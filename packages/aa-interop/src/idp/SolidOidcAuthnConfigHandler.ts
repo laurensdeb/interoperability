@@ -16,10 +16,10 @@ export class SolidOidcAuthnConfigHandler extends OAuthConfigRequestHandler<OidcC
    */
   public getConfig(): OidcConfiguration {
     return {
-      jwks_uri: `${this.baseUrl}/keys`,
-      grant_types_supported: ['client_credentials'],
+      jwks_uri: `${this.baseUrl}/oidc/keys`,
+      grant_types_supported: [],
       claims_supported: ['sub', 'webid', 'iss', 'aud'],
-      issuer: this.baseUrl,
+      issuer: `${this.baseUrl}/oidc`,
       dpop_signing_alg_values_supported: [...ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM],
       scopes_supported: ['openid', 'offline_access', 'webid'],
       response_types_supported: [ResponseType.Token],

@@ -32,7 +32,7 @@
     "extensions": {
       "recommendations": [
         "dbaeumer.vscode-eslint",
-        "humao.rest-client"
+        "henrynguyen5-vsc.vsc-nvm"
       ]
     }
   }
