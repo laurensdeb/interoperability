@@ -53,7 +53,6 @@ export class TokenRequestHandler implements HttpHandler {
 
     const grantProcessor = this.grantProcessors.get(grantType)!;
 
-    // TODO: What  if grant processor throws an error?
     const tokenResponse = from(grantProcessor.process(parsedRequestBody, input));
 
     return tokenResponse.pipe(map((data) => {
