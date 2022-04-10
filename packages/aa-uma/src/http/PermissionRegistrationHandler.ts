@@ -1,6 +1,7 @@
 import {BadRequestHttpError, HttpHandler, HttpHandlerContext,
-  HttpHandlerResponse, InternalServerError, UnauthorizedHttpError, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
-import {catchError, concatMap, from, map, Observable, throwError} from 'rxjs';
+  HttpHandlerResponse, InternalServerError,
+  UnauthorizedHttpError, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
+import {concatMap, from, Observable, throwError} from 'rxjs';
 import * as jose from 'jose';
 import {TicketFactory} from '../token/TicketFactory';
 import {parseModes} from '../util/modes/ModesParser';
@@ -80,11 +81,15 @@ export class PermissionRegistrationHandler extends HttpHandler {
     const path: string = request.body.resource_set_id as string;
 
     return resourceServer.pipe(
-        concatMap((resourceServer: RequestingPartyRegistration) => {
-          return this.ticketFactory.serialize({id: v4(),
-            sub: {path, pod: resourceServer.baseUri}, requested: scopes});
-        }),
-        map((ticket) => {
+        concatMap(async (resourceServer: RequestingPartyRegistration) => {
+          let ticket;
+          try {
+            ticket = await this.ticketFactory.serialize({id: v4(),
+              sub: {path, pod: resourceServer.baseUri}, requested: scopes});
+          } catch (e) {
+            throw new InternalServerError(`Error while generating ticket: ${(e as Error).message}`);
+          }
+
           return {
             headers: {'content-type': 'application/json'},
             status: 200,

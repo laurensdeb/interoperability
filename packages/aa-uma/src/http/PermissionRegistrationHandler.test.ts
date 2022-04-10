@@ -1,4 +1,5 @@
 import {BadRequestHttpError, HttpHandlerContext,
+  InternalServerError,
   UnauthorizedHttpError, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
 import {PermissionRegistrationHandler, RequestingPartyRegistration} from './PermissionRegistrationHandler';
 import * as jose from 'jose';
@@ -91,6 +92,17 @@ describe('Unhappy flows', () => {
           'authorization': `Bearer ${await getJwt(POD_PRIVATE_KEY, 'ES256', POD_URI, AS_URI)}`},
       },
     };
+  });
+
+  test('Rejected ticket serialization should throw error', async () => {
+    mockedTicketFactory.serialize.mockReset();
+    mockedTicketFactory.serialize.mockRejectedValueOnce(new Error('Some error.'));
+
+    requestContext.request.body = {
+      resource_set_id: '/example/123',
+      scopes: ['http://www.w3.org/ns/auth/acl#Read'],
+    };
+    expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(InternalServerError);
   });
 
   test('Invalid Authorization header should throw error', async () => {
