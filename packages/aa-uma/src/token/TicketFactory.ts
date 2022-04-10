@@ -1,10 +1,10 @@
 import {AccessMode} from '../util/modes/AccessModes';
 import {ResourceIdentifier} from '../util/ResourceIdentifier';
 
-export type Ticket = {
-    sub: ResourceIdentifier,
-    id: string,
-    requested: Set<AccessMode>
+export interface Ticket {
+    sub: ResourceIdentifier;
+    id: string;
+    requested: Set<AccessMode>;
 
 }
 

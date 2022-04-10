@@ -1,5 +1,5 @@
 import {BadRequestHttpError, HttpHandler, HttpHandlerContext,
-  HttpHandlerResponse, UnauthorizedHttpError, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
+  HttpHandlerResponse, InternalServerError, UnauthorizedHttpError, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
 import {catchError, concatMap, from, map, Observable, throwError} from 'rxjs';
 import * as jose from 'jose';
 import {TicketFactory} from '../token/TicketFactory';
@@ -91,7 +91,6 @@ export class PermissionRegistrationHandler extends HttpHandler {
             body: {ticket: ticket},
           };
         }),
-        catchError((err) => throwError(() => err)),
     );
   }
 
