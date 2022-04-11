@@ -8,6 +8,7 @@ import {parseModes} from '../util/modes/ModesParser';
 import {isString} from '../util/StringGuard';
 import {v4} from 'uuid';
 import {AccessMode} from '../util/modes/AccessModes';
+import {isUrlString, UrlString} from '../util/UrlGuard';
 
 // TODO: move this to a Service
 export interface RequestingPartyRegistration {
@@ -80,11 +81,16 @@ export class PermissionRegistrationHandler extends HttpHandler {
     }
     const path: string = request.body.resource_set_id as string;
 
+    if (!request.body.owner || !isUrlString(request.body.owner)) {
+      return throwError(() => new BadRequestHttpError('Missing or invalid key "owner" in the request'));
+    }
+    const owner: UrlString = request.body.owner;
+
     return resourceServer.pipe(
         concatMap(async (resourceServer: RequestingPartyRegistration) => {
           let ticket;
           try {
-            ticket = await this.ticketFactory.serialize({id: v4(),
+            ticket = await this.ticketFactory.serialize({owner,
               sub: {path, pod: resourceServer.baseUri}, requested: scopes});
           } catch (e) {
             throw new InternalServerError(`Error while generating ticket: ${(e as Error).message}`);

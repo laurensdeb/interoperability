@@ -36,6 +36,8 @@ lvCtf2pY32NMVpy2yWCk8LbfJ+WhRANCAAQYmTM7fikydPHi7GhMPT528HiBVpez
 1f6qSC7NQI1P1nNtn+idNmu9AMtUB0f75zuxL++Z+s24AJR42Euv1pgU
 -----END PRIVATE KEY----`;
 
+const WEBID = 'http://pod.example.org/alice/profile/card#me';
+
 const getJwt = async (ecPrivateKey: string, ecAlgorithm: string, iss: string, aud: string) => {
   const privateKey = await jose.importPKCS8(ecPrivateKey, ecAlgorithm);
   return await new jose.SignJWT({})
@@ -69,6 +71,7 @@ describe('Happy flows', () => {
   test('Returns ticket in response body', async () => {
     requestContext.request.body = {
       resource_set_id: '/example/123',
+      owner: WEBID,
       scopes: ['http://www.w3.org/ns/auth/acl#Read'],
     };
     const response = await lastValueFrom(requestHandler.handle(requestContext));
@@ -100,6 +103,7 @@ describe('Unhappy flows', () => {
 
     requestContext.request.body = {
       resource_set_id: '/example/123',
+      owner: WEBID,
       scopes: ['http://www.w3.org/ns/auth/acl#Read'],
     };
     expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(InternalServerError);
@@ -109,6 +113,7 @@ describe('Unhappy flows', () => {
     requestContext.request.headers['authorization'] = 'abc';
     requestContext.request.body = {
       resource_set_id: '/example/123',
+      owner: WEBID,
       scopes: ['http://www.w3.org/ns/auth/acl#Read'],
     };
     expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(BadRequestHttpError);
@@ -118,6 +123,7 @@ describe('Unhappy flows', () => {
     delete requestContext.request.headers['authorization'];
     requestContext.request.body = {
       resource_set_id: '/example/123',
+      owwner: WEBID,
       scopes: ['http://www.w3.org/ns/auth/acl#Read'],
     };
     expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(UnauthorizedHttpError);
@@ -129,6 +135,7 @@ describe('Unhappy flows', () => {
     'yGYDlkBA7DfyjrqmSHu6pQ2hoZuFqUSLPNY2N0mpHb3nk5K17HWP_3cYHBw7AhHale5wky6-sVA';
     requestContext.request.body = {
       resource_set_id: '/example/123',
+      owner: WEBID,
       scopes: ['http://www.w3.org/ns/auth/acl#Read'],
     };
     expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError('Bearer token is invalid');
@@ -136,6 +143,7 @@ describe('Unhappy flows', () => {
 
   test('Missing key "resource_set_id" should throw error', async () => {
     requestContext.request.body = {
+      owner: WEBID,
       scopes: ['http://www.w3.org/ns/auth/acl#Read'],
     };
     expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(BadRequestHttpError);
@@ -151,6 +159,7 @@ describe('Unhappy flows', () => {
 
   test('Invalid "scopes" should throw error', async () => {
     requestContext.request.body = {
+      owner: WEBID,
       resource_set_id: '/example/123',
       scopes: ['http://www.w3.org/ns/auth/acl#Teleport'],
     };
@@ -159,6 +168,7 @@ describe('Unhappy flows', () => {
 
   test('Missing key "scopes" should throw error', async () => {
     requestContext.request.body = {
+      owner: WEBID,
       resource_set_id: '/example/123',
     };
     expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(BadRequestHttpError);
@@ -166,8 +176,35 @@ describe('Unhappy flows', () => {
 
   test('Invalid key "scopes" should throw error', async () => {
     requestContext.request.body = {
+      owner: WEBID,
       resource_set_id: '/example/123',
       scopes: 'abc',
+    };
+    expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(BadRequestHttpError);
+  });
+
+  test('Missing key "owner" should throw error', async () => {
+    requestContext.request.body = {
+      resource_set_id: '/example/123',
+      scopes: ['http://www.w3.org/ns/auth/acl#Read'],
+    };
+    expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(BadRequestHttpError);
+  });
+
+  test('Non-URL key "owner" should throw error', async () => {
+    requestContext.request.body = {
+      owner: 'abc',
+      resource_set_id: '/example/123',
+      scopes: ['http://www.w3.org/ns/auth/acl#Read'],
+    };
+    expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(BadRequestHttpError);
+  });
+
+  test('Non-HTTP URL key "owner" should throw error', async () => {
+    requestContext.request.body = {
+      owner: 'ftp://localhost:3000',
+      resource_set_id: '/example/123',
+      scopes: ['http://www.w3.org/ns/auth/acl#Read'],
     };
     expect(lastValueFrom(requestHandler.handle(requestContext))).rejects.toThrowError(BadRequestHttpError);
   });

@@ -3,7 +3,7 @@ import {ResourceIdentifier} from '../util/ResourceIdentifier';
 
 export interface Ticket {
     sub: ResourceIdentifier;
-    id: string;
+    owner: string;
     requested: Set<AccessMode>;
 
 }

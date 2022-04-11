@@ -31,7 +31,7 @@ export class JwtTicketFactory extends TicketFactory {
    */
   async serialize(ticket: Ticket): Promise<string> {
     const kid = await this.keyholder.getDefaultKey();
-    const jwt = await new SignJWT({id: ticket.id, sub: ticket.sub.path, modes: [...ticket.requested]})
+    const jwt = await new SignJWT({owner: ticket.owner, sub: ticket.sub.path, modes: [...ticket.requested]})
         .setProtectedHeader({alg: this.keyholder.getAlg(), kid})
         .setIssuedAt()
         .setIssuer(this.issuer)
@@ -55,20 +55,20 @@ export class JwtTicketFactory extends TicketFactory {
         issuer: this.issuer,
       });
 
-      if (!payload.sub || !payload.aud || !payload.modes || !payload.id) {
-        throw new Error('Missing JWT parameter(s): {sub, aud, modes, id} are required.');
+      if (!payload.sub || !payload.aud || !payload.modes || !payload.owner) {
+        throw new Error('Missing JWT parameter(s): {sub, aud, modes, owner} are required.');
       }
       if (Array.isArray(payload.aud)) {
         throw new Error('JWT audience should not be an array.');
       }
-      if (!isString(payload.id)) {
-        throw new Error('JWT claim "id" is not a string.');
+      if (!isString(payload.owner)) {
+        throw new Error('JWT claim "owner" is not a string.');
       }
       if (!Array.isArray(payload.modes)) {
         throw new Error('JWT claim "modes" is not an array.');
       }
 
-      return {sub: {path: payload.sub, pod: payload.aud}, id: payload.id, requested: parseModes(payload.modes)};
+      return {sub: {path: payload.sub, pod: payload.aud}, owner: payload.owner, requested: parseModes(payload.modes)};
     } catch (error: any) {
       throw new BadRequestHttpError(`Invalid UMA Ticket provided, error while parsing: `+
       `${error.message}`);
