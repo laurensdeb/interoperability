@@ -24,6 +24,5 @@
     "shx": "^0.3.3"
   },
   "dependencies": {
-    "@solid/access-token-verifier": "^1.2.0"
   }
 }

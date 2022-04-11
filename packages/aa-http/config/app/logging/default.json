@@ -1,0 +1,9 @@
+{
+    "@context": "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-logging/^0.0.0/components/context.jsonld",
+    "@graph": [
+      {
+        "comment": "Uses the winston library for logging",
+        "@type": "WinstonLoggerFactory"
+      }
+    ]
+  }
