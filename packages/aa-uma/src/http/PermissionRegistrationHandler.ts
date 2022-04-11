@@ -6,7 +6,6 @@ import * as jose from 'jose';
 import {TicketFactory} from '../token/TicketFactory';
 import {parseModes} from '../util/modes/ModesParser';
 import {isString} from '../util/StringGuard';
-import {v4} from 'uuid';
 import {AccessMode} from '../util/modes/AccessModes';
 import {isUrlString, UrlString} from '../util/UrlGuard';
 
