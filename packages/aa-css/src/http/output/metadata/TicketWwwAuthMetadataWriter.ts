@@ -51,10 +51,11 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
    * @param {AsWwwAuthHandlerArgs} input
    */
   public async handle(input: AsWwwAuthHandlerArgs): Promise<void> {
-    this.logger.info('Invoked AS WWW Auth writer');
     const statusLiteral = input.metadata.get(HTTP.terms.statusCodeNumber);
 
     if (statusLiteral?.value === '401') {
+      this.logger.info('Invoked AS WWW Auth writer');
+
       const ticketNeeds = new Set(input.metadata.getAll(AUTH.terms.ticketNeeds).map(this.termToString));
       const ticketSubject = input.metadata.get(AUTH.terms.ticketSubject);
       if (ticketNeeds && ticketSubject) {
@@ -70,7 +71,7 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
             .setJti(v4())
             .sign(secret);
 
-        addHeader(input.response, 'WWW-Authenticate', `UMA realm="${this.baseUrl}",` +
+        addHeader(input.response, 'WWW-Authenticate', `UMA realm="solid",` +
         `as_uri="${this.asUrl}",ticket="${jwt}"`);
       }
     }

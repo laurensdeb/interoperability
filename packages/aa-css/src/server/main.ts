@@ -6,7 +6,7 @@ export const runServer = async () => {
 
   const configVariables = {
     'urn:solid-server:default:variable:showStackTrace': true,
-    'urn:solid-server:default:variable:loggingLevel': 'warn',
+    'urn:solid-server:default:variable:loggingLevel': 'silly',
     'urn:solid-server:default:variable:port': 3000,
     'urn:solid-server:default:variable:baseUrl': 'http://localhost:3000',
     'urn:solid-server:default:variable:seededPodConfigJson': null,

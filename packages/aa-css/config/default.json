@@ -6,9 +6,10 @@
     "import": [
       "files-laac:config/ldp/authentication/uma-token.json",
       "files-laac:config/ldp/authorization/authorization-service.json",
-      "files-laac:config/ldp/handler/default.json",
       "files-laac:config/ldp/metadata-writer/uma-ticket-header.json",
       "files-laac:config/identity/handler/default.json",
+      "files-laac:config/ldp/handler/default.json",
+
       "files-scs:config/app/main/default.json",
       "files-scs:config/app/init/initialize-prefilled-root.json",
       "files-scs:config/app/setup/optional.json",
