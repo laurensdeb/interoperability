@@ -5,7 +5,7 @@
     ],
     "@graph": [
         {
-            "@id": "urn:authorization-agent:default:TokenRoute",
+            "@id": "urn:authorization-agent:uma:default:TokenRoute",
             "@type": "HttpHandlerRoute",
             "operations": [
                 {
@@ -35,13 +35,13 @@
                       "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
                   },
                   "claimTokenProcessors": [{
-                      "@type": "DpopClaimTokenProcessor"
+                      "@type": "BasicClaimTokenProcessor"
                   }],
                   "authorizers": [{"@type": "AllAuthorizer"}]
               }]
               }
             },
-            "path": "/token"
+            "path": "/uma/token"
         }
     ]
 }

@@ -1,11 +1,11 @@
 {
     "@context": [
       "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/components/context.jsonld"
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-interop/^1.0.0/components/context.jsonld"
     ],
     "@graph": [
         {
-            "@id": "urn:authorization-agent:uma:default:UmaConfigRoute",
+            "@id": "urn:authorization-agent:oidc:default:OidcConfigRoute",
             "@type": "HttpHandlerRoute",
             "operations": [
                 {
@@ -15,10 +15,10 @@
                 }
             ],
             "handler": {
-              "@type": "UmaConfigRequestHandler",
+              "@type": "SolidOidcAuthnConfigHandler",
               "baseUrl": { "@id": "urn:authorization-agent:variables:baseUrl" }
             },
-            "path":  "/uma/.well-known/uma2-configuration"
+            "path":  "/oidc/.well-known/oidc-configuration"
         }
     ]
 }

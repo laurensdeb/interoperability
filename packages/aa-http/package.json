@@ -2,10 +2,16 @@
 	"name": "@laurensdeb/authorization-agent-http",
 	"version": "1.0.0",
 	"author": "Laurens Debackere <Laurens.Debackere@UGent.be> (https://thundr.be)",
-	"license": "AGPL-3.0-only",
+	"license": "MIT",
 	"private": true,
-	"main": "./dist/main.js",
+	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
+	"exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "require": "./dist/index.js"
+        }
+    },
 	"lsd:module": "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-http",
 	"lsd:components": "dist/components/components.jsonld",
 	"lsd:contexts": {
@@ -18,7 +24,7 @@
 	},
   "scripts": {
     "build": "npm run build:ts && npm run build:components",
-    "build:components": "componentsjs-generator -s lib -c dist/components -i .componentsignore --lenient",
+    "build:components": "componentsjs-generator -s src -c dist/components -i .componentsignore --lenient",
     "prepare": "npm run build",
     "build:ts": "tsc",
     "start": "node dist/main.js",
@@ -43,7 +49,8 @@
 		"@digita-ai/handlersjs-http": "0.8.5",
 		"componentsjs": "5.0.0-beta.7",
 		"yargs": "17.3.1",
-		"@laurensdeb/authorization-agent-uma": "^1.0.0"
+		"@laurensdeb/authorization-agent-uma": "^1.0.0",
+		"@laurensdeb/authorization-agent-interop": "^1.0.0"
 	},
 	"files": [
 		"config",

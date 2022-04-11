@@ -1,4 +1,5 @@
 // HTTP
+export * from './http/OAuthConfigRequestHandler';
 export * from './http/UmaConfigRequestHandler';
 export * from './http/JwksRequestHandler';
 export * from './http/TokenRequestHandler';
@@ -19,6 +20,7 @@ export * from './token/JwtTicketFactory';
 // Token/Authn
 export * from './token/authn/ClaimTokenProcessor';
 export * from './token/authn/DpopClaimTokenProcessor';
+export * from './token/authn/BasicClaimTokenProcessor';
 
 // Token/Authz
 export * from './token/authz/Authorizer';

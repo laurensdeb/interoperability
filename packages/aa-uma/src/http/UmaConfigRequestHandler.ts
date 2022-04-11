@@ -1,51 +1,28 @@
-import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {Observable, of} from 'rxjs';
+import {ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM}
+  from '@solid/access-token-verifier/dist/constant/ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM';
+import {OAuthConfigRequestHandler, OAuthConfiguration, ResponseType} from './OAuthConfigRequestHandler';
 
-export interface UmaConfiguration {
-  issuer?: string,
-  jwks_uri?: string,
-  token_endpoint?: string,
-  grant_types_supported?: string[]
-}
+
+export type UmaConfiguration = OAuthConfiguration & {uma_profiles_supported?: string[]};
 
 /**
  * An HttpHandler used for returning the configuration
  * of the UMA Authorization Service.
  */
-export class UmaConfigRequestHandler implements HttpHandler {
-  /**
-  * An HttpHandler used for returning the configuration
-  * of the UMA Authorization Service.
-   * @param {string} baseUrl - Base URL of the AS
-   */
-  constructor(private readonly baseUrl: string) {
-
-  }
+export class UmaConfigRequestHandler extends OAuthConfigRequestHandler<UmaConfiguration> {
   /**
    * Returns UMA Configuration for the AS
    * @return {UmaConfiguration} - AS Configuration
    */
-  private getUmaConfig(): UmaConfiguration {
+  public getConfig(): UmaConfiguration {
     return {
-      jwks_uri: '/keys',
+      jwks_uri: `${this.baseUrl}/uma/keys`,
+      token_endpoint: `${this.baseUrl}/uma/token`,
       grant_types_supported: ['urn:ietf:params:oauth:grant-type:uma-ticket'],
-      issuer: this.baseUrl,
+      issuer: `${this.baseUrl}/uma`,
+      uma_profiles_supported: ['http://openid.net/specs/openid-connect-core-1_0.html#IDToken'],
+      dpop_signing_alg_values_supported: [...ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM],
+      response_types_supported: [ResponseType.Token],
     };
-  }
-
-  /**
-   * Returns the endpoint's UMA configuration
-   *
-   * @param {HttpHandlerContext} context - an irrelevant incoming context
-   * @return {Observable<HttpHandlerResponse>} - the mock response
-   */
-  handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
-    const response: HttpHandlerResponse = {
-      body: JSON.stringify(this.getUmaConfig()),
-      headers: {'content-type': 'application/json'},
-      status: 200,
-    };
-
-    return of(response);
   }
 }
