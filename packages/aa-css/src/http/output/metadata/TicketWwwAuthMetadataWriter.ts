@@ -1,5 +1,5 @@
 import {MetadataWriter, getLoggerFor, HttpResponse,
-  RepresentationMetadata, HTTP, addHeader} from '@solid/community-server';
+  RepresentationMetadata, HTTP, addHeader, AccountStore} from '@solid/community-server';
 import * as jose from 'jose';
 import type {Term} from 'rdf-js';
 import {v4} from 'uuid';
@@ -14,6 +14,10 @@ export interface AsWwwAuthMetadataWriterArgs {
    * Base URL of the server.
    */
   baseUrl: string;
+  /**
+   * Account Store
+   */
+  accountStore: AccountStore;
 }
 
 export interface AsWwwAuthHandlerArgs {
@@ -29,6 +33,7 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
 
   private readonly asUrl: string;
   private readonly baseUrl: string;
+  private readonly accountStore: AccountStore;
 
   /**
    * Adds the `WWW-Authenticate` header with the injected value in case the response status code is 401.
@@ -38,6 +43,7 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
     super();
     this.asUrl = args.asUrl;
     this.baseUrl = args.baseUrl;
+    this.accountStore = args.accountStore;
   }
 
   /**

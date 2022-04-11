@@ -9,6 +9,7 @@
         "@id": "urn:solid-server:default:MetadataWriter_TicketWwwAuth",
         "@type": "TicketWwwAuthMetadataWriter",
         "TicketWwwAuthMetadataWriter:_args_asUrl": "http://localhost:4000/",
+        "TicketWwwAuthMetadataWriter:_args_accountStore": {"@id": "urn:solid-server:auth:password:AccountStore"},
         "TicketWwwAuthMetadataWriter:_args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" }
       }
     ]

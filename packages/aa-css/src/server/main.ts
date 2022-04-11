@@ -4,14 +4,12 @@ import * as path from 'path';
 export const runServer = async () => {
   const appRunner = new AppRunner();
 
-  console.info(absoluteFilePath('.'));
-  console.info(path.join(__dirname, '../../config/default.json'));
-
   const configVariables = {
     'urn:solid-server:default:variable:showStackTrace': true,
-    'urn:solid-server:default:variable:loggingLevel': 'Debug',
+    'urn:solid-server:default:variable:loggingLevel': 'warn',
     'urn:solid-server:default:variable:port': 3000,
     'urn:solid-server:default:variable:baseUrl': 'http://localhost:3000',
+    'urn:solid-server:default:variable:seededPodConfigJson': null,
   };
 
   const app = await appRunner.create(

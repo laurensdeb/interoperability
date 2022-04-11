@@ -19,3 +19,5 @@ export * from './http/output/error/ConvertingErrorHandler';
 
 export * from './http/output/error/metadata/ErrorMetadataCollector';
 export * from './http/output/error/metadata/TicketMetadataCollector';
+
+export * from './util/ExtendedAccountStore';
