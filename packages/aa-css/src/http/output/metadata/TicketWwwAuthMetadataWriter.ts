@@ -118,32 +118,61 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
    * @param {string} ticketSubject
    * @param {Set<string>} ticketNeeds
    */
-  private async fetchPermissionTicket(ticketSubject: string, ticketNeeds: Set<string>): Promise<string> {
-    const owner = 'https://example.org/123'; // TODO: fetch owner
-    const permissionEndpoint = (await this.retrieveUMAConfiguration()).permission_registration_endpoint;
-    this.logger.info(await this.getJwt());
-    const ticketResponse = await fetch(permissionEndpoint,
-        {method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${await this.getJwt()}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            owner,
-            resource_set_id: ticketSubject,
-            scopes: [...ticketNeeds],
-          }),
-        });
-    const json = await ticketResponse.json();
+  private async fetchPermissionTicket(ticketSubject: string, ticketNeeds: Set<string>): Promise<string | undefined> {
+    let json;
+    let owner: string;
+    let ticketResponse;
+    try {
+      owner = await this.retrievePodOwner(ticketSubject);
+      const permissionEndpoint = (await this.retrieveUMAConfiguration()).permission_registration_endpoint;
+      ticketResponse = await fetch(permissionEndpoint,
+          {method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${await this.getJwt()}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              owner,
+              resource_set_id: ticketSubject,
+              scopes: [...ticketNeeds],
+            }),
+          });
+      json = await ticketResponse.json();
+    } catch (e: any) {
+      this.logger.error(`Error while retrieving ticket: ${(e as Error).message}`);
+      return undefined;
+    }
 
     if (ticketResponse.status !== 200) {
-      throw new Error(`Error while generating UMA Ticket. Retrieved: ${JSON.stringify(json)}`);
+      this.logger.error(`Error while generating UMA Ticket. Retrieved: ${JSON.stringify(json)}`);
+      return undefined;
     }
 
     if (!json.ticket || typeof json.ticket !== 'string') {
-      throw new Error('Invalid response from UMA AS: missing or invalid \'ticket\'');
+      this.logger.error('Invalid response from UMA AS: missing or invalid \'ticket\'');
+      return undefined;
     }
+
     return json.ticket;
+  }
+
+  /**
+   * For a given ticketSubject this method will aim to retrieve
+   * the Pod owner (a requirement for the UMA AS to know).
+   *
+   * @param {string} ticketSubject
+   */
+  private async retrievePodOwner(ticketSubject: string): Promise<string> {
+    const webIdSettings = await this.accountStore.getWebIdSettings();
+
+    for (const tup of webIdSettings) {
+      const webid = tup[0];
+      const setting = tup[1];
+      if (setting.podBaseUrl && ticketSubject.startsWith(setting?.podBaseUrl)) {
+        return webid;
+      }
+    }
+    throw new Error('Pod owner not found.');
   }
 
   /**
@@ -157,8 +186,11 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
       const ticketNeeds = new Set(input.metadata.getAll(AUTH.terms.ticketNeeds).map(this.termToString));
       const ticketSubject = input.metadata.get(AUTH.terms.ticketSubject);
       if (ticketNeeds && ticketSubject) {
-        addHeader(input.response, 'WWW-Authenticate', `UMA realm="solid",` +
-        `as_uri="${this.asUrl}",ticket="${await this.fetchPermissionTicket(ticketSubject.value, ticketNeeds)}"`);
+        const permissionTicket = await this.fetchPermissionTicket(ticketSubject.value, ticketNeeds);
+        if (permissionTicket) {
+          addHeader(input.response, 'WWW-Authenticate', `UMA realm="solid",` +
+        `as_uri="${this.asUrl}",ticket="${permissionTicket}"`);
+        }
       }
     }
   }
