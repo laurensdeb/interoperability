@@ -21,14 +21,14 @@ const mockedTicketFactory = {
 };
 
 const POD_URI = 'https://pod.example.org';
-const MOCK_REGISTRATION : RequestingPartyRegistration = {
-  baseUri: POD_URI,
-  ecAlgorithm: 'ES256',
-  ecPublicKey: `-----BEGIN PUBLIC KEY-----
+const MOCK_REGISTRATION = new RequestingPartyRegistration(
+    POD_URI,
+    `-----BEGIN PUBLIC KEY-----
   MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEGJkzO34pMnTx4uxoTD0+dvB4gVaX
   s9X+qkguzUCNT9ZzbZ/onTZrvQDLVAdH++c7sS/vmfrNuACUeNhLr9aYFA==
   -----END PUBLIC KEY-----`,
-};
+    'ES256',
+);
 
 const POD_PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
 MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg/cteLEDr0AH+7mA3

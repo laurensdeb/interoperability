@@ -35,18 +35,19 @@
     },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.2",
+        "@types/n3": "^1.10.4",
         "@typescript-eslint/eslint-plugin": "^5.12.1",
         "@typescript-eslint/parser": "^5.12.1",
         "componentsjs-generator": "2.6.1",
         "eslint": "^8.10.0",
         "eslint-config-google": "^0.14.0",
         "nodemon": "^2.0.15",
-        "typescript": "^4.5.5",
-        "@types/n3": "^1.10.4"
+        "typescript": "^4.5.5"
     },
     "dependencies": {
         "@solid/community-server": "github:CommunitySolidServer/CommunitySolidServer#versions/4.0.0",
         "componentsjs": "4.5.0",
+        "cross-fetch": "^3.1.5",
         "n3": "^1.16.0",
         "rdf-js": "^4.0.2"
     },
