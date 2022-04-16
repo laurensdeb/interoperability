@@ -31,7 +31,7 @@
                       "@type": "JwtTokenFactory",
                       "params_expirationTime": "5m",
                       "params_aud": "solid",
-                      "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                      "issuer": "http://localhost:4000/uma",
                       "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
                   },
                   "claimTokenProcessors": [{

@@ -32,7 +32,8 @@ export class UmaPermissionBasedAuthorizer extends Authorizer {
     const {credentials, modes, identifier, permissionSet} = input;
 
     const modeString = [...modes].join(',');
-    this.logger.debug(`Checking if ${credentials.agent?.webId} has ${modeString} permissions for ${identifier.path}`);
+    this.logger.debug(`Checking if ${this.getAgentWebId(credentials)} has ${modeString} ` +
+    `permissions for ${identifier.path}`);
 
     // Ensure all required modes are within the agent's permissions.
     for (const mode of modes) {
@@ -65,7 +66,7 @@ export class UmaPermissionBasedAuthorizer extends Authorizer {
       mode: {mode: AccessMode, modes: Set<AccessMode>}, path: string): void {
     if (!this.hasModePermission(permissionSet, mode.mode)) {
       if (this.isAuthenticated(credentials)) {
-        this.logger.warn(`Agent ${credentials.agent!.webId} has no ${mode} permissions`);
+        this.logger.warn(`Agent ${this.getAgentWebId(credentials)} has no ${mode} permissions`);
         throw new ForbiddenHttpError();
       } else {
         // Solid, §2.1: "When a client does not provide valid credentials when requesting a resource that requires it,
@@ -75,6 +76,13 @@ export class UmaPermissionBasedAuthorizer extends Authorizer {
         throw new UnauthorizedHttpError([...mode.modes], path);
       }
     }
+  }
+
+  private getAgentWebId(credentials: CredentialSet) {
+    if (credentials.ticket) {
+      return credentials.ticket.webId;
+    }
+    return credentials.agent?.webId;
   }
 
   /**
@@ -94,6 +102,6 @@ export class UmaPermissionBasedAuthorizer extends Authorizer {
    * @param credentials - Credentials to check.
    */
   private isAuthenticated(credentials: CredentialSet): boolean {
-    return typeof credentials.agent?.webId === 'string';
+    return !!(credentials.agent && credentials.agent.webId) || !!(credentials.ticket && credentials.ticket.webId);
   }
 }

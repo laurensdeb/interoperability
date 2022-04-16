@@ -7,6 +7,7 @@ export * from './authentication/Credentials';
 
 export * from './authorization/PermissionReader';
 export * from './authorization/TicketPermissionReader';
+export * from './authorization/UmaUnionPermissionReader';
 export * from './authorization/UmaPermissionBasedAuthorizer';
 export * from './authorization/error/UnauthorizedHttpError';
 export * from './authorization/permissions/Permissions';
