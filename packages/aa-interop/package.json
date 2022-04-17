@@ -49,6 +49,9 @@
       "componentsjs": "5.0.0-beta.7",
       "jose": "^4.5.1",
       "@laurensdeb/authorization-agent-uma": "^1.0.0",
+      "@janeirodigital/interop-authorization-agent": "1.0.0-rc.6",
+      "@janeirodigital/interop-data-model": "1.0.0-rc.6",
+      "@janeirodigital/interop-namespaces": "1.0.0-rc.6",
       "uuid": "^8.3.2"
     },
     "files": [
