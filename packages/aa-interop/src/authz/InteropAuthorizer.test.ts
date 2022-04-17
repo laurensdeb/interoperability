@@ -9,7 +9,7 @@ describe('Happy flows', () => {
   const authorizer = new InteropAuthorizer();
 
   test('Should throw error', () => {
-    expect(async () => await authorizer.authorize({webId, clientId}, {id: '123', requested: new Set(),
+    expect(async () => await authorizer.authorize({webId, clientId}, {owner: webId, requested: new Set(),
       sub: {pod, path}})).rejects.toThrowError();
   });
 });
