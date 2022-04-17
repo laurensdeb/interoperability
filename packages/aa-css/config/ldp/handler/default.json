@@ -2,10 +2,10 @@
     "@context": [
         "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^3.0.0/components/context.jsonld",
         "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld"
-      ],
+    ],
     "import": [
-      "files-scs:config/ldp/handler/components/authorizer.json",
-      "files-laac:config/ldp/handler/components/uma-error-handler.json",
+      "files-laac:config/ldp/handler/components/authorizer.json",
+      "files-scs:config/ldp/handler/components/error-handler.json",
       "files-scs:config/ldp/handler/components/operation-handler.json",
       "files-scs:config/ldp/handler/components/operation-metadata.json",
       "files-scs:config/ldp/handler/components/request-parser.json",
@@ -15,12 +15,12 @@
       {
         "comment": "The main entry point into the main Solid behaviour.",
         "@id": "urn:solid-server:default:LdpHandler",
-        "@type": "laac:dist/server/ParsingHttpHandler#ParsingHttpHandler",
-        "laac:dist/server/ParsingHttpHandler#ParsingHttpHandler_args_requestParser": { "@id": "urn:solid-server:default:RequestParser" },
-        "laac:dist/server/ParsingHttpHandler#ParsingHttpHandler_args_metadataCollector": { "@id": "urn:solid-server:default:OperationMetadataCollector" },
-        "laac:dist/server/ParsingHttpHandler#ParsingHttpHandler_args_errorHandler": { "@id": "urn:solid-server:default:ErrorHandler" },
-        "laac:dist/server/ParsingHttpHandler#ParsingHttpHandler_args_responseWriter": { "@id": "urn:solid-server:default:ResponseWriter" },
-        "laac:dist/server/ParsingHttpHandler#ParsingHttpHandler_args_operationHandler": {
+        "@type": "ParsingHttpHandler",
+        "args_requestParser": { "@id": "urn:solid-server:default:RequestParser" },
+        "args_metadataCollector": { "@id": "urn:solid-server:default:OperationMetadataCollector" },
+        "args_errorHandler": { "@id": "urn:solid-server:default:ErrorHandler" },
+        "args_responseWriter": { "@id": "urn:solid-server:default:ResponseWriter" },
+        "args_operationHandler": {
           "@type": "AuthorizingHttpHandler",
           "args_credentialsExtractor": { "@id": "urn:solid-server:default:CredentialsExtractor" },
           "args_modesExtractor": { "@id": "urn:solid-server:default:ModesExtractor" },

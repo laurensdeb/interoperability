@@ -11,8 +11,8 @@
       {
         "comment": "Uses Web Access Control for authorization.",
         "@id": "urn:solid-server:default:PermissionReader",
-        "@type": "UnionPermissionReader",
-        "readers": [
+        "@type": "UmaUnionPermissionReader",
+        "UmaUnionPermissionReader:_readers": [
           {
             "comment": "This PermissionReader will be used to prevent external access to containers used for internal storage.",
             "@id": "urn:solid-server:default:PathBasedReader",
@@ -29,7 +29,14 @@
           {
             "@type": "TicketPermissionReader",
             "@id": "urn:solid-server:default:TicketPermissionReader"
-          }
+          },
+          {
+            "comment": "This PermissionReader makes sure that for auxiliary resources, the main reader gets called with the associated identifier.",
+            "@type": "AuxiliaryReader",
+            "resourceReader": { "@id": "urn:solid-server:default:WebAclReader" },
+            "auxiliaryStrategy": { "@id": "urn:solid-server:default:AuxiliaryStrategy" }
+          },
+          { "@id": "urn:solid-server:default:WebAclReader" }
         ]
       },
       {

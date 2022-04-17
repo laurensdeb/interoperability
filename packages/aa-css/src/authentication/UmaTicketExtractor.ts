@@ -74,6 +74,7 @@ export class UMATicketExtractor extends CredentialsExtractor {
    */
   public async handle({headers}: HttpRequest): Promise<CredentialSet> {
     const token = /^Bearer\s+(.*)/ui.exec(headers.authorization!)![1];
+
     try {
       // Validate token JWT against JWKS of UMA Server
       const umaConfig = await this.fetchUMAConfig();
@@ -85,6 +86,7 @@ export class UMATicketExtractor extends CredentialsExtractor {
         audience: this.baseUrl,
         maxTokenAge: this.maxTokenAge,
       });
+      this.logger.info('Validated UMA token.');
 
       if (!payload.sub) {
         throw new Error('UMA Access Token is missing \'sub\' claim.');

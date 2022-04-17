@@ -1,4 +1,4 @@
-import {AccessMode} from '@solid/community-server';
+import {AccessMode, getLoggerFor} from '@solid/community-server';
 import {PermissionReader, PermissionReaderInput} from './PermissionReader';
 import {PermissionSet} from './permissions/Permissions';
 
@@ -6,6 +6,8 @@ import {PermissionSet} from './permissions/Permissions';
  * PermissionReader using input from Ticket to authorize the request.
  */
 export class TicketPermissionReader extends PermissionReader {
+  protected readonly logger = getLoggerFor(this);
+
   /**
      * Converts ticket to PermissionSet
      * @param {PermissionReaderInput} input
@@ -14,8 +16,9 @@ export class TicketPermissionReader extends PermissionReader {
   public async handle(input: PermissionReaderInput): Promise<PermissionSet> {
     const result: PermissionSet = {};
 
-    if (input.credentials.ticket?.resource === input.identifier && input.credentials.ticket?.modes) {
+    if (input.credentials.ticket?.resource?.path === input.identifier.path && input.credentials.ticket?.modes) {
       result.ticket = this.ticketModesToPermissions(input.credentials.ticket.modes);
+      this.logger.info(`${JSON.stringify(result)}`);
     }
 
     return result;

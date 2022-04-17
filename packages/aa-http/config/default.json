@@ -37,6 +37,9 @@
                                 },
                                 {
                                     "@id": "urn:authorization-agent:oidc:default:OidcConfigRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-agent:uma:default:PermissionRegistrationRoute"
                                 }
                             ]
                         }

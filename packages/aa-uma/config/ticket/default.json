@@ -15,7 +15,23 @@
                 }
             ],
             "handler": {
-              "@type": "PermissionRegistrationHandler"
+              "@type": "JsonHttpErrorHandler",
+              "nestedHandler": {
+              "@type": "PermissionRegistrationHandler",
+              "resourceServers": [{
+                  "@type": "RequestingPartyRegistration",
+                  "baseUri": "http://localhost:3000",
+                  "ecPublicKey": "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEGJkzO34pMnTx4uxoTD0+dvB4gVaXs9X+qkguzUCNT9ZzbZ/onTZrvQDLVAdH++c7sS/vmfrNuACUeNhLr9aYFA==-----END PUBLIC KEY-----",
+                  "ecAlgorithm": "ES256"
+                }],
+                "ticketFactory": {
+                  "@type": "JwtTicketFactory",
+                  "issuer": { "@id": "urn:authorization-agent:variables:baseUrl" },
+                  "params_expirationTime": "15m",
+                  "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"}
+                },
+                "baseUrl": "http://localhost:4000/uma"
+              }
             },
             "path":  "/uma/register"
         }
