@@ -40,6 +40,7 @@ describe('Happy flows', () => {
       'response_types_supported': [
         'token',
       ],
+      'permission_registration_endpoint': 'https://example.org/uma/register',
       'uma_profiles_supported': [
         'http://openid.net/specs/openid-connect-core-1_0.html#IDToken',
       ],

@@ -51,7 +51,7 @@
 		"yargs": "17.3.1",
 		"@laurensdeb/authorization-agent-uma": "^1.0.0",
 		"@laurensdeb/authorization-agent-interop": "^1.0.0"
-	},
+		},
 	"files": [
 		"config",
 		"dist"

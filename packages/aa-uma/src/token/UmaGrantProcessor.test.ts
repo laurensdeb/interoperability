@@ -10,6 +10,8 @@ const mockClaimTokenProcessor = {process: jest.fn()};
 const POD = 'https://pods.example.com/';
 const TOKEN_URI = new URL('https://uma.example.com/token');
 const WEBID = 'https://example.com/profile/alice#me';
+const WEBID_BIS = 'https://example.com/profile/carol#me';
+
 const CLIENT = 'https://projectapp.com';
 const PATH = 'test/123.ttl';
 
@@ -21,7 +23,7 @@ describe('Happy Flows', () => {
   const sub = {path: PATH, pod: POD};
   const ticket: Ticket = {
     sub,
-    id: '123',
+    owner: WEBID_BIS,
     requested: new Set([AccessMode.read]),
   };
   const principal: Principal = {webId: WEBID, clientId: CLIENT};
@@ -125,7 +127,7 @@ describe('Sad Flows', () => {
   const sub = {path: PATH, pod: POD};
   const ticket: Ticket = {
     sub,
-    id: '123',
+    owner: WEBID_BIS,
     requested: new Set([AccessMode.read]),
   };
   const principal: Principal = {webId: WEBID, clientId: CLIENT};

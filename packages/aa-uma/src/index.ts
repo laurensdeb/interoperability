@@ -1,6 +1,7 @@
 // HTTP
 export * from './http/OAuthConfigRequestHandler';
 export * from './http/UmaConfigRequestHandler';
+export * from './http/PermissionRegistrationHandler';
 export * from './http/JwksRequestHandler';
 export * from './http/TokenRequestHandler';
 export * from './http/ErrorHandler';

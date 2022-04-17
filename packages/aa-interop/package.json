@@ -52,6 +52,7 @@
       "@janeirodigital/interop-authorization-agent": "1.0.0-rc.6",
       "@janeirodigital/interop-data-model": "1.0.0-rc.6",
       "@janeirodigital/interop-namespaces": "1.0.0-rc.6",
+      "@solid/access-token-verifier": "^1.2.0",
       "uuid": "^8.3.2"
     },
     "files": [

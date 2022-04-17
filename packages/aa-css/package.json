@@ -15,42 +15,46 @@
     "lsd:module": "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css",
     "lsd:components": "dist/components/components.jsonld",
     "lsd:contexts": {
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld": "dist/components/context.jsonld"
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld": "dist/components/context.jsonld"
     },
     "lsd:importPaths": {
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/": "dist/components/",
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/config/": "config/",
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/dist/": "dist/"
-    },
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/": "dist/components/",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/config/": "config/",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/dist/": "dist/"
+        },
     "scripts": {
-      "build": "npm run build:ts && npm run build:components",
-      "build:components": "componentsjs-generator -s src/ -c dist/components -i .componentsignore",
-      "prepare": "npm run build",
-      "build:ts": "tsc",
-      "start": "node dist/server/main.js",
-      "lint": "eslint . --ext .ts",
-      "lint:fix": "eslint . --ext .ts --fix",
-      "test": "echo \"Error: no test specified\" && exit 0",
-      "watch": "nodemon --watch \"dist/**/*.js\" --exec npm start"
+        "build": "npm run build:ts && npm run build:components",
+        "build:components": "componentsjs-generator -s src/ -c dist/components -i .componentsignore",
+        "prepare": "npm run build",
+        "build:ts": "tsc",
+        "start": "node dist/server/main.js",
+        "lint": "eslint . --ext .ts",
+        "lint:fix": "eslint . --ext .ts --fix",
+        "test": "echo \"Error: no test specified\" && exit 0",
+        "watch": "nodemon --watch \"dist/**/*.js\" --exec npm start"
     },
     "devDependencies": {
-      "@tsconfig/node16": "^1.0.2",
-      "@typescript-eslint/eslint-plugin": "^5.12.1",
-      "@typescript-eslint/parser": "^5.12.1",
-      "componentsjs-generator": "2.6.1",
-      "eslint": "^8.10.0",
-      "eslint-config-google": "^0.14.0",
-      "nodemon": "^2.0.15",
-      "typescript": "^4.5.5"
+        "@tsconfig/node16": "^1.0.2",
+        "@types/n3": "^1.10.4",
+        "@typescript-eslint/eslint-plugin": "^5.12.1",
+        "@typescript-eslint/parser": "^5.12.1",
+        "componentsjs-generator": "2.6.1",
+        "eslint": "^8.10.0",
+        "eslint-config-google": "^0.14.0",
+        "nodemon": "^2.0.15",
+        "typescript": "^4.5.5"
     },
     "dependencies": {
-      "@solid/community-server": "3.0.0",
-      "componentsjs": "4.5.0"
+        "@solid/community-server": "github:CommunitySolidServer/CommunitySolidServer#versions/4.0.0",
+        "componentsjs": "4.5.0",
+        "cross-fetch": "^3.1.5",
+        "n3": "^1.16.0",
+        "rdf-js": "^4.0.2"
     },
     "files": [
         ".componentsignore",
         "dist",
-        "config"
-      ]
+        "config",
+        "templates"
+    ]
 }
-  

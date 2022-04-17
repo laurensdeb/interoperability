@@ -2,9 +2,9 @@ import {AccessMode} from '../util/modes/AccessModes';
 import {ResourceIdentifier} from '../util/ResourceIdentifier';
 
 export interface Ticket {
-    sub: ResourceIdentifier,
-    id: string,
-    requested: Set<AccessMode>
+    sub: ResourceIdentifier;
+    owner: string;
+    requested: Set<AccessMode>;
 
 }
 

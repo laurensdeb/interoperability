@@ -1,0 +1,116 @@
+sequenceDiagram
+    autonumber
+    actor Agent
+    participant Pod
+    participant UMA Authorization Service
+    participant Authorization Agent
+    Note right of Pod: The Pod has been pre-registered<br />with the Authorization Service.
+    Agent->>+Authorization Agent: Discover Agent Registration
+        Authorization Agent->>+Pod: Fetch Agent Registry
+            Pod->>+UMA Authorization Service: POST Permission Registration
+            UMA Authorization Service->>-Pod: UMA Ticket
+        Pod->>-Authorization Agent: 403 Forbidden with UMA Ticket
+        Note over Authorization Agent: The Authorization Agent has an<br /> IdP that yields ID Tokens
+        %% Note: the Authorization Agent should have "god mode" access, this could be achieved by looking at the WebID
+        %% proposal: isAuthorizationAgent(agent) ruleset
+        Authorization Agent->>+UMA Authorization Service: POST /token
+        UMA Authorization Service->>-Authorization Agent: Access Token
+        Authorization Agent->>+Pod: Fetch Agent Registry
+        Pod->>-Authorization Agent: Agent Registry
+    Authorization Agent->>-Agent: Agent Registration URI
+    Note right of UMA Authorization Service: The Authorization Service<br /> uses a specific engine for evaluating<br />authorizations based on the SAI spec.
+    %% isAgentRegistration(agent, registration) ruleset
+    Agent->>+Pod: Fetch Agent Registration
+        Note right of Pod: The request needs to pass<br /> through the UMA flow.
+        Pod->>+UMA Authorization Service: POST Permission Registration
+        UMA Authorization Service->>-Pod: UMA Ticket
+    Pod->>-Agent: 403 Forbidden with UMA Ticket
+    Agent->>+UMA Authorization Service: POST /token
+        Note left of UMA Authorization Service: A special ruleset must be<br /> applied on the registrations.
+        UMA Authorization Service->>+Pod: Fetch Agent Registration
+        Pod->>-UMA Authorization Service: Agent Registration
+        Note left of UMA Authorization Service: Check whether registration pertains to agent.
+    UMA Authorization Service->>-Agent: Access Token
+    Note left of Pod: Now the Registration can be successfully fetched.
+    Agent->>+Pod: Fetch Agent Registration
+    Pod->>-Agent: Agent Registration
+    %% isAccessGrantee(agent, accessGrant) ruleset
+     Agent->>+Pod: Fetch Access Grant
+        Note right of Pod: The request needs to pass<br /> through the UMA flow.
+        Pod->>+UMA Authorization Service: POST Permission Registration
+        UMA Authorization Service->>-Pod: UMA Ticket
+    Pod->>-Agent: 403 Forbidden with UMA Ticket
+    Agent->>+UMA Authorization Service: POST /token
+        Note left of UMA Authorization Service: A special ruleset must be<br /> applied on the access grants.
+        UMA Authorization Service->>+Pod: Fetch Access Grant
+        Pod->>-UMA Authorization Service: Access Grant
+        Note left of UMA Authorization Service: Check whether grant pertains to agent.
+    UMA Authorization Service->>-Agent: Access Token
+    Note left of Pod: Now the Access Grant can be successfully fetched.
+    Agent->>+Pod: Fetch Access Grant
+    Pod->>-Agent: Access Grant
+    %% isDataGrantee(agent, dataGrant) ruleset => note: should support delegated grant
+    Agent->>+Pod: Fetch Data Grant
+        Note right of Pod: The request needs to pass<br /> through the UMA flow.
+        Pod->>+UMA Authorization Service: POST Permission Registration
+        UMA Authorization Service->>-Pod: UMA Ticket
+    Pod->>-Agent: 403 Forbidden with UMA Ticket
+    Agent->>+UMA Authorization Service: POST /token
+        Note left of UMA Authorization Service: A special ruleset must be<br /> applied on the data grants.
+        UMA Authorization Service->>+Pod: Fetch Data Grant
+        Pod->>-UMA Authorization Service: Data Grant
+        Note left of UMA Authorization Service: Check whether grant pertains to agent.
+    UMA Authorization Service->>-Agent: Access Token
+    Note left of Pod: Now the Data Grant can be successfully fetched.
+    Agent->>+Pod: Fetch Data Grant
+    Pod->>-Agent: Data Grant
+    %% hasDataRegistration(agent, dataRegistration) => should check whether the agent has a grant to the registration
+    Agent->>+Pod: Fetch Data Registration
+        Note right of Pod: The request needs to pass<br /> through the UMA flow.
+        Pod->>+UMA Authorization Service: POST Permission Registration
+        UMA Authorization Service->>-Pod: UMA Ticket
+    Pod->>-Agent: 403 Forbidden with UMA Ticket
+    Agent->>+UMA Authorization Service: POST /token
+        Note left of UMA Authorization Service: A special ruleset must be<br /> applied on the data registrations.
+        UMA Authorization Service->>+Pod: Fetch Agent Registration
+        Pod->>-UMA Authorization Service: Agent Registration
+        loop Dereference Access Grants for the Agent
+            UMA Authorization Service->>+Pod: Fetch Access Grant
+            Pod->>-UMA Authorization Service: Access Grant
+                loop Check whether any Data Grant refers to the Data Registration
+                UMA Authorization Service->>+Pod: Fetch Data Grant
+                Pod->>-UMA Authorization Service: Data Grant
+                end
+        end
+    UMA Authorization Service->>-Agent: Access Token
+    Note left of Pod: Now the Data Registration can be successfully fetched.
+    Agent->>+Pod: Fetch Data Registration
+    Pod->>-Agent: Data Registration
+    %% isDataInstance(agent, dataInstance)
+        Agent->>+Pod: Fetch Data Instance
+        Note right of Pod: The request needs to pass<br /> through the UMA flow.
+        Pod->>+UMA Authorization Service: POST Permission Registration
+        UMA Authorization Service->>-Pod: UMA Ticket
+    Pod->>-Agent: 403 Forbidden with UMA Ticket
+    Agent->>+UMA Authorization Service: POST /token
+        Note left of UMA Authorization Service: A special ruleset must be<br /> applied on the data instances.
+        UMA Authorization Service->>+Pod: Fetch Agent Registration
+        Pod->>-UMA Authorization Service: Agent Registration
+        loop Dereference Access Grants for the Agent
+            UMA Authorization Service->>+Pod: Fetch Access Grant
+            Pod->>-UMA Authorization Service: Access Grant
+                loop Dereference Data Grants for Access Grant
+                UMA Authorization Service->>+Pod: Fetch Data Grant
+                Pod->>-UMA Authorization Service: Data Grant
+                loop Check whether Data Registration references Data Instance
+                    UMA Authorization Service->>+Pod: Fetch Data Registration
+                    Pod->>-UMA Authorization Service: Data Registration
+                end
+                end
+        end
+    UMA Authorization Service->>-Agent: Access Token
+    Note left of Pod: Now the Data Instance can be successfully fetched.
+    Agent->>+Pod: Fetch Data Instance
+    Pod->>-Agent: Data Instance
+
+    

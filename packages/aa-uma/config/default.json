@@ -5,7 +5,8 @@
     "import": [
         "laau:config/discovery/default.json",
         "laau:config/keys/default.json",
-        "laau:config/token/default.json"
+        "laau:config/token/default.json",
+        "laau:config/ticket/default.json"
     ],
     "@graph": [
         {

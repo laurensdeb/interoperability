@@ -40,6 +40,9 @@
                                 },
                                 {
                                     "@id": "urn:authorization-agent:oidc:default:JwksRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-agent:uma:default:PermissionRegistrationRoute"
                                 }
                             ]
                         }
