@@ -6,10 +6,10 @@ export const runServer = async () => {
 
   const configVariables = {
     'urn:solid-server:default:variable:showStackTrace': true,
-    'urn:solid-server:default:variable:loggingLevel': 'verbose',
+    'urn:solid-server:default:variable:loggingLevel': 'debug',
     'urn:solid-server:default:variable:port': 3000,
     'urn:solid-server:default:variable:baseUrl': 'http://localhost:3000',
-    'urn:solid-server:default:variable:seededPodConfigJson': null,
+    'urn:solid-server:default:variable:seededPodConfigJson': 'config/seeded-pod-config.json',
   };
 
   const app = await appRunner.create(

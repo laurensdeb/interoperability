@@ -21,7 +21,7 @@
         "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/": "dist/components/",
         "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/config/": "config/",
         "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/dist/": "dist/"
-    },
+        },
     "scripts": {
         "build": "npm run build:ts && npm run build:components",
         "build:components": "componentsjs-generator -s src/ -c dist/components -i .componentsignore",
@@ -54,6 +54,7 @@
     "files": [
         ".componentsignore",
         "dist",
-        "config"
+        "config",
+        "templates"
     ]
 }

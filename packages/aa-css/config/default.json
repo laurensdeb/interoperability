@@ -5,8 +5,8 @@
     ],
     "import": [
       "files-scs:config/app/main/default.json",
-      "files-scs:config/app/init/initialize-prefilled-root.json",
-      "files-scs:config/app/setup/optional.json",
+      "files-scs:config/app/init/initialize-root.json",
+      "files-scs:config/app/setup/disabled.json",
       "files-scs:config/app/variables/default.json",
       "files-scs:config/http/handler/default.json",
       "files-scs:config/http/middleware/websockets.json",
@@ -15,7 +15,6 @@
       "files-scs:config/identity/access/public.json",
       "files-scs:config/identity/email/default.json",
       "files-scs:config/identity/ownership/token.json",
-      "files-scs:config/identity/pod/static.json",
       "files-scs:config/identity/registration/enabled.json",
       "files-scs:config/ldp/metadata-parser/default.json",
       "files-scs:config/ldp/modes/default.json",
@@ -33,7 +32,8 @@
       "files-laac:config/ldp/authorization/authorization-service.json",
       "files-laac:config/ldp/metadata-writer/uma-ticket-header.json",
       "files-laac:config/identity/handler/default.json",
-      "files-laac:config/ldp/handler/default.json"
+      "files-laac:config/ldp/handler/default.json",
+      "files-laac:config/identity/pod/static.json"
     ],
     "@graph": [
       {
