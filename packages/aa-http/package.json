@@ -47,10 +47,12 @@
 	},
 	"dependencies": {
 		"@digita-ai/handlersjs-http": "0.8.5",
+		"@digita-ai/handlersjs-logging": "0.8.5",
 		"componentsjs": "5.0.0-beta.7",
 		"yargs": "17.3.1",
 		"@laurensdeb/authorization-agent-uma": "^1.0.0",
-		"@laurensdeb/authorization-agent-interop": "^1.0.0"
+		"@laurensdeb/authorization-agent-interop": "^1.0.0",
+		"@laurensdeb/authorization-agent-helpers": "^1.0.0"
 		},
 	"files": [
 		"config",

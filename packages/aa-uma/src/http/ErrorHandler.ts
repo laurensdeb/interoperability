@@ -1,4 +1,5 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
+import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
@@ -49,6 +50,8 @@ export const statusCodes: { [code: number]: string } = {
  * Handler class that properly processes the HttpErrors from handlersjs-http
  */
 export class JsonHttpErrorHandler implements HttpHandler {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   /**
    * Creates an {ErrorHandler} that catches errors and returns an error response to the given handler.
    */
@@ -65,15 +68,18 @@ export class JsonHttpErrorHandler implements HttpHandler {
    */
   handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
     return this.nestedHandler.handle(context).pipe(
-        catchError((error) => of({
-          status: statusCodes[error?.statusCode] ? error.statusCode : 500,
-          headers: {'content-type': 'application/json'},
-          body: JSON.stringify({
-            'status': statusCodes[error?.statusCode] ? error.statusCode : 500,
-            'description': statusCodes[error?.statusCode] ? statusCodes[error.statusCode] : statusCodes[500],
-            'message': error?.message ? error.message : undefined,
-          }),
-        })),
-    );
+        catchError((error) => {
+          this.logger.error(`Returned error for ${context.request.method} '${context.request.url}':` +
+          ` ${(error as Error).name} ${(error as Error).message}`);
+          return of({
+            status: statusCodes[error?.statusCode] ? error.statusCode : 500,
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({
+              'status': statusCodes[error?.statusCode] ? error.statusCode : 500,
+              'description': statusCodes[error?.statusCode] ? statusCodes[error.statusCode] : statusCodes[500],
+              'message': error?.message ? error.message : undefined,
+            }),
+          });
+        }));
   }
 }

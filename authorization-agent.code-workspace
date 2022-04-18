@@ -17,6 +17,10 @@
         "path": "./packages/aa-interop"
       },
       {
+        "name": "util",
+        "path": "./packages/aa-util"
+      },
+      {
         "name": "css",
         "path": "./packages/aa-css"
       }

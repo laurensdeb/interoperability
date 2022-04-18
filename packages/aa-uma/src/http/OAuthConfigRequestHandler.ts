@@ -1,4 +1,5 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
+import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {Observable, of} from 'rxjs';
 
 export enum ResponseType {
@@ -25,6 +26,7 @@ export type OAuthConfiguration = {
  * of the UMA Authorization Service.
  */
 export abstract class OAuthConfigRequestHandler<T extends OAuthConfiguration = OAuthConfiguration> extends HttpHandler {
+  protected readonly logger: Logger = getLoggerFor(this);
   /**
     * An HttpHandler used for returning the configuration
     * of the UMA Authorization Service.
@@ -46,6 +48,7 @@ export abstract class OAuthConfigRequestHandler<T extends OAuthConfiguration = O
      * @return {Observable<HttpHandlerResponse>} - the mock response
      */
   handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
+    this.logger.info(`Received discovery request at '${context.request.url}'`);
     const response: HttpHandlerResponse = {
       body: JSON.stringify(this.getConfig()),
       headers: {'content-type': 'application/json'},

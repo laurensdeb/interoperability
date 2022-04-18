@@ -1,4 +1,5 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {Observable, from} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
@@ -8,6 +9,8 @@ import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
  * of the UMA Authorization Service.
  */
 export class JwksRequestHandler implements HttpHandler {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   /**
    * Yields a new request handler for JWKS
    * @param {JwksKeyHolder} keyholder - the keyholder to be used for serving JWKS
@@ -22,6 +25,7 @@ export class JwksRequestHandler implements HttpHandler {
      * @return {Observable<HttpHandlerResponse>} - the JWKS response
      */
   handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
+    this.logger.info(`Received JWKS request at '${context.request.url}'`);
     return from(this.keyholder.getJwks()).pipe(map((data) => {
       return {body: JSON.stringify(data), headers: {'content-type': 'application/json'}, status: 200};
     }));

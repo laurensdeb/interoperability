@@ -5,7 +5,7 @@
     ],
     "@graph": [
         {
-            "@id": "urn:authorization-agent:uma:default:TokenRoute",
+            "@id": "urn:authorization-service:default:TokenRoute",
             "@type": "HttpHandlerRoute",
             "operations": [
                 {
@@ -19,20 +19,20 @@
               "nestedHandler": {
               "@type": "TokenRequestHandler",
               "processors": [{
-                  "@id": "urn:authorization-agent:default:UmaGrantProcessor",
+                  "@id": "urn:authorization-service:UmaGrantProcessor",
                   "@type": "UmaGrantProcessor",
                   "ticketFactory": {
                       "@type": "JwtTicketFactory",
                       "params_expirationTime": "5m",
-                      "issuer": {"@id": "urn:authorization-agent:variables:baseUrl"},
-                      "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                      "issuer": {"@id": "urn:authorization-service:variables:baseUrl"},
+                      "keyholder": {"@id": "urn:authorization-service:default:DefaultKeyholder"} 
                   },
                   "tokenFactory": {
                       "@type": "JwtTokenFactory",
                       "params_expirationTime": "5m",
                       "params_aud": "solid",
-                      "issuer": "http://localhost:4000/uma",
-                      "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"} 
+                      "issuer": {"@id": "urn:authorization-service:variables:baseUrl"},
+                      "keyholder": {"@id": "urn:authorization-service:default:DefaultKeyholder"} 
                   },
                   "claimTokenProcessors": [{
                       "@type": "BasicClaimTokenProcessor"
