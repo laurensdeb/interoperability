@@ -9,7 +9,7 @@ module.exports = {
   'coveragePathIgnorePatterns': [
     '<rootDir>/node_modules',
     'src/index.ts',
-    'src/logging/LogLevel.ts',
+    'src/server/main.ts',
   ],
   'coverageReporters': [
     'json',

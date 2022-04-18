@@ -1,11 +1,30 @@
 /* eslint-disable require-jsdoc */
 /* eslint-disable valid-jsdoc */
-import {Authorizer, getLoggerFor, ResourceSet, AuthorizerInput,
-  NotFoundHttpError, ForbiddenHttpError} from '@solid/community-server';
+import {Authorizer, getLoggerFor, ResourceSet,
+  NotFoundHttpError, ForbiddenHttpError, ResourceIdentifier} from '@solid/community-server';
 import {UnauthorizedHttpError} from './error/UnauthorizedHttpError';
 import type {CredentialSet} from '../authentication/Credentials';
 import type {PermissionSet} from './permissions/Permissions';
 import {AccessMode} from './permissions/Permissions';
+
+export interface AuthorizerInput {
+  /**
+   * Credentials of the entity that wants to use the resource.
+   */
+  credentials: CredentialSet;
+  /**
+   * Identifier of the resource that will be read/modified.
+   */
+  identifier: ResourceIdentifier;
+  /**
+   * Modes that are requested on the resource.
+   */
+  modes: Set<AccessMode>;
+  /**
+   * Permissions that are available for the request.
+   */
+  permissionSet: PermissionSet;
+}
 
 /**
  * Authorizer that bases its decision on the output it gets from its PermissionReader.
