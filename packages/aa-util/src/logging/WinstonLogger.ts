@@ -3,7 +3,6 @@
 
 import * as util from 'util';
 import {transports, createLogger, format, Logger as WLogger} from 'winston';
-import {HandlerArgumentError} from '@digita-ai/handlersjs-core';
 import {Logger, LoggerLevel} from '@digita-ai/handlersjs-logging';
 import {TransformableInfo} from 'logform';
 import * as fs from 'fs';
@@ -39,14 +38,6 @@ export class WinstonLogger extends Logger {
   }
 
   log(level: LoggerLevel, message: string, data?: unknown): void {
-    if (level === null || level === undefined) {
-      throw new HandlerArgumentError('Argument level should be set', this.label);
-    }
-
-    if (!message) {
-      throw new HandlerArgumentError('Argument message should be set', message);
-    }
-
     const logLevel = LoggerLevel[level];
     const printData = level <= this.minimumLevelPrintData;
 
@@ -61,10 +52,10 @@ export class WinstonLogger extends Logger {
    * @param info The log info to format
    * @return The formatted string
    */
-  private formatLog(info: TransformableInfo): string {
+  public formatLog(info: TransformableInfo): string {
     return info.printData ?
       `${info.timestamp} [${info.typeName}] ${info.level}: ${info.message}${info.data ?
         `\n${util.inspect(info.data)}` : ''}` :
-      `[${info.timestamp} ${info.typeName}] ${info.level}: ${info.message}`;
+      `${info.timestamp} [${info.typeName}] ${info.level}: ${info.message}`;
   }
 }

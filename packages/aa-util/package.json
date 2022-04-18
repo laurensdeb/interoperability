@@ -48,6 +48,7 @@
         "@digita-ai/handlersjs-http": "0.8.5",
         "@digita-ai/handlersjs-logging": "0.8.5",
         "componentsjs": "5.0.0-beta.7",
+        "jest-mock-extended": "^2.0.5",
         "winston": "^3.7.2",
         "winston-transport": "^4.5.0"
     },
