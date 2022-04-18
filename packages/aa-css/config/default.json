@@ -33,7 +33,8 @@
       "files-laac:config/ldp/metadata-writer/uma-ticket-header.json",
       "files-laac:config/identity/handler/default.json",
       "files-laac:config/ldp/handler/default.json",
-      "files-laac:config/identity/pod/static.json"
+      "files-laac:config/identity/pod/static.json",
+      "files-laac:config/uma/default.json"
     ],
     "@graph": [
       {

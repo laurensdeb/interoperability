@@ -8,11 +8,8 @@
         "comment": "Returns the UMA ticket in case of an unauthorized request.",
         "@id": "urn:solid-server:default:MetadataWriter_TicketWwwAuth",
         "@type": "TicketWwwAuthMetadataWriter",
-        "TicketWwwAuthMetadataWriter:_args_asUrl": "http://localhost:4000/uma",
-        "TicketWwwAuthMetadataWriter:_args_ecAlgorithm": "ES256",
-        "TicketWwwAuthMetadataWriter:_args_ecPrivateKey": "-----BEGIN PRIVATE KEY-----MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg/cteLEDr0AH+7mA3lvCtf2pY32NMVpy2yWCk8LbfJ+WhRANCAAQYmTM7fikydPHi7GhMPT528HiBVpez1f6qSC7NQI1P1nNtn+idNmu9AMtUB0f75zuxL++Z+s24AJR42Euv1pgU-----END PRIVATE KEY----",
-        "TicketWwwAuthMetadataWriter:_args_accountStore": {"@id": "urn:solid-server:auth:password:AccountStore"},
-        "TicketWwwAuthMetadataWriter:_args_baseUrl": { "@id": "urn:solid-server:default:variable:baseUrl" }
+        "TicketWwwAuthMetadataWriter:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"},
+        "TicketWwwAuthMetadataWriter:_args_accountStore": {"@id": "urn:solid-server:auth:password:AccountStore"}
       }
     ]
   }
