@@ -39,8 +39,6 @@ jobs:
         run: npm run bootstrap
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - name: Run build
-        run: npm run build:all
       - name: Run tests
         run: npm run test:all
       - uses: codecov/codecov-action@v2
