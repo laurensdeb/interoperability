@@ -1,5 +1,5 @@
 # Authorization Agent & Authorization Service for Community Solid Server
-[![CI/CD](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml)
+[![CI/CD](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/laurensdeb/authorization-agent/branch/main/graph/badge.svg?token=YNT84QJT7G)](https://codecov.io/gh/laurensdeb/authorization-agent)
 
 This repository implements experimental [UMA](https://docs.kantarainitiative.org/uma/wg/rec-oauth-uma-grant-2.0.html) support for the Community Solid Server, as
 to enable an Authorization Agent like defined by the [Solid Application Interoperability Draft Specification](https://solid.github.io/data-interoperability-panel/specification/) to control
