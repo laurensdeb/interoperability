@@ -11,6 +11,13 @@ export interface UmaConfig {
     issuer: string;
     permission_registration_endpoint: string;
     }
+
+export type PermissionTicketRequest = {
+    ticketSubject: string,
+    owner: string,
+    ticketNeeds: Set<string>
+}
+
 /**
  * Client interface for the UMA AS
  */
@@ -18,6 +25,5 @@ export abstract class UmaClient {
     public abstract getAsUrl(): string;
     public abstract verifyToken(token: string): Promise<UmaToken>;
     public abstract fetchUMAConfig(): Promise<UmaConfig>;
-    public abstract fetchPermissionTicket(ticketSubject: string, owner: string,
-        ticketNeeds: Set<string>): Promise<string | undefined>;
+    public abstract fetchPermissionTicket(request: PermissionTicketRequest): Promise<string | undefined>;
 }

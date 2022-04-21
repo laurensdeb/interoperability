@@ -52,7 +52,7 @@ describe('A TicketWwwAuthMetadataWriter', () => {
     await expect(writer.handle({response, metadata})).resolves.toBeUndefined();
 
     expect(mockUmaClient.fetchPermissionTicket).toHaveBeenCalledTimes(1);
-    expect(mockUmaClient.fetchPermissionTicket).toHaveBeenCalledWith('http://example.org/456/def', 'http://example.org/123/profile', new Set(['http://www.w3.org/ns/auth/acl#Read']));
+    expect(mockUmaClient.fetchPermissionTicket).toHaveBeenCalledWith({ticketSubject: 'http://example.org/456/def', owner: 'http://example.org/123/profile', ticketNeeds: new Set(['http://www.w3.org/ns/auth/acl#Read'])});
     expect(response.getHeaders()).toEqual({
       'www-authenticate': 'UMA realm=\"solid\",as_uri=\"https://as.example.org\",ticket=\"def\"',
     });
@@ -66,7 +66,7 @@ describe('A TicketWwwAuthMetadataWriter', () => {
     await expect(writer.handle({response, metadata})).resolves.toBeUndefined();
 
     expect(mockUmaClient.fetchPermissionTicket).toHaveBeenCalledTimes(1);
-    expect(mockUmaClient.fetchPermissionTicket).toHaveBeenCalledWith('http://example.org/456/def', 'http://example.org/123/profile', new Set(['http://www.w3.org/ns/auth/acl#Read']));
+    expect(mockUmaClient.fetchPermissionTicket).toHaveBeenCalledWith({ticketSubject: 'http://example.org/456/def', owner: 'http://example.org/123/profile', ticketNeeds: new Set(['http://www.w3.org/ns/auth/acl#Read'])});
     expect(response.getHeaders()).toEqual({});
   });
 

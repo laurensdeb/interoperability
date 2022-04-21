@@ -10,6 +10,7 @@ module.exports = {
     '<rootDir>/node_modules',
     'src/index.ts',
     'src/server/main.ts',
+    'src/util/'
   ],
   'coverageReporters': [
     'json',

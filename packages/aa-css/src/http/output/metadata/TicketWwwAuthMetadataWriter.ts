@@ -87,7 +87,8 @@ export class TicketWwwAuthMetadataWriter extends MetadataWriter {
     if (ticketNeeds && ticketSubject) {
       const owner = await this.retrievePodOwner(ticketSubject.value);
       if (owner) {
-        const permissionTicket = await this.umaClient.fetchPermissionTicket(ticketSubject.value, owner, ticketNeeds);
+        const permissionTicket = await this.umaClient.fetchPermissionTicket({ticketSubject: ticketSubject.value,
+          owner, ticketNeeds});
         if (permissionTicket) {
           addHeader(response, 'WWW-Authenticate', `UMA realm="solid",` +
         `as_uri="${this.umaClient.getAsUrl()}",ticket="${permissionTicket}"`);
