@@ -5,7 +5,7 @@
     ],
     "@graph": [
         {
-            "@id": "urn:authorization-agent:uma:default:PermissionRegistrationRoute",
+            "@id": "urn:authorization-service:default:PermissionRegistrationRoute",
             "@type": "HttpHandlerRoute",
             "operations": [
                 {
@@ -26,11 +26,11 @@
                 }],
                 "ticketFactory": {
                   "@type": "JwtTicketFactory",
-                  "issuer": { "@id": "urn:authorization-agent:variables:baseUrl" },
+                  "issuer": { "@id": "urn:authorization-service:variables:baseUrl" },
                   "params_expirationTime": "15m",
-                  "keyholder": {"@id": "urn:authorization-agent:default:DefaultKeyholder"}
+                  "keyholder": {"@id": "urn:authorization-service:default:DefaultKeyholder"}
                 },
-                "baseUrl": "http://localhost:4000/uma"
+                "baseUrl": { "@id": "urn:authorization-service:variables:baseUrl" }
               }
             },
             "path":  "/uma/register"

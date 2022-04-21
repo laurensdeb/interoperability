@@ -20,8 +20,8 @@ describe('Happy flows', () => {
   test('Handles GET request with configuration in body', async () => {
     const response = await lastValueFrom(requestHandler.handle(requestContext));
     expect(JSON.parse(response.body)).toEqual({
-      'jwks_uri': `${BASE_URL}/uma/keys`,
-      'token_endpoint': `${BASE_URL}/uma/token`,
+      'jwks_uri': `${BASE_URL}/keys`,
+      'token_endpoint': `${BASE_URL}/token`,
       'grant_types_supported': [
         'urn:ietf:params:oauth:grant-type:uma-ticket',
       ],
@@ -36,11 +36,11 @@ describe('Happy flows', () => {
         'RS384',
         'RS512',
       ],
-      'issuer': 'https://example.org/uma',
+      'issuer': 'https://example.org',
       'response_types_supported': [
         'token',
       ],
-      'permission_registration_endpoint': 'https://example.org/uma/register',
+      'permission_registration_endpoint': 'https://example.org/register',
       'uma_profiles_supported': [
         'http://openid.net/specs/openid-connect-core-1_0.html#IDToken',
       ],

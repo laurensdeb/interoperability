@@ -1,3 +1,4 @@
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {AccessMode} from '../../util/modes/AccessModes';
 import {Ticket} from '../TicketFactory';
 import {Principal} from '../UmaGrantProcessor';
@@ -10,6 +11,8 @@ import {Authorizer} from './Authorizer';
  * NOTE: DO NOT USE THIS IN PRODUCTION
  */
 export class AllAuthorizer extends Authorizer {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   /**
      *
      * @param {AccessMode[]} accessModes - default access modes to be granted to any client.
@@ -17,6 +20,8 @@ export class AllAuthorizer extends Authorizer {
   constructor(private readonly accessModes: AccessMode[] =
   [AccessMode.read, AccessMode.write, AccessMode.append, AccessMode.delete, AccessMode.create]) {
     super();
+    this.logger.warn(`The AllAuthorizer was enabled with modes ${accessModes.join(', ')}. ` +
+    `DO NOT USE THIS IN PRODUCTION!`);
   }
 
   /**
@@ -26,6 +31,7 @@ export class AllAuthorizer extends Authorizer {
    * @return {Promise<Set<AccessMode>>} - granted access modes
    */
   public async authorize(client: Principal, request: Ticket): Promise<Set<AccessMode>> {
+    this.logger.debug(`Authorized request by ${client.webId} for ${request.sub.path}`);
     return new Set(this.accessModes);
   }
 }

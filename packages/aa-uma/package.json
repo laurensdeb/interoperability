@@ -45,8 +45,10 @@
     },
     "dependencies": {
         "@digita-ai/handlersjs-http": "0.8.5",
+        "@digita-ai/handlersjs-logging": "0.8.5",
         "componentsjs": "5.0.0-beta.7",
         "@solid/access-token-verifier": "^1.2.0",
+        "@laurensdeb/authorization-agent-helpers": "^1.0.0",
         "jest": "^27.5.1",
         "jose": "^4.5.1",
         "rxjs": "^7.5.4",

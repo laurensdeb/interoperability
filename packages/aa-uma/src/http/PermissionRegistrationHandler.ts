@@ -8,6 +8,7 @@ import {parseModes} from '../util/modes/ModesParser';
 import {isString} from '../util/StringGuard';
 import {AccessMode} from '../util/modes/AccessModes';
 import {isUrlString, UrlString} from '../util/UrlGuard';
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 
 /**
  * Registration for a Requesting Party (i.e. Pod Server)
@@ -36,6 +37,8 @@ export type PermissionRegistrationResponse = {
  * It provides an endpoint to a Resource Server for requesting UMA tickets.
  */
 export class PermissionRegistrationHandler implements HttpHandler {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   /**
     * A PermissionRegistrationHandler is tasked with implementing
     * section 3.2 from the User-Managed Access (UMA) Profile of OAuth 2.0.
@@ -87,7 +90,9 @@ export class PermissionRegistrationHandler implements HttpHandler {
     const resourceServer = await this.validateAuthorization(authorizationHeader);
 
     if (!body.scopes || !Array.isArray(body.scopes)) {
-      throw new BadRequestHttpError('Missing or invalid key "scopes" in the request');
+      const msg = 'Missing or invalid key "scopes" in the request';
+      this.logger.debug(msg);
+      throw new BadRequestHttpError(msg);
     }
 
     let scopes: Set<AccessMode>;
@@ -95,26 +100,36 @@ export class PermissionRegistrationHandler implements HttpHandler {
     try {
       scopes = parseModes(body.scopes);
     } catch (e) {
-      throw new BadRequestHttpError(`Invalid provided scopes: ${(e as Error).message}`);
+      const msg = `Invalid provided scopes: ${(e as Error).message}`;
+      this.logger.debug(msg);
+      throw new BadRequestHttpError(msg);
     }
 
     if (!body.resource_set_id || !isString(body.resource_set_id)) {
-      throw new BadRequestHttpError('Missing or invalid key "resource_set_id" in the request');
+      const msg = 'Missing or invalid key "resource_set_id" in the request';
+      this.logger.debug(msg);
+      throw new BadRequestHttpError(msg);
     }
     const path: string = body.resource_set_id as string;
 
     if (!body.owner || !isUrlString(body.owner)) {
-      throw new BadRequestHttpError('Missing or invalid key "owner" in the request');
+      const msg = 'Missing or invalid key "owner" in the request';
+      this.logger.debug(msg);
+      throw new BadRequestHttpError(msg);
     }
     const owner: UrlString = body.owner;
 
+    this.logger.info(`Successful UMA registration for resource '${path}' (${Array.from(scopes).join(', ')}) `+
+    `owned by '${owner}' on resource server '${resourceServer.baseUri}'`);
 
     let ticket;
     try {
       ticket = await this.ticketFactory.serialize({owner,
         sub: {path, pod: resourceServer.baseUri}, requested: scopes});
     } catch (e) {
-      throw new InternalServerError(`Error while generating ticket: ${(e as Error).message}`);
+      const msg = `Error while generating ticket: ${(e as Error).message}`;
+      this.logger.error(msg);
+      throw new InternalServerError(msg);
     }
     return {ticket: ticket};
   }
@@ -127,6 +142,7 @@ export class PermissionRegistrationHandler implements HttpHandler {
    */
   private async validateAuthorization(authorization: string): Promise<RequestingPartyRegistration> {
     if (!/^Bearer /ui.test(authorization)) {
+      this.logger.debug('Missing Bearer authorization header.');
       throw new BadRequestHttpError('Expected Bearer authorization header.');
     }
     // TODO: prevent replay.
@@ -144,6 +160,7 @@ export class PermissionRegistrationHandler implements HttpHandler {
       // ignored
       }
     }
+    this.logger.debug('Bearer token could not be matched against resource server.');
     throw new UnauthorizedHttpError('Bearer token is invalid.');
   }
 }

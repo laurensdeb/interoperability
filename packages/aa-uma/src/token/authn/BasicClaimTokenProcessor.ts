@@ -1,4 +1,5 @@
 import {UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {Principal} from '../UmaGrantProcessor';
 import {ClaimTokenProcessor, ClaimTokenRequest} from './ClaimTokenProcessor';
 
@@ -8,6 +9,16 @@ import {ClaimTokenProcessor, ClaimTokenRequest} from './ClaimTokenProcessor';
  * **DO NOT USE IN PRODUCTION!**
  */
 export class BasicClaimTokenProcessor extends ClaimTokenProcessor {
+  protected readonly logger: Logger = getLoggerFor(this);
+
+  /**
+   * A dummy claim token processor for debugging purposes
+   */
+  constructor() {
+    super();
+    this.logger.warn(`The BasicClaimTokenProcessor was enabled. DO NOT USE THIS IN PRODUCTION!`);
+  }
+
   /**
      * Process a dummy token of type 'urn:authorization-agent:dummy-token'.
      *
@@ -30,9 +41,11 @@ export class BasicClaimTokenProcessor extends ClaimTokenProcessor {
       if (tokenContents.length === 2) {
         principal.clientId = new URL(decodeURIComponent(tokenContents[1])).toString();
       }
+      this.logger.info(`Authenticated as ${principal.webId} via a dummy token.`);
       return principal;
     } catch (error: unknown) {
       const message = `Error verifying Access Token via WebID: ${(error as Error).message}`;
+      this.logger.debug(message);
       throw new UnauthorizedHttpError(message);
     }
   }

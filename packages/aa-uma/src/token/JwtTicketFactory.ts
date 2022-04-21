@@ -1,4 +1,5 @@
 import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {SignJWT, createLocalJWKSet, jwtVerify} from 'jose';
 import {v4} from 'uuid';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
@@ -15,6 +16,8 @@ export interface JwtTicketParams {
  * A UMA Ticket Factory using JWTs for tickets.
  */
 export class JwtTicketFactory extends TicketFactory {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   /**
      * Construct a new ticket factory
      * @param {JwksKeyHolder} keyholder - keyholder to be used in issuance
@@ -39,6 +42,7 @@ export class JwtTicketFactory extends TicketFactory {
         .setExpirationTime(this.params.expirationTime)
         .setJti(v4())
         .sign(this.keyholder.getPrivateKey(kid));
+    this.logger.debug('Issued new JWT Ticket', ticket);
     return jwt;
   }
 
@@ -70,8 +74,9 @@ export class JwtTicketFactory extends TicketFactory {
 
       return {sub: {path: payload.sub, pod: payload.aud}, owner: payload.owner, requested: parseModes(payload.modes)};
     } catch (error: any) {
-      throw new BadRequestHttpError(`Invalid UMA Ticket provided, error while parsing: `+
-      `${error.message}`);
+      const msg = `Invalid UMA Ticket provided, error while parsing: ${error.message}`;
+      this.logger.debug(msg);
+      throw new BadRequestHttpError(msg);
     }
   }
 }

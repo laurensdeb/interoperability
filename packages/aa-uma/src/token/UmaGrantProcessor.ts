@@ -6,6 +6,7 @@ import {ClaimTokenProcessor, ClaimTokenRequest} from './authn/ClaimTokenProcesso
 import {Ticket, TicketFactory} from './TicketFactory';
 import {TokenFactory} from './TokenFactory';
 import {GrantTypeProcessor, TokenResponse} from './GrantTypeProcessor';
+import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 
 /**
  * A UmaAccessToken is a type of RPT that is supported by the UmaGrantProcessor.
@@ -44,6 +45,8 @@ export type AccessToken = Principal & Authorization;
  * type.
  */
 export class UmaGrantProcessor extends GrantTypeProcessor {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   /**
      * Construct a new UmaGrantProcessor
      * @param {ClaimTokenProcessor[]} claimTokenProcessors - a list of registered processors for claim tokens.
@@ -74,8 +77,10 @@ export class UmaGrantProcessor extends GrantTypeProcessor {
   public async process(body: Map<string, string>, context: HttpHandlerContext): Promise<TokenResponse> {
     // Validate if all required parameters are present in body
     if (!body.has('ticket') || !body.has('claim_token') || !body.has('claim_token_format')) {
-      throw new BadRequestHttpError('The request is missing one of the required body parameters:'+
-      ' {\'ticket\', \'claim_token\', \'claim_token_format\'}');
+      const msg = 'The request is missing one of the required body parameters:'+
+      ' {\'ticket\', \'claim_token\', \'claim_token_format\'}';
+      this.logger.debug(msg);
+      throw new BadRequestHttpError(msg);
     }
 
     const request: ClaimTokenRequest = {claim_token: body.get('claim_token')!,
@@ -102,8 +107,13 @@ export class UmaGrantProcessor extends GrantTypeProcessor {
     const authorization = await this.authorize(ticket, principal);
 
     if (!authorization.modes.size) {
-      throw new ForbiddenHttpError('Unable to authorize request.');
+      const msg = 'Unable to authorize request.';
+      this.logger.debug(msg);
+      throw new ForbiddenHttpError(msg);
     }
+
+    this.logger.info(`Generating new Access Token for resource '${authorization.sub.path}' ` +
+    `and principal '${principal.webId}'`);
 
     // Serialize Authorization into Access Token
     const {token, tokenType} = await this.tokenFactory.serialize({...principal, ...authorization});

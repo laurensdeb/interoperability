@@ -3,12 +3,15 @@ import {createSolidTokenVerifier} from '@solid/access-token-verifier';
 import {Principal} from '../UmaGrantProcessor';
 import {UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
 import {NotImplementedHttpError} from '@digita-ai/handlersjs-http';
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 
 /**
  * Claim Token Processor performing Solid OIDC authentication
  * with DPoP to obtain an authenticated Principal object.
  */
 export class DpopClaimTokenProcessor extends ClaimTokenProcessor {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   private readonly verify = createSolidTokenVerifier();
   /**
      * Processes the claim token request, in the process performing Solid OIDC
@@ -24,7 +27,9 @@ export class DpopClaimTokenProcessor extends ClaimTokenProcessor {
     }
 
     if (!req.dpop) {
-      throw new NotImplementedHttpError('DPoP Header is missing.');
+      const msg = 'DPoP Header is missing.';
+      this.logger.debug(msg);
+      throw new NotImplementedHttpError(msg);
     }
 
     try {
@@ -36,9 +41,11 @@ export class DpopClaimTokenProcessor extends ClaimTokenProcessor {
             url: req.url.toString(),
           },
       );
+      this.logger.info(`Authenticated as ${webId} via a Solid OIDC.`);
       return {webId, clientId};
     } catch (error: unknown) {
       const message = `Error verifying Access Token via WebID: ${(error as Error).message}`;
+      this.logger.debug(message);
       throw new UnauthorizedHttpError(message);
     }
   }

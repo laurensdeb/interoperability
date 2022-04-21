@@ -17,6 +17,10 @@
         "path": "./packages/aa-interop"
       },
       {
+        "name": "util",
+        "path": "./packages/aa-util"
+      },
+      {
         "name": "css",
         "path": "./packages/aa-css"
       }
@@ -32,7 +36,7 @@
     "extensions": {
       "recommendations": [
         "dbaeumer.vscode-eslint",
-        "humao.rest-client"
+        "henrynguyen5-vsc.vsc-nvm"
       ]
     }
   }

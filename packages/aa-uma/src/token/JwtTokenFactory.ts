@@ -1,4 +1,5 @@
 import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {createLocalJWKSet, jwtVerify, SignJWT} from 'jose';
 import {v4} from 'uuid';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
@@ -16,6 +17,8 @@ export interface JwtTokenParams {
  * A TokenFactory yielding its tokens as signed JWTs.
  */
 export class JwtTokenFactory extends TokenFactory {
+  protected readonly logger: Logger = getLoggerFor(this);
+
   /**
      * Construct a new ticket factory
      * @param {JwksKeyHolder} keyholder - keyholder to be used in issuance
@@ -41,6 +44,7 @@ export class JwtTokenFactory extends TokenFactory {
         .setExpirationTime(this.params.expirationTime)
         .setJti(v4())
         .sign(this.keyholder.getPrivateKey(kid));
+    this.logger.debug('Issued new JWT Token', token);
     return {token: jwt, tokenType: 'Bearer'};
   }
 
@@ -75,8 +79,9 @@ export class JwtTokenFactory extends TokenFactory {
       return {webId: payload.webid!, clientId: payload.azp!, sub: {pod: payload.aud, path: payload.sub},
         modes: parseModes(payload.modes)};
     } catch (error: any) {
-      throw new BadRequestHttpError(`Invalid Access Token provided, error while parsing: `+
-      `${error.message}`);
+      const msg = `Invalid Access Token provided, error while parsing: ${error.message}`;
+      this.logger.debug(msg);
+      throw new BadRequestHttpError(msg);
     }
   }
 }

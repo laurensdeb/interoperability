@@ -1,6 +1,7 @@
 import {exportJWK, generateKeyPair, JSONWebKeySet, JWK, KeyLike} from 'jose';
 import {JwksKeyHolder} from './JwksKeyHolder';
 import {v4} from 'uuid';
+import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 
 const SUPPORTED_ALGORITHMS = new Set(['ES256', 'ES384', 'ES512', 'RS256', 'RS384', 'RS512']);
 
@@ -13,6 +14,7 @@ export interface KeyPair {
  * In-memory implementation of a JWKS Key Holder.
  */
 export class InMemoryJwksKeyHolder extends JwksKeyHolder {
+  protected readonly logger: Logger = getLoggerFor(this);
   private readonly keys: Map<string, KeyPair>;
   private currentKid: undefined | string;
 
@@ -23,7 +25,9 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
   public constructor(private readonly alg: string) {
     super();
     if (!SUPPORTED_ALGORITHMS.has(alg)) {
-      throw new Error(`The chosen algorithm '${alg}' is not supported by the InMemoryJwksKeyHolder.`);
+      const msg = `The chosen algorithm '${alg}' is not supported by the InMemoryJwksKeyHolder.`;
+      this.logger.error(msg);
+      throw new Error(msg);
     }
 
     this.alg = alg;
@@ -65,8 +69,11 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
    */
   getPrivateKey(kid: string): KeyLike {
     if (!this.keys.has(kid)) {
-      throw new Error(`The specified kid '${kid}' does not exist in the holder.`);
+      const msg = `The specified kid '${kid}' does not exist in the holder.`;
+      this.logger.error(msg);
+      throw new Error(msg);
     }
+    this.logger.info(`Retrieved private key with kid '${kid}'.`);
     return this.keys.get(kid)!.privateKey;
   }
 
@@ -77,8 +84,11 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
    */
   getPublicKey(kid: string): KeyLike {
     if (!this.keys.has(kid)) {
-      throw new Error(`The specified kid '${kid}' does not exist in the holder.`);
+      const msg = `The specified kid '${kid}' does not exist in the holder.`;
+      this.logger.error(msg);
+      throw new Error(msg);
     }
+    this.logger.info(`Retrieved public key with kid '${kid}'.`);
     return this.keys.get(kid)!.publicKey;
   }
 
@@ -89,7 +99,9 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
    */
   async toPublicJwk(kid: string): Promise<JWK> {
     if (!this.keys.has(kid)) {
-      throw new Error(`The specified kid '${kid}' does not exist in the holder.`);
+      const msg = `The specified kid '${kid}' does not exist in the holder.`;
+      this.logger.error(msg);
+      throw new Error(msg);
     }
     return {kid: kid, ...await exportJWK(this.keys.get(kid)!.publicKey)};
   }
@@ -111,6 +123,7 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
     const kid = v4();
 
     this.keys.set(kid, key);
+    this.logger.info(`Generated new default keypair with kid '${kid}'`);
     this.currentKid = kid;
     return kid;
   }

@@ -1,5 +1,9 @@
 export * from './server/main';
 
+export * from './uma/UmaClientImpl';
+export * from './uma/UmaClient';
+
+
 export * from './util/Vocabularies';
 
 export * from './authentication/UmaTicketExtractor';

@@ -1,6 +1,6 @@
 {
     "@context": [
-      "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^3.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^4.0.0/components/context.jsonld",
       "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-css/^1.0.0/components/context.jsonld"
     ],
     "import": [
@@ -33,7 +33,8 @@
       "files-laac:config/ldp/metadata-writer/uma-ticket-header.json",
       "files-laac:config/identity/handler/default.json",
       "files-laac:config/ldp/handler/default.json",
-      "files-laac:config/identity/pod/static.json"
+      "files-laac:config/identity/pod/static.json",
+      "files-laac:config/uma/default.json"
     ],
     "@graph": [
       {
