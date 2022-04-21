@@ -10,6 +10,7 @@
     "lint:fix:all": "lerna run lint:fix --parallel",
     "test:all": "lerna run test --parallel",
     "build:all": "lerna run build",
+    "start": "lerna run start --parallel",
     "commit": "commit",
     "prepare": "husky install"
   },
