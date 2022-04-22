@@ -42,4 +42,8 @@ describe('Happy Flows', () => {
     expect(solidTokenVerifier).toHaveBeenCalledWith('DPoP token-123', {header: 'token-456', method: 'POST', url: 'http://example.com/token'});
     expect(result).toEqual({webId: 'http://alice.example/card#me', clientId: 'http://example.com/app'});
   });
+
+  test('Should return supported claim format', () => {
+    expect(dpopClaimTokenProcessor.claimTokenFormat()).toEqual('http://openid.net/specs/openid-connect-core-1_0.html#IDToken');
+  });
 });

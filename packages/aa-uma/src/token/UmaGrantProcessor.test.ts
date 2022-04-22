@@ -1,11 +1,14 @@
-import {BadRequestHttpError, ForbiddenHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
+import {BadRequestHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
+import {NeedInfoError} from '../error/NeedInfoError';
+import {RequestDeniedError} from '../error/RequestDeniedError';
 import {AccessMode} from '../util/modes/AccessModes';
 import {Ticket} from './TicketFactory';
 import {Principal, UmaGrantProcessor} from './UmaGrantProcessor';
 const mockTicketFactory = {serialize: jest.fn(), deserialize: jest.fn()};
 const mockTokenFactory = {serialize: jest.fn(), deserialize: jest.fn()};
 const mockAuthorizer = {authorize: jest.fn()};
-const mockClaimTokenProcessor = {process: jest.fn()};
+const mockClaimTokenProcessor = {process: jest.fn(),
+  claimTokenFormat: jest.fn(() => 'urn:authorization-agent:dummy-token')};
 
 const POD = 'https://pods.example.com/';
 const TOKEN_URI = new URL('https://uma.example.com/token');
@@ -194,7 +197,7 @@ describe('Sad Flows', () => {
     try {
       await umaGrantProcessor.process(body, requestContext);
     } catch (e) {
-      expect(e).toBeInstanceOf(ForbiddenHttpError);
+      expect(e).toBeInstanceOf(RequestDeniedError);
     }
 
     expect(mockClaimTokenProcessor.process).toHaveBeenCalledWith({url: TOKEN_URI, method: 'POST',
@@ -203,7 +206,21 @@ describe('Sad Flows', () => {
     expect(mockAuthorizer.authorize).toHaveBeenCalledWith(principal, ticket);
   });
 
-  test('Unsupported token_format should throw error', async () => {
+  test('Invalid claim_token should re-throw error', async () => {
+    mockClaimTokenProcessor.process.mockRejectedValueOnce(new Error('invalid'));
+    const body = new Map([
+      ['claim_token', 'abc'],
+      ['claim_token_format', 'token'],
+      ['ticket', '123'],
+    ]);
+    try {
+      await umaGrantProcessor.process(body, requestContext);
+    } catch (e) {
+      expect(e).toBeInstanceOf(NeedInfoError);
+    }
+  });
+
+  test('Unsupported claim_token_format should throw error', async () => {
     mockClaimTokenProcessor.process.mockReturnValue(new Promise((resolve) =>
       resolve(undefined)));
     const body = new Map([
@@ -214,7 +231,7 @@ describe('Sad Flows', () => {
     try {
       await umaGrantProcessor.process(body, requestContext);
     } catch (e) {
-      expect(e).toBeInstanceOf(BadRequestHttpError);
+      expect(e).toBeInstanceOf(NeedInfoError);
     }
   });
 });

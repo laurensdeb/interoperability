@@ -58,4 +58,7 @@ describe('Happy Flows', () => {
       claim_token_format: 'urn:authorization-agent:dummy-token',
     })).toEqual({webId: 'https://example.org/id'});
   });
+  test('Should return supported claim format', () => {
+    expect(claimTokenProcessor.claimTokenFormat()).toEqual('urn:authorization-agent:dummy-token');
+  });
 });

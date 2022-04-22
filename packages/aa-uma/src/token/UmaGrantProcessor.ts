@@ -1,4 +1,4 @@
-import {BadRequestHttpError, ForbiddenHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
+import {BadRequestHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {AccessMode} from '../util/modes/AccessModes';
 import {ResourceIdentifier} from '../util/ResourceIdentifier';
 import {Authorizer} from './authz/Authorizer';
@@ -7,6 +7,8 @@ import {Ticket, TicketFactory} from './TicketFactory';
 import {TokenFactory} from './TokenFactory';
 import {GrantTypeProcessor, TokenResponse} from './GrantTypeProcessor';
 import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
+import {RequestDeniedError} from '../error/RequestDeniedError';
+import {NeedInfoError} from '../error/NeedInfoError';
 
 /**
  * A UmaAccessToken is a type of RPT that is supported by the UmaGrantProcessor.
@@ -96,12 +98,11 @@ export class UmaGrantProcessor extends GrantTypeProcessor {
       request.rpt = body.get('rpt');
     }
 
-
-    // Construct principal object
-    const principal = await this.authenticate(request);
-
     // Extract metadata from ticket
     const ticket = await this.ticketFactory.deserialize(body.get('ticket')!);
+
+    // Construct principal object
+    const principal = await this.authenticate(request, ticket);
 
     // Authorize request using principal
     const authorization = await this.authorize(ticket, principal);
@@ -109,7 +110,7 @@ export class UmaGrantProcessor extends GrantTypeProcessor {
     if (!authorization.modes.size) {
       const msg = 'Unable to authorize request.';
       this.logger.debug(msg);
-      throw new ForbiddenHttpError(msg);
+      throw new RequestDeniedError(msg);
     }
 
     this.logger.info(`Generating new Access Token for resource '${authorization.sub.path}' ` +
@@ -128,16 +129,24 @@ export class UmaGrantProcessor extends GrantTypeProcessor {
    * request could not be authenticated.
    *
    * @param {ClaimTokenRequest} req - request
+   * @param {Ticket} ticket
    * @return {Promise<Principal>} - authenticated principal
    */
-  private async authenticate(req: ClaimTokenRequest): Promise<Principal> {
+  private async authenticate(req: ClaimTokenRequest, ticket: Ticket): Promise<Principal> {
     for (const processor of this.claimTokenProcessors) {
-      const principal = await processor.process(req);
+      let principal;
+      try {
+        principal = await processor.process(req);
+      } catch (e: any) {
+        throw new NeedInfoError((e as Error).message, await this.ticketFactory.serialize(ticket),
+            {required_claims: {claim_token_format: this.claimTokenProcessors.map((p) => p.claimTokenFormat())}});
+      }
       if (principal) {
         return principal;
       }
     }
-    throw new BadRequestHttpError('Unsupported token request.');
+    throw new NeedInfoError('Unsupported \'claim_token_format\' value', await this.ticketFactory.serialize(ticket),
+        {required_claims: {claim_token_format: this.claimTokenProcessors.map((p) => p.claimTokenFormat())}});
   }
 
   /**

@@ -32,5 +32,6 @@ export interface ClaimTokenRequest {
  * optional RPT, and returns a Principal.
  */
 export abstract class ClaimTokenProcessor {
+    public abstract claimTokenFormat(): string;
     public abstract process(req: ClaimTokenRequest): Promise<Principal | undefined>;
 }

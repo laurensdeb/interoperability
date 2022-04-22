@@ -77,7 +77,9 @@ export class JsonHttpErrorHandler implements HttpHandler {
             body: JSON.stringify({
               'status': statusCodes[error?.statusCode] ? error.statusCode : 500,
               'description': statusCodes[error?.statusCode] ? statusCodes[error.statusCode] : statusCodes[500],
-              'message': error?.message ? error.message : undefined,
+              'error': error?.type ?? error.type,
+              'message': error?.message ?? error.message,
+              ...(error?.additionalParams?error.additionalParams:{}),
             }),
           });
         }));
