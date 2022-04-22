@@ -1,9 +1,9 @@
 import {ClaimTokenProcessor, ClaimTokenRequest} from './ClaimTokenProcessor';
 import {createSolidTokenVerifier} from '@solid/access-token-verifier';
 import {Principal} from '../UmaGrantProcessor';
-import {UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
-import {NotImplementedHttpError} from '@digita-ai/handlersjs-http';
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
+
+const IDTOKEN_FORMAT = 'http://openid.net/specs/openid-connect-core-1_0.html#IDToken';
 
 /**
  * Claim Token Processor performing Solid OIDC authentication
@@ -13,6 +13,14 @@ export class DpopClaimTokenProcessor extends ClaimTokenProcessor {
   protected readonly logger: Logger = getLoggerFor(this);
 
   private readonly verify = createSolidTokenVerifier();
+
+  /**
+   * Get the URI of the supported claim token format
+   * @return {string}
+   */
+  public claimTokenFormat(): string {
+    return IDTOKEN_FORMAT;
+  }
   /**
      * Processes the claim token request, in the process performing Solid OIDC
      * authentication.
@@ -22,14 +30,14 @@ export class DpopClaimTokenProcessor extends ClaimTokenProcessor {
      *                                            undefined if the token format is unsupported
      */
   public async process(req: ClaimTokenRequest): Promise<Principal | undefined> {
-    if (req.claim_token_format !== 'http://openid.net/specs/openid-connect-core-1_0.html#IDToken') {
+    if (req.claim_token_format !== IDTOKEN_FORMAT) {
       return undefined;
     }
 
     if (!req.dpop) {
       const msg = 'DPoP Header is missing.';
       this.logger.debug(msg);
-      throw new NotImplementedHttpError(msg);
+      throw new Error(msg);
     }
 
     try {
@@ -46,7 +54,7 @@ export class DpopClaimTokenProcessor extends ClaimTokenProcessor {
     } catch (error: unknown) {
       const message = `Error verifying Access Token via WebID: ${(error as Error).message}`;
       this.logger.debug(message);
-      throw new UnauthorizedHttpError(message);
+      throw new Error(message);
     }
   }
 }

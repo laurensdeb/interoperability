@@ -1,8 +1,8 @@
-import {UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {Principal} from '../UmaGrantProcessor';
 import {ClaimTokenProcessor, ClaimTokenRequest} from './ClaimTokenProcessor';
 
+const DUMMY_TOKEN_FORMAT = 'urn:authorization-agent:dummy-token';
 /**
  * A dummy claim token processor for debugging purposes
  *
@@ -20,6 +20,14 @@ export class BasicClaimTokenProcessor extends ClaimTokenProcessor {
   }
 
   /**
+   * Get the URI of the supported claim token format
+   * @return {string}
+   */
+  public claimTokenFormat(): string {
+    return DUMMY_TOKEN_FORMAT;
+  }
+
+  /**
      * Process a dummy token of type 'urn:authorization-agent:dummy-token'.
      *
      * @summary The 'urn:authorization-agent:dummy-token' is formatted as '<WebID>(.<ClientID>)?'
@@ -27,7 +35,7 @@ export class BasicClaimTokenProcessor extends ClaimTokenProcessor {
      * @return {Promise<Principal | undefined>}
      */
   public async process(req: ClaimTokenRequest): Promise<Principal | undefined> {
-    if (req.claim_token_format !== 'urn:authorization-agent:dummy-token') {
+    if (req.claim_token_format !== DUMMY_TOKEN_FORMAT) {
       return undefined;
     }
 
@@ -46,7 +54,7 @@ export class BasicClaimTokenProcessor extends ClaimTokenProcessor {
     } catch (error: unknown) {
       const message = `Error verifying Access Token via WebID: ${(error as Error).message}`;
       this.logger.debug(message);
-      throw new UnauthorizedHttpError(message);
+      throw new Error(message);
     }
   }
 }

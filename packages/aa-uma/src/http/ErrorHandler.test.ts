@@ -56,6 +56,36 @@ describe('error_handler', () => {
       expect(res.status).toEqual(400);
     });
 
+    it('should return a type in the body if one is provided', async () => {
+      nestedHttpHandler.handle = jest.fn().mockReturnValue(
+          throwError({...response, statusCode: 400, type: 'invalid_grant', message: 'This is a message'}),
+      );
+
+      const newErrorHandler = new JsonHttpErrorHandler(nestedHttpHandler);
+
+      const res = await lastValueFrom(newErrorHandler.handle(context));
+
+      expect(res.headers).toEqual({'content-type': 'application/json'});
+      expect(res.body).toEqual(`{\"status\":400,\"description\":\"Bad Request\",\"error\":\"invalid_grant\",`+
+      `\"message\":\"This is a message\"}`);
+      expect(res.status).toEqual(400);
+    });
+
+    it('should return additionalParams in the body if one is provided', async () => {
+      nestedHttpHandler.handle = jest.fn().mockReturnValue(
+          throwError({...response, statusCode: 400, additionalParams: {'abc': 'def'}, message: 'This is a message'}),
+      );
+
+      const newErrorHandler = new JsonHttpErrorHandler(nestedHttpHandler);
+
+      const res = await lastValueFrom(newErrorHandler.handle(context));
+
+      expect(res.headers).toEqual({'content-type': 'application/json'});
+      expect(res.body).toEqual(`{\"status\":400,\"description\":\"Bad Request\",`+
+      `\"message\":\"This is a message\",\"abc\":\"def\"}`);
+      expect(res.status).toEqual(400);
+    });
+
 
     it('should set an content type and status as 500 if not known', async () => {
       nestedHttpHandler.handle = jest.fn().mockReturnValue(

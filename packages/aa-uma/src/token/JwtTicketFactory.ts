@@ -1,7 +1,7 @@
-import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {SignJWT, createLocalJWKSet, jwtVerify} from 'jose';
 import {v4} from 'uuid';
+import {InvalidGrantError} from '../error/InvalidGrantError';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
 import {parseModes} from '../util/modes/ModesParser';
 import {isString} from '../util/StringGuard';
@@ -76,7 +76,7 @@ export class JwtTicketFactory extends TicketFactory {
     } catch (error: any) {
       const msg = `Invalid UMA Ticket provided, error while parsing: ${error.message}`;
       this.logger.debug(msg);
-      throw new BadRequestHttpError(msg);
+      throw new InvalidGrantError(msg);
     }
   }
 }

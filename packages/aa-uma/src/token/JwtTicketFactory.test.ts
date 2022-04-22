@@ -3,8 +3,8 @@ import {JwtTicketFactory} from './JwtTicketFactory';
 import {TicketFactory} from './TicketFactory';
 import {AccessMode} from '../util/modes/AccessModes';
 import {decodeJwt, decodeProtectedHeader, generateKeyPair, JWTPayload, KeyLike, SignJWT} from 'jose';
-import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {v4} from 'uuid';
+import {InvalidGrantError} from '../error/InvalidGrantError';
 
 const ISSUER = 'https://example.com';
 const POD = 'https://pods.example.com/';
@@ -51,14 +51,14 @@ describe('Deserialization tests', () => {
   });
 
   test('Invalid JWT should throw error', async () => {
-    expect(async () => await ticketFactory.deserialize('abc')).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize('abc')).rejects.toThrow(InvalidGrantError);
   });
 
   test('Invalid Signature should throw error', async () => {
     const key = await generateKeyPair('ES256');
     const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read]}, key.privateKey);
 
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing: signature verification failed');
   });
@@ -67,7 +67,7 @@ describe('Deserialization tests', () => {
     const jwt = await createJwt({sub: 'test/123.ttl', modes: [AccessMode.read], aud: POD},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' Missing JWT parameter(s): {sub, aud, modes, owner} are required.');
@@ -77,7 +77,7 @@ describe('Deserialization tests', () => {
     const jwt = await createJwt({owner: OWNER, modes: [AccessMode.read], aud: POD},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' Missing JWT parameter(s): {sub, aud, modes, owner} are required.');
@@ -87,7 +87,7 @@ describe('Deserialization tests', () => {
     const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', aud: POD},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' Missing JWT parameter(s): {sub, aud, modes, owner} are required.');
@@ -96,7 +96,7 @@ describe('Deserialization tests', () => {
   test('Missing payload claim `aud` should throw error', async () => {
     const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read]},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' Missing JWT parameter(s): {sub, aud, modes, owner} are required.');
@@ -105,7 +105,7 @@ describe('Deserialization tests', () => {
   test('Array payload claim `aud` should throw error', async () => {
     const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read], aud: ['abc', 'def']},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' JWT audience should not be an array.');
@@ -114,7 +114,7 @@ describe('Deserialization tests', () => {
   test('Non-string payload claim `owner` should throw error', async () => {
     const jwt = await createJwt({owner: 123, sub: 'test/123.ttl', modes: [AccessMode.read], aud: POD},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' JWT claim "owner" is not a string.');
@@ -123,7 +123,7 @@ describe('Deserialization tests', () => {
   test('Non-array payload claim `modes` should throw error', async () => {
     const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: 123, aud: POD},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' JWT claim "modes" is not an array.');
@@ -132,7 +132,7 @@ describe('Deserialization tests', () => {
   test('Invalid mode in claim `modes` should throw error', async () => {
     const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read, 'abc'], aud: POD},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' Invalid access mode: abc.');
@@ -141,7 +141,7 @@ describe('Deserialization tests', () => {
   test('Invalid mode in claim `modes` should throw error', async () => {
     const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read, 123], aud: POD},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
+    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
         ' Invalid access mode: 123');
