@@ -10,6 +10,7 @@ module.exports = {
     '<rootDir>/node_modules',
     'src/index.ts',
     'src/logging/LogLevel.ts',
+    'src/util/FetchFactory.ts'
   ],
   'coverageReporters': [
     'json',

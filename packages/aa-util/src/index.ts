@@ -5,3 +5,4 @@ export * from './logging/WinstonLoggerFactory';
 export * from './util/StringGuard';
 export * from './modes/AccessModes';
 export * from './modes/ModesParser';
+export * from './util/FetchFactory';
