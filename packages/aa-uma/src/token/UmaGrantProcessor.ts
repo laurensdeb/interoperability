@@ -1,5 +1,5 @@
 import {BadRequestHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {ResourceIdentifier} from '../util/ResourceIdentifier';
 import {Authorizer} from './authz/Authorizer';
 import {ClaimTokenProcessor, ClaimTokenRequest} from './authn/ClaimTokenProcessor';

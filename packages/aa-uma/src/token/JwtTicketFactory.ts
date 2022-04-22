@@ -3,7 +3,7 @@ import {SignJWT, createLocalJWKSet, jwtVerify} from 'jose';
 import {v4} from 'uuid';
 import {InvalidGrantError} from '../error/InvalidGrantError';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
-import {parseModes} from '../util/modes/ModesParser';
+import {parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isString} from '../util/StringGuard';
 import {Ticket, TicketFactory} from './TicketFactory';
 

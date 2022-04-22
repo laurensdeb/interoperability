@@ -1,5 +1,5 @@
 import {Authorizer, Principal, Ticket} from '@laurensdeb/authorization-agent-uma';
-import {AccessMode} from '@laurensdeb/authorization-agent-uma/dist/util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 
 /**
  * An InteropAuthorizer authorizes incoming requests

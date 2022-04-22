@@ -1,6 +1,6 @@
 import {Authorizer} from './Authorizer';
 import {AllAuthorizer} from './AllAuthorizer';
-import {AccessMode} from '../../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 
 const POD = 'https://pods.example.com/';
 const WEBID = 'https://example.com/profile/alice#me';

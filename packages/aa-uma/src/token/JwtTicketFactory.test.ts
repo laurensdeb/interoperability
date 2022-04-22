@@ -1,7 +1,7 @@
 import {InMemoryJwksKeyHolder} from '../secrets/InMemoryJwksKeyHolder';
 import {JwtTicketFactory} from './JwtTicketFactory';
 import {TicketFactory} from './TicketFactory';
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {decodeJwt, decodeProtectedHeader, generateKeyPair, JWTPayload, KeyLike, SignJWT} from 'jose';
 import {v4} from 'uuid';
 import {InvalidGrantError} from '../error/InvalidGrantError';

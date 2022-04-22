@@ -1,5 +1,5 @@
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
-import {AccessMode} from '../../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {Ticket} from '../TicketFactory';
 import {Principal} from '../UmaGrantProcessor';
 import {Authorizer} from './Authorizer';

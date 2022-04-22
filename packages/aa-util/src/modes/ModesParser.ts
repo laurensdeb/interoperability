@@ -1,4 +1,4 @@
-import {isString} from '../StringGuard';
+import {isString} from '../util/StringGuard';
 import {AccessMode} from './AccessModes';
 
 /**

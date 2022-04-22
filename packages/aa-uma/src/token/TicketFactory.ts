@@ -1,4 +1,4 @@
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {ResourceIdentifier} from '../util/ResourceIdentifier';
 
 export interface Ticket {

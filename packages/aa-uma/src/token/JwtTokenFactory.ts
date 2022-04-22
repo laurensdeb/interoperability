@@ -3,7 +3,7 @@ import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {createLocalJWKSet, jwtVerify, SignJWT} from 'jose';
 import {v4} from 'uuid';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
-import {parseModes} from '../util/modes/ModesParser';
+import {parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isString} from '../util/StringGuard';
 import {SerializedToken, TokenFactory} from './TokenFactory';
 import {AccessToken} from './UmaGrantProcessor';

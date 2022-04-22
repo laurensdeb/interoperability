@@ -1,7 +1,7 @@
 import {BadRequestHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {NeedInfoError} from '../error/NeedInfoError';
 import {RequestDeniedError} from '../error/RequestDeniedError';
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {Ticket} from './TicketFactory';
 import {Principal, UmaGrantProcessor} from './UmaGrantProcessor';
 const mockTicketFactory = {serialize: jest.fn(), deserialize: jest.fn()};

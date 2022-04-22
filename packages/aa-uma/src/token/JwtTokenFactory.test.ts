@@ -1,7 +1,7 @@
 import {InMemoryJwksKeyHolder} from '../secrets/InMemoryJwksKeyHolder';
 import {TokenFactory} from './TokenFactory';
 import {JwtTokenFactory} from './JwtTokenFactory';
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {decodeJwt, decodeProtectedHeader, generateKeyPair, JWTPayload, KeyLike, SignJWT} from 'jose';
 import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {v4} from 'uuid';
