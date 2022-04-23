@@ -10,7 +10,7 @@
         "laau:config/keys/default.json",
         "laau:config/token/default.json",
         "laau:config/ticket/default.json",
-        "laau:config/authz/interop.json"
+        "laau:config/authz/all.json"
     ],
     "@graph": [
         {
@@ -52,7 +52,7 @@
             }
         },
         {
-            "comment": "Configuration for the UMA AS."
+            "comment": "Configuration for the UMA AS in debug mode."
         }
     ]
 }

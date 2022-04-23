@@ -52,7 +52,7 @@ export class InteropAuthorizer extends Authorizer {
         }
       }
     } catch (e: any) {
-      this.logger.warn(`Interoperability Authorization failed: ${(e as Error).message}`);
+      this.logger.warn(`Interoperability Authorization failed: ${(e as Error).message}`, e);
     }
 
     this.logger.info(`Authorized with access modes ${[...result].map((v) => `"${v}"`).join(', ')}`);
@@ -90,7 +90,7 @@ export class InteropAuthorizer extends Authorizer {
     return {
       modes: request.requested,
       owner: request.owner,
-      resource: request.sub.path,
+      resource: request.sub.iri,
     };
   }
 

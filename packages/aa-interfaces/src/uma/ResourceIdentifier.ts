@@ -1,10 +1,6 @@
 export interface ResourceIdentifier {
     /**
-     * Pod Base URI
+     * Resource IRI
      */
-    pod: string,
-    /**
-     * Resource relative path
-     */
-    path: string
+    iri: string
 }

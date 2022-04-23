@@ -25,3 +25,4 @@ export * from './token/authn/BasicClaimTokenProcessor';
 
 // Token/Authz
 export * from './token/authz/AllAuthorizer';
+export * from './token/authz/util/UmaFetchFactory';

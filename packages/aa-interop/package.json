@@ -50,9 +50,9 @@
       "jose": "^4.5.1",
       "@laurensdeb/authorization-agent-interfaces": "^1.0.0",
       "@laurensdeb/authorization-agent-helpers": "^1.0.0",
-      "@janeirodigital/interop-authorization-agent": "1.0.0-rc.6",
-      "@janeirodigital/interop-data-model": "1.0.0-rc.6",
-      "@janeirodigital/interop-namespaces": "1.0.0-rc.6",
+      "@janeirodigital/interop-authorization-agent": "1.0.0-rc.7",
+      "@janeirodigital/interop-data-model": "1.0.0-rc.7",
+      "@janeirodigital/interop-namespaces": "1.0.0-rc.7",
       "@solid/access-token-verifier": "^1.2.0",
       "uuid": "^8.3.2"
     },

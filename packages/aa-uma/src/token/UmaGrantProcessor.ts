@@ -81,7 +81,7 @@ export class UmaGrantProcessor extends GrantTypeProcessor {
       throw new RequestDeniedError(msg);
     }
 
-    this.logger.info(`Generating new Access Token for resource '${authorization.sub.path}' ` +
+    this.logger.info(`Generating new Access Token for resource '${authorization.sub.iri}' ` +
     `and principal '${principal.webId}'`);
 
     // Serialize Authorization into Access Token

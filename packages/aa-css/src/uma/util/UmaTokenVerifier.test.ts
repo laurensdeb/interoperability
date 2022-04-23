@@ -11,7 +11,7 @@ jest.mock('jose', () => {
 });
 
 const MOCK_RESOURCE = 'https://pod.example.org/test/123';
-const MOCK_AUD = 'https://pod.example.org';
+const MOCK_AUD = 'solid';
 const MOCK_WEBID = 'https://id.example.org/test/123';
 const MOCK_CLIENT = 'https://app.example.org/';
 const MOCK_MODES = ['http://www.w3.org/ns/auth/acl#Read'];
