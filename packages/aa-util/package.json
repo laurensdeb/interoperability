@@ -1,7 +1,7 @@
 {
     "name": "@laurensdeb/authorization-agent-helpers",
     "version": "1.0.0",
-    "author": "Laurens Debackere <Laurens.Debackere@UGent.be> (https://thundr.be)",
+    "author": "Laurens Debackere <Laurens.Debackere@thundr.be> (https://thundr.be)",
     "license": "MIT",
     "private": true,
     "types": "./dist/index.d.ts",
