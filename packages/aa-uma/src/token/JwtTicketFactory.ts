@@ -5,7 +5,8 @@ import {InvalidGrantError} from '../error/InvalidGrantError';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
 import {parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isString} from '../util/StringGuard';
-import {Ticket, TicketFactory} from './TicketFactory';
+import {TicketFactory} from './TicketFactory';
+import {Ticket} from '@laurensdeb/authorization-agent-interfaces';
 
 
 export interface JwtTicketParams {

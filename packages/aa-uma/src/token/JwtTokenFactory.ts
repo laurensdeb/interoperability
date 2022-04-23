@@ -6,7 +6,7 @@ import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
 import {parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isString} from '../util/StringGuard';
 import {SerializedToken, TokenFactory} from './TokenFactory';
-import {AccessToken} from './UmaGrantProcessor';
+import {AccessToken} from '@laurensdeb/authorization-agent-interfaces';
 
 export interface JwtTokenParams {
     expirationTime: string | number

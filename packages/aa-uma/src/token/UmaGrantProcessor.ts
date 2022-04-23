@@ -1,45 +1,13 @@
 import {BadRequestHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
-import {ResourceIdentifier} from '../util/ResourceIdentifier';
-import {Authorizer} from './authz/Authorizer';
+import {Authorizer, Principal, Authorization, Ticket} from '@laurensdeb/authorization-agent-interfaces';
 import {ClaimTokenProcessor, ClaimTokenRequest} from './authn/ClaimTokenProcessor';
-import {Ticket, TicketFactory} from './TicketFactory';
+import {TicketFactory} from './TicketFactory';
 import {TokenFactory} from './TokenFactory';
 import {GrantTypeProcessor, TokenResponse} from './GrantTypeProcessor';
 import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {RequestDeniedError} from '../error/RequestDeniedError';
 import {NeedInfoError} from '../error/NeedInfoError';
-
-/**
- * A UmaAccessToken is a type of RPT that is supported by the UmaGrantProcessor.
- */
-export interface Authorization {
-    /**
-     * Authorized ACL access modes.
-     */
-    modes: Set<AccessMode>,
-    /**
-     * Resource which is the subject of the authorization request.
-     */
-    sub: ResourceIdentifier
-}
-
-/**
- * The Principal object serializes the authorization
- * request made by the client to the UMA AS.
- */
-export interface Principal {
-    /**
-     * The WebID of the RP
-     */
-    webId: string,
-    /**
-     * The ClientID of the Application used by the RP
-     */
-    clientId?: string,
-}
-
-export type AccessToken = Principal & Authorization;
 
 
 /**

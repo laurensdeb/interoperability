@@ -1,8 +1,6 @@
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
-import {Ticket} from '../TicketFactory';
-import {Principal} from '../UmaGrantProcessor';
-import {Authorizer} from './Authorizer';
+import {Authorizer, Principal, Ticket} from '@laurensdeb/authorization-agent-interfaces';
 
 /**
  * Mock authorizer granting all specified access modes

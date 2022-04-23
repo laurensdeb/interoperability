@@ -1,4 +1,4 @@
-import {Authorizer, Principal, Ticket} from '@laurensdeb/authorization-agent-uma';
+import {Authorizer, Principal, Ticket} from '@laurensdeb/authorization-agent-interfaces';
 import {AccessMode, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {Application, AuthenticatedClient, RequestedPermissions, SocialAgent} from './strategy/Types';
 import {InteropBaseAuthorizerStrategy} from './strategy/InteropBaseAuthorizerStrategy';

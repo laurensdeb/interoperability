@@ -24,5 +24,4 @@ export * from './token/authn/DpopClaimTokenProcessor';
 export * from './token/authn/BasicClaimTokenProcessor';
 
 // Token/Authz
-export * from './token/authz/Authorizer';
 export * from './token/authz/AllAuthorizer';

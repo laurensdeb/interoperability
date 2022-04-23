@@ -29,7 +29,3 @@ export * from './authz/strategy/registration/data/DataRegistrationStrategy';
 export * from './factory/AuthorizationAgentFactory';
 export * from './factory/ClientIdStrategy';
 export * from './factory/Base64ClientIdStrategy';
-
-// IdP
-export * from './idp/SolidOidcAuthnConfigHandler';
-export * from './idp/SolidAuthnTokenFactory';

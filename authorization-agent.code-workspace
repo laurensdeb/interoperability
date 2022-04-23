@@ -21,6 +21,10 @@
         "path": "./packages/aa-util"
       },
       {
+        "name": "interfaces",
+        "path": "./packages/aa-interfaces"
+      },
+      {
         "name": "css",
         "path": "./packages/aa-css"
       }
