@@ -4,9 +4,8 @@ import {BadRequestHttpError, HttpHandler, HttpHandlerContext,
 import {from, map, Observable, throwError} from 'rxjs';
 import * as jose from 'jose';
 import {TicketFactory} from '../token/TicketFactory';
-import {parseModes} from '../util/modes/ModesParser';
 import {isString} from '../util/StringGuard';
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode, parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isUrlString, UrlString} from '../util/UrlGuard';
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 
@@ -125,7 +124,7 @@ export class PermissionRegistrationHandler implements HttpHandler {
     let ticket;
     try {
       ticket = await this.ticketFactory.serialize({owner,
-        sub: {path, pod: resourceServer.baseUri}, requested: scopes});
+        sub: {iri: path}, requested: scopes});
     } catch (e) {
       const msg = `Error while generating ticket: ${(e as Error).message}`;
       this.logger.error(msg);

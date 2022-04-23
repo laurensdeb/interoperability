@@ -1,13 +1,13 @@
 import {InMemoryJwksKeyHolder} from '../secrets/InMemoryJwksKeyHolder';
 import {JwtTicketFactory} from './JwtTicketFactory';
 import {TicketFactory} from './TicketFactory';
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {decodeJwt, decodeProtectedHeader, generateKeyPair, JWTPayload, KeyLike, SignJWT} from 'jose';
 import {v4} from 'uuid';
 import {InvalidGrantError} from '../error/InvalidGrantError';
 
 const ISSUER = 'https://example.com';
-const POD = 'https://pods.example.com/';
+const RESOURCE = 'https://pods.example.com/test/123.ttl';
 const OWNER = 'https://pods.example.com/alice/profile/card#me';
 
 describe('Serialization tests', () => {
@@ -15,7 +15,7 @@ describe('Serialization tests', () => {
   const ticketFactory: TicketFactory = new JwtTicketFactory(keyholder, ISSUER);
 
   test('Should yield JWT for ticket', async () => {
-    const jwt = await ticketFactory.serialize({owner: OWNER, sub: {path: 'test/123.ttl', pod: POD},
+    const jwt = await ticketFactory.serialize({owner: OWNER, sub: {iri: RESOURCE},
       requested: new Set([AccessMode.read, AccessMode.write])});
 
     expect(jwt).toBeTruthy();
@@ -31,11 +31,11 @@ describe('Serialization tests', () => {
     expect('jti' in payload).toBeTruthy();
 
     expect(payload.iss).toEqual(ISSUER);
-    expect(payload.aud).toEqual(POD);
+    expect(payload.aud).toEqual('solid');
 
     expect(payload.modes).toEqual(['http://www.w3.org/ns/auth/acl#Read', 'http://www.w3.org/ns/auth/acl#Write']);
     expect(payload.owner).toEqual(OWNER);
-    expect(payload.sub).toEqual('test/123.ttl');
+    expect(payload.sub).toEqual(RESOURCE);
   });
 });
 
@@ -44,7 +44,8 @@ describe('Deserialization tests', () => {
   const ticketFactory: TicketFactory = new JwtTicketFactory(keyholder, ISSUER);
 
   test('E2E', async () => {
-    const ticket = {owner: OWNER, sub: {path: 'test/123.ttl', pod: 'https://pods.example.com/'}, requested: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])};
+    const ticket = {owner: OWNER, sub: {iri: RESOURCE},
+      requested: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])};
     const jwt = await ticketFactory.serialize(ticket);
 
     expect(await ticketFactory.deserialize(jwt)).toEqual(ticket);
@@ -56,7 +57,7 @@ describe('Deserialization tests', () => {
 
   test('Invalid Signature should throw error', async () => {
     const key = await generateKeyPair('ES256');
-    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read]}, key.privateKey);
+    const jwt = await createJwt({owner: OWNER, sub: RESOURCE, modes: [AccessMode.read]}, key.privateKey);
 
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
@@ -64,9 +65,8 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `owner` should throw error', async () => {
-    const jwt = await createJwt({sub: 'test/123.ttl', modes: [AccessMode.read], aud: POD},
+    const jwt = await createJwt({sub: RESOURCE, modes: [AccessMode.read], aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
@@ -74,7 +74,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `sub` should throw error', async () => {
-    const jwt = await createJwt({owner: OWNER, modes: [AccessMode.read], aud: POD},
+    const jwt = await createJwt({owner: OWNER, modes: [AccessMode.read], aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
@@ -84,7 +84,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `modes` should throw error', async () => {
-    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', aud: POD},
+    const jwt = await createJwt({owner: OWNER, sub: RESOURCE, aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
@@ -94,25 +94,16 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `aud` should throw error', async () => {
-    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read]},
+    const jwt = await createJwt({owner: OWNER, sub: RESOURCE, modes: [AccessMode.read]},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
         .toThrow('Invalid UMA Ticket provided, error while parsing:' +
-        ' Missing JWT parameter(s): {sub, aud, modes, owner} are required.');
-  });
-
-  test('Array payload claim `aud` should throw error', async () => {
-    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read], aud: ['abc', 'def']},
-        keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
-    expect(async () => await ticketFactory.deserialize(jwt)).rejects
-        .toThrow('Invalid UMA Ticket provided, error while parsing:' +
-        ' JWT audience should not be an array.');
+        ' unexpected \"aud\" claim value');
   });
 
   test('Non-string payload claim `owner` should throw error', async () => {
-    const jwt = await createJwt({owner: 123, sub: 'test/123.ttl', modes: [AccessMode.read], aud: POD},
+    const jwt = await createJwt({owner: 123, sub: 'test/123.ttl', modes: [AccessMode.read], aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
@@ -121,7 +112,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Non-array payload claim `modes` should throw error', async () => {
-    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: 123, aud: POD},
+    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: 123, aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
@@ -130,7 +121,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Invalid mode in claim `modes` should throw error', async () => {
-    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read, 'abc'], aud: POD},
+    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read, 'abc'], aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects
@@ -139,7 +130,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Invalid mode in claim `modes` should throw error', async () => {
-    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read, 123], aud: POD},
+    const jwt = await createJwt({owner: OWNER, sub: 'test/123.ttl', modes: [AccessMode.read, 123], aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await ticketFactory.deserialize(jwt)).rejects.toThrow(InvalidGrantError);
     expect(async () => await ticketFactory.deserialize(jwt)).rejects

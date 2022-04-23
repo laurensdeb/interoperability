@@ -1,8 +1,6 @@
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
-import {AccessMode} from '../../util/modes/AccessModes';
-import {Ticket} from '../TicketFactory';
-import {Principal} from '../UmaGrantProcessor';
-import {Authorizer} from './Authorizer';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
+import {Authorizer, Principal, Ticket} from '@laurensdeb/authorization-agent-interfaces';
 
 /**
  * Mock authorizer granting all specified access modes
@@ -31,7 +29,7 @@ export class AllAuthorizer extends Authorizer {
    * @return {Promise<Set<AccessMode>>} - granted access modes
    */
   public async authorize(client: Principal, request: Ticket): Promise<Set<AccessMode>> {
-    this.logger.debug(`Authorized request by ${client.webId} for ${request.sub.path}`);
+    this.logger.debug(`Authorized request by ${client.webId} for ${request.sub.iri}`);
     return new Set(this.accessModes);
   }
 }

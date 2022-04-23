@@ -1,4 +1,4 @@
-import {Principal} from '../UmaGrantProcessor';
+import {Principal} from '@laurensdeb/authorization-agent-interfaces';
 
 export interface ClaimTokenRequest {
     /**

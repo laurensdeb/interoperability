@@ -1,2 +1,6 @@
 [
+        "ReadableAccessGrant",
+        "DataGrant",
+        "CRUDApplicationRegistration",
+        "CRUDSocialAgentRegistration"
 ]

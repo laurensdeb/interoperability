@@ -28,6 +28,7 @@
                       "keyholder": {"@id": "urn:authorization-service:default:DefaultKeyholder"} 
                   },
                   "tokenFactory": {
+                      "@id": "urn:authorization-service:TokenFactory",
                       "@type": "JwtTokenFactory",
                       "params_expirationTime": "5m",
                       "params_aud": "solid",
@@ -37,7 +38,7 @@
                   "claimTokenProcessors": [{
                       "@type": "BasicClaimTokenProcessor"
                   }],
-                  "authorizers": [{"@type": "AllAuthorizer"}]
+                  "authorizers": [{"@id": "urn:authorization-service:default:Authorizer"}]
               }]
               }
             },

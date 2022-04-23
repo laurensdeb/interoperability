@@ -1,6 +1,6 @@
-import {AccessMode} from '../../util/modes/AccessModes';
-import {Ticket} from '../TicketFactory';
-import {Principal} from '../UmaGrantProcessor';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
+import {Ticket} from './Ticket';
+import {Principal} from './AccessToken';
 
 /**
  * An authorizer will determine, for some given request and client

@@ -1,16 +1,15 @@
 import {InMemoryJwksKeyHolder} from '../secrets/InMemoryJwksKeyHolder';
 import {TokenFactory} from './TokenFactory';
 import {JwtTokenFactory} from './JwtTokenFactory';
-import {AccessMode} from '../util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {decodeJwt, decodeProtectedHeader, generateKeyPair, JWTPayload, KeyLike, SignJWT} from 'jose';
 import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {v4} from 'uuid';
 
 const ISSUER = 'https://example.com';
-const POD = 'https://pods.example.com/';
 const WEBID = 'https://example.com/profile/alice#me';
 const CLIENT = 'https://projectapp.com';
-const PATH = 'test/123.ttl';
+const RESOURCE = 'https://pods.example.com/test/123.ttl';
 const ALG = 'ES256';
 
 describe('JWT Access Token Issuance', () => {
@@ -18,7 +17,7 @@ describe('JWT Access Token Issuance', () => {
   const tokenFactory: TokenFactory = new JwtTokenFactory(keyholder, ISSUER);
 
   test('Should yield JWT for access token', async () => {
-    const accessToken = await tokenFactory.serialize({webId: WEBID, clientId: CLIENT, sub: {path: PATH, pod: POD},
+    const accessToken = await tokenFactory.serialize({webId: WEBID, clientId: CLIENT, sub: {iri: RESOURCE},
       modes: new Set([AccessMode.read, AccessMode.write])});
 
     expect(accessToken.token).toBeTruthy();
@@ -35,12 +34,12 @@ describe('JWT Access Token Issuance', () => {
     expect('jti' in payload).toBeTruthy();
 
     expect(payload.iss).toEqual(ISSUER);
-    expect(payload.aud).toEqual(POD);
+    expect(payload.aud).toEqual('solid');
 
     expect(payload.modes).toEqual(['http://www.w3.org/ns/auth/acl#Read', 'http://www.w3.org/ns/auth/acl#Write']);
     expect(payload.webid).toEqual(WEBID);
     expect(payload.azp).toEqual(CLIENT);
-    expect(payload.sub).toEqual(PATH);
+    expect(payload.sub).toEqual(RESOURCE);
   });
 });
 
@@ -49,7 +48,7 @@ describe('Deserialization tests', () => {
   const tokenFactory: TokenFactory = new JwtTokenFactory(keyholder, ISSUER);
 
   test('E2E', async () => {
-    const accessToken = {webId: WEBID, clientId: CLIENT, sub: {path: PATH, pod: POD},
+    const accessToken = {webId: WEBID, clientId: CLIENT, sub: {iri: RESOURCE},
       modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])};
     const jwt = (await tokenFactory.serialize(accessToken)).token;
 
@@ -70,7 +69,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `webid` should throw error', async () => {
-    const jwt = await createJwt({azp: CLIENT, sub: PATH, aud: POD,
+    const jwt = await createJwt({azp: CLIENT, sub: RESOURCE, aud: 'solid',
       modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])},
     keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
@@ -81,7 +80,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `azp` should throw error', async () => {
-    const jwt = await createJwt({webid: WEBID, sub: PATH, aud: POD,
+    const jwt = await createJwt({webid: WEBID, sub: RESOURCE, aud: 'solid',
       modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])},
     keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
@@ -92,7 +91,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `sub` should throw error', async () => {
-    const jwt = await createJwt({webid: WEBID, azp: CLIENT, aud: POD,
+    const jwt = await createJwt({webid: WEBID, azp: CLIENT, aud: 'solid',
       modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])},
     keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
@@ -103,18 +102,18 @@ describe('Deserialization tests', () => {
   });
 
   test('Missing payload claim `aud` should throw error', async () => {
-    const jwt = await createJwt({webid: WEBID, azp: CLIENT, sub: PATH,
+    const jwt = await createJwt({webid: WEBID, azp: CLIENT, sub: RESOURCE,
       modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])},
     keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
     expect(async () => await tokenFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
     expect(async () => await tokenFactory.deserialize(jwt)).rejects
         .toThrow('Invalid Access Token provided, error while parsing:' +
-        ' Missing JWT parameter(s): {sub, aud, modes, webid, azp} are required.');
+        ' unexpected \"aud\" claim value');
   });
 
   test('Missing payload claim `modes` should throw error', async () => {
-    const jwt = await createJwt({webid: WEBID, azp: CLIENT, sub: PATH, aud: POD},
+    const jwt = await createJwt({webid: WEBID, azp: CLIENT, sub: RESOURCE, aud: 'solid'},
         keyholder.getPrivateKey(await keyholder.getDefaultKey()));
 
     expect(async () => await tokenFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
@@ -123,18 +122,8 @@ describe('Deserialization tests', () => {
         ' Missing JWT parameter(s): {sub, aud, modes, webid, azp} are required.');
   });
 
-  test('Array payload claim `aud` should throw error', async () => {
-    const jwt = await createJwt({webid: WEBID, azp: CLIENT, sub: PATH, aud: ['abc', 'def'],
-      modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])},
-    keyholder.getPrivateKey(await keyholder.getDefaultKey()));
-    expect(async () => await tokenFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
-    expect(async () => await tokenFactory.deserialize(jwt)).rejects
-        .toThrow('Invalid Access Token provided, error while parsing:' +
-        ' JWT audience should not be an array.');
-  });
-
   test('Non-string claim `webid` should throw error', async () => {
-    const jwt = await createJwt({webid: 123, azp: CLIENT, sub: PATH, aud: POD,
+    const jwt = await createJwt({webid: 123, azp: CLIENT, sub: RESOURCE, aud: 'solid',
       modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])},
     keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await tokenFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
@@ -143,7 +132,7 @@ describe('Deserialization tests', () => {
         ' JWT claim "webid" is not a string.');
   });
   test('Non-array claim `modes` should throw error', async () => {
-    const jwt = await createJwt({webid: WEBID, azp: CLIENT, sub: PATH, aud: POD,
+    const jwt = await createJwt({webid: WEBID, azp: CLIENT, sub: RESOURCE, aud: 'solid',
       modes: 123},
     keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await tokenFactory.deserialize(jwt)).rejects
@@ -152,7 +141,7 @@ describe('Deserialization tests', () => {
   });
 
   test('Non-string claim `azp` should throw error', async () => {
-    const jwt = await createJwt({webid: WEBID, azp: 123, sub: PATH, aud: POD,
+    const jwt = await createJwt({webid: WEBID, azp: 123, sub: RESOURCE, aud: 'solid',
       modes: new Set([AccessMode.read, AccessMode.write, AccessMode.create, AccessMode.append, AccessMode.delete])},
     keyholder.getPrivateKey(await keyholder.getDefaultKey()));
     expect(async () => await tokenFactory.deserialize(jwt)).rejects.toThrow(BadRequestHttpError);
@@ -167,7 +156,7 @@ describe('Test anonymous client', () => {
   const tokenFactory: TokenFactory = new JwtTokenFactory(keyholder, ISSUER);
 
   test('Should yield JWT for access token', async () => {
-    const accessToken = await tokenFactory.serialize({webId: WEBID, sub: {path: PATH, pod: POD},
+    const accessToken = await tokenFactory.serialize({webId: WEBID, sub: {iri: RESOURCE},
       modes: new Set([AccessMode.read, AccessMode.write])});
 
     expect(accessToken.token).toBeTruthy();
@@ -184,12 +173,12 @@ describe('Test anonymous client', () => {
     expect('jti' in payload).toBeTruthy();
 
     expect(payload.iss).toEqual(ISSUER);
-    expect(payload.aud).toEqual(POD);
+    expect(payload.aud).toEqual('solid');
 
     expect(payload.modes).toEqual(['http://www.w3.org/ns/auth/acl#Read', 'http://www.w3.org/ns/auth/acl#Write']);
     expect(payload.webid).toEqual(WEBID);
     expect(payload.azp).toEqual('http://www.w3.org/ns/auth/acl#Origin');
-    expect(payload.sub).toEqual(PATH);
+    expect(payload.sub).toEqual(RESOURCE);
   });
 });
 

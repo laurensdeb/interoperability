@@ -1,29 +1,28 @@
 import {BadRequestHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {NeedInfoError} from '../error/NeedInfoError';
 import {RequestDeniedError} from '../error/RequestDeniedError';
-import {AccessMode} from '../util/modes/AccessModes';
-import {Ticket} from './TicketFactory';
-import {Principal, UmaGrantProcessor} from './UmaGrantProcessor';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
+import {Ticket, Principal} from '@laurensdeb/authorization-agent-interfaces';
+import {UmaGrantProcessor} from './UmaGrantProcessor';
 const mockTicketFactory = {serialize: jest.fn(), deserialize: jest.fn()};
 const mockTokenFactory = {serialize: jest.fn(), deserialize: jest.fn()};
 const mockAuthorizer = {authorize: jest.fn()};
 const mockClaimTokenProcessor = {process: jest.fn(),
   claimTokenFormat: jest.fn(() => 'urn:authorization-agent:dummy-token')};
 
-const POD = 'https://pods.example.com/';
 const TOKEN_URI = new URL('https://uma.example.com/token');
 const WEBID = 'https://example.com/profile/alice#me';
 const WEBID_BIS = 'https://example.com/profile/carol#me';
 
 const CLIENT = 'https://projectapp.com';
-const PATH = 'test/123.ttl';
+const RESOURCE = 'https://pods.example.com/test/123.ttl';
 
 describe('Happy Flows', () => {
   const umaGrantProcessor = new UmaGrantProcessor([mockClaimTokenProcessor], [mockAuthorizer],
       mockTicketFactory, mockTokenFactory);
   let requestContext: HttpHandlerContext;
 
-  const sub = {path: PATH, pod: POD};
+  const sub = {iri: RESOURCE};
   const ticket: Ticket = {
     sub,
     owner: WEBID_BIS,
@@ -127,7 +126,7 @@ describe('Sad Flows', () => {
       mockTicketFactory, mockTokenFactory);
   let requestContext: HttpHandlerContext;
 
-  const sub = {path: PATH, pod: POD};
+  const sub = {iri: RESOURCE};
   const ticket: Ticket = {
     sub,
     owner: WEBID_BIS,

@@ -1,12 +1,4 @@
-import {AccessMode} from '../util/modes/AccessModes';
-import {ResourceIdentifier} from '../util/ResourceIdentifier';
-
-export interface Ticket {
-    sub: ResourceIdentifier;
-    owner: string;
-    requested: Set<AccessMode>;
-
-}
+import {Ticket} from '@laurensdeb/authorization-agent-interfaces';
 
 /**
  * A TicketFactory is responsible for serializing and deserializing

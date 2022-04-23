@@ -3,10 +3,12 @@ import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {createLocalJWKSet, jwtVerify, SignJWT} from 'jose';
 import {v4} from 'uuid';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
-import {parseModes} from '../util/modes/ModesParser';
+import {parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isString} from '../util/StringGuard';
 import {SerializedToken, TokenFactory} from './TokenFactory';
-import {AccessToken} from './UmaGrantProcessor';
+import {AccessToken} from '@laurensdeb/authorization-agent-interfaces';
+
+const AUD = 'solid';
 
 export interface JwtTokenParams {
     expirationTime: string | number
@@ -36,11 +38,11 @@ export class JwtTokenFactory extends TokenFactory {
   public async serialize(token: AccessToken): Promise<SerializedToken> {
     const kid = await this.keyholder.getDefaultKey();
     const jwt = await new SignJWT({webid: token.webId, azp: token.clientId?token.clientId:'http://www.w3.org/ns/auth/acl#Origin', modes: [...token.modes],
-      sub: token.sub.path})
+      sub: token.sub.iri})
         .setProtectedHeader({alg: this.keyholder.getAlg(), kid})
         .setIssuedAt()
         .setIssuer(this.issuer)
-        .setAudience(token.sub.pod)
+        .setAudience(AUD)
         .setExpirationTime(this.params.expirationTime)
         .setJti(v4())
         .sign(this.keyholder.getPrivateKey(kid));
@@ -58,13 +60,11 @@ export class JwtTokenFactory extends TokenFactory {
     try {
       const {payload} = await jwtVerify(token, jwks, {
         issuer: this.issuer,
+        audience: AUD,
       });
 
       if (!payload.sub || !payload.aud || !payload.modes || !payload.azp || !payload.webid) {
         throw new Error('Missing JWT parameter(s): {sub, aud, modes, webid, azp} are required.');
-      }
-      if (Array.isArray(payload.aud)) {
-        throw new Error('JWT audience should not be an array.');
       }
       if (!isString(payload.webid)) {
         throw new Error('JWT claim "webid" is not a string.');
@@ -76,7 +76,7 @@ export class JwtTokenFactory extends TokenFactory {
         throw new Error('JWT claim "modes" is not an array.');
       }
 
-      return {webId: payload.webid!, clientId: payload.azp!, sub: {pod: payload.aud, path: payload.sub},
+      return {webId: payload.webid!, clientId: payload.azp!, sub: {iri: payload.sub},
         modes: parseModes(payload.modes)};
     } catch (error: any) {
       const msg = `Invalid Access Token provided, error while parsing: ${error.message}`;

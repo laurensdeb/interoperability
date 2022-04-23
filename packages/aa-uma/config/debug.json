@@ -1,0 +1,58 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "import": [
+        "laau:config/variables/default.json",
+        "laau:config/discovery/default.json",
+        "laau:config/keys/default.json",
+        "laau:config/token/default.json",
+        "laau:config/ticket/default.json",
+        "laau:config/authz/all.json"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-service:default:NodeHttpServer",
+            "@type": "NodeHttpServer",
+            "port": { "@id": "urn:authorization-service:variables:port" },
+            "host": { "@id": "urn:authorization-service:variables:host"},
+            "nodeHttpStreamsHandler": {
+                "@id": "urn:authorization-service:default:NodeHttpRequestResponseHandler",
+                "@type": "NodeHttpRequestResponseHandler",
+                "httpHandler": {
+                    "@id": "urn:authorization-service:default:RoutedHttpRequestHandler",
+                    "@type": "RoutedHttpRequestHandler",
+                    "handlerControllerList": [
+                        {
+                            "@id": "urn:authorization-service:default:HttpHandlerController",
+                            "@type": "HttpHandlerController",
+                            "label": "ControllerList",
+                            "routes": [
+                                {
+                                    "@id": "urn:authorization-service:default:UmaConfigRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-service:default:JwksRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-service:default:TokenRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-service:default:PermissionRegistrationRoute"
+                                }
+                            ]
+                        }
+                    ],
+                    "defaultHandler": {
+                        "@type": "DefaultRouteHandler"
+                    }
+                }
+            }
+        },
+        {
+            "comment": "Configuration for the UMA AS in debug mode."
+        }
+    ]
+}

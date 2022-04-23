@@ -1,6 +1,6 @@
 import {ClaimTokenProcessor, ClaimTokenRequest} from './ClaimTokenProcessor';
 import {createSolidTokenVerifier} from '@solid/access-token-verifier';
-import {Principal} from '../UmaGrantProcessor';
+import {Principal} from '@laurensdeb/authorization-agent-interfaces';
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 
 const IDTOKEN_FORMAT = 'http://openid.net/specs/openid-connect-core-1_0.html#IDToken';

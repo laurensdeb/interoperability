@@ -2,6 +2,8 @@ import {UmaConfig, UmaToken} from '../UmaClient';
 import * as jose from 'jose';
 import {isString} from '../../util/StringGuard';
 
+const AUD = 'solid';
+
 export type JWTVerifyOptions = {
     /**
      * Maximum age of an Access Token to be Valid
@@ -25,7 +27,7 @@ export async function verifyUMAToken(token: string, config: UmaConfig, options: 
 
   const {payload} = await jose.jwtVerify(token, JWKS, {
     issuer: config.issuer,
-    audience: options.baseUrl,
+    audience: AUD,
     maxTokenAge: options.maxTokenAge,
   });
 

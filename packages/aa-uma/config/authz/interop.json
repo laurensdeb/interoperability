@@ -1,0 +1,28 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-interop/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-service:default:AuthorizationAgentFactory",
+            "@type": "AuthorizationAgentFactoryImpl",
+            "clientIdStrategy": {
+                "@type": "Base64ClientIdStrategy",
+                "baseUrl": {"@id": "urn:authorization-service:variables:baseUrl"},
+                "aaPath": "/clients/"
+            },
+            "fetchFactory": {
+                "@type": "UmaFetchFactory",
+                "tokenFactory": {"@id": "urn:authorization-service:TokenFactory"},
+                "asUrl": {"@id": "urn:authorization-service:variables:baseUrl"}
+            }
+        },
+        {
+            "@id": "urn:authorization-service:default:Authorizer",
+            "@type": "InteropAuthorizer",
+            "authorizationAgentFactory": {"@id": "urn:authorization-service:default:AuthorizationAgentFactory"},
+            "strategies": []
+        }
+    ]
+}

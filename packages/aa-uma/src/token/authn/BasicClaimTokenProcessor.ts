@@ -1,5 +1,5 @@
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
-import {Principal} from '../UmaGrantProcessor';
+import {Principal} from '@laurensdeb/authorization-agent-interfaces';
 import {ClaimTokenProcessor, ClaimTokenRequest} from './ClaimTokenProcessor';
 
 const DUMMY_TOKEN_FORMAT = 'urn:authorization-agent:dummy-token';

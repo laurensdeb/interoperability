@@ -1,4 +1,4 @@
-import {AccessToken} from './UmaGrantProcessor';
+import {AccessToken} from '@laurensdeb/authorization-agent-interfaces';
 
 export interface SerializedToken {
     tokenType: string,
