@@ -1,5 +1,5 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
-import {AccessMode} from '@laurensdeb/authorization-agent-uma/dist/util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {AuthorizationAgentFactory} from '../../factory/AuthorizationAgentFactory';
 import {AuthenticatedClient, RequestedPermissions} from './Types';
 /**

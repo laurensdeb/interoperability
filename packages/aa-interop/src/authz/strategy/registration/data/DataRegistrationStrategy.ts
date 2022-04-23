@@ -1,4 +1,4 @@
-import {AccessMode} from '@laurensdeb/authorization-agent-uma/dist/util/modes/AccessModes';
+import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {getDataGrantsForClient} from '../../grant/getDataGrantsForClient';
 import {InteropBaseAuthorizerStrategy} from '../../InteropBaseAuthorizerStrategy';
 import {RequestedPermissions, AuthenticatedClient} from '../../Types';
