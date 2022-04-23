@@ -1,21 +1,25 @@
 import {SocialAgentRegistrationStrategy} from './SocialAgentRegistrationStrategy';
 import {MOCK_APPLICATION, MOCK_REQUEST,
-  MOCK_RESOURCE, MOCK_SOCIAL_AGENT, WEBID_ALICE, WEBID_BOB} from './../../../../util/test/MockData';
+  MOCK_RESOURCE, MOCK_SOCIAL_AGENT, WEBID_ALICE, WEBID_BOB} from '../../../../util/test/MockData';
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 
 const MOCK_FIND_SOCIAL_AGENT_REGISTRATION = jest.fn();
 
 const MOCK_AUTHORIZATION_AGENT_FACTORY = {
-  getAuthorizationAgent: jest.fn(async () => {
-    return {
-      findSocialAgentRegistration: MOCK_FIND_SOCIAL_AGENT_REGISTRATION,
-    } as unknown as AuthorizationAgent;
-  }),
+  getAuthorizationAgent: jest.fn(),
 };
 
 describe('A SocialAgentRegistrationStrategy', () =>{
   const strategy = new SocialAgentRegistrationStrategy(MOCK_AUTHORIZATION_AGENT_FACTORY);
+
+  beforeEach(() => {
+    MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent.mockImplementation(async () => {
+      return {
+        findSocialAgentRegistration: MOCK_FIND_SOCIAL_AGENT_REGISTRATION,
+      } as unknown as AuthorizationAgent;
+    });
+  });
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -36,6 +40,20 @@ describe('A SocialAgentRegistrationStrategy', () =>{
     expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();
     expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalledWith(WEBID_BOB);
   });
+
+  it('should not authorize an Social Agent\'s request if no registration exists', async () =>{
+    MOCK_FIND_SOCIAL_AGENT_REGISTRATION.mockResolvedValueOnce(undefined);
+
+    const result = await strategy.authorize(MOCK_REQUEST, MOCK_SOCIAL_AGENT);
+    expect(result).toEqual(new Set([]));
+
+    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalled();
+    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledWith(WEBID_ALICE);
+
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalledWith(WEBID_BOB);
+  });
+
 
   it('should not authorize a Application\'s request to a Social Agent\'s registration', async () =>{
     MOCK_FIND_SOCIAL_AGENT_REGISTRATION.mockResolvedValueOnce({

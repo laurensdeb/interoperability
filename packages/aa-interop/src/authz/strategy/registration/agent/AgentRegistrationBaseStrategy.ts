@@ -18,9 +18,8 @@ export type Registration = {
 export abstract class AgentRegistrationBaseStrategy<T extends Registration, S extends AuthenticatedClient>
   extends InteropBaseAuthorizerStrategy {
   /**
-     * Authorizes a request to SocialAgentRegistration
-     * for the registeredAgent of the Social Agent Registration
-     * with Read permissions.
+     * Authorizes a request to SocialAgentRegistration or ApplicationRegistration
+     * for its registeredAgent with Read permissions.
      *
      * @param {RequestedPermissions} request
      * @param {AuthenticatedClient} client
@@ -37,8 +36,7 @@ export abstract class AgentRegistrationBaseStrategy<T extends Registration, S ex
     const registration = await this.getRegistrationForClient(authorizationAgent, client);
 
     if (!!registration &&
-      this.isAuthorizationSubject(registration, request) &&
-      this.isAuthorizedClient(registration, client)) {
+      this.isAuthorizationSubject(registration, request)) {
       PERMITTED_ACCESS_MODES.forEach((mode) => result.add(mode));
     }
 
@@ -50,7 +48,15 @@ export abstract class AgentRegistrationBaseStrategy<T extends Registration, S ex
   protected abstract getRegistrationForClient(authorizationAgent: AuthorizationAgent,
     client: S): Promise<T | undefined>;
 
-  protected abstract isAuthorizationSubject(registration: T, request: RequestedPermissions): boolean;
-
-  protected abstract isAuthorizedClient(registration: T, client: S): boolean;
+  /**
+   * Determines whether the registration IRI matches
+   * with the authorization request subject or not.
+   *
+   * @param {T} registration
+   * @param {RequestedPermissions} request
+   * @return {boolean}
+   */
+  protected isAuthorizationSubject(registration: T, request: RequestedPermissions): boolean {
+    return registration.iri === request.resource;
+  }
 }

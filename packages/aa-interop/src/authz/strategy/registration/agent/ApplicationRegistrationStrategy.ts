@@ -1,7 +1,7 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {CRUDApplicationRegistration} from '@janeirodigital/interop-data-model';
 import {Application} from '../../Types';
-import {RequestedPermissions, AuthenticatedClient} from '../../Types';
+import {AuthenticatedClient} from '../../Types';
 import {AgentRegistrationBaseStrategy} from './AgentRegistrationBaseStrategy';
 
 /**
@@ -40,29 +40,5 @@ export class ApplicationRegistrationStrategy
   protected async getRegistrationForClient(authorizationAgent: AuthorizationAgent,
       client: Application): Promise<CRUDApplicationRegistration | undefined> {
     return await authorizationAgent.findApplicationRegistration(client.clientId);
-  }
-
-  /**
-   * Determines whether the registration IRI matches
-   * with the authorization request subject or not.
-   *
-   * @param {CRUDApplicationRegistration} registration
-   * @param {RequestedPermissions} request
-   * @return {boolean}
-   */
-  protected isAuthorizationSubject(registration: CRUDApplicationRegistration, request: RequestedPermissions): boolean {
-    return registration.iri === request.resource;
-  }
-
-  /**
-   * Determines whether the registration grantee matches
-   * with the authorization request social agent or not.
-   *
-   * @param {CRUDApplicationRegistration} registration
-   * @param {AuthenticatedClient} client
-   * @return {boolean}
-   */
-  protected isAuthorizedClient(registration: CRUDApplicationRegistration, client: Application): boolean {
-    return registration.registeredAgent === client.clientId;
   }
 }
