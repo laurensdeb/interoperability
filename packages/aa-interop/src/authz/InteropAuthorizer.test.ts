@@ -1,6 +1,6 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
-import {APP_CLIENTID, MOCK_POD, MOCK_RESOURCE, WEBID_ALICE, WEBID_BOB} from '../util/test/MockData';
+import {APP_CLIENTID, MOCK_RESOURCE, WEBID_ALICE, WEBID_BOB} from '../util/test/MockData';
 import {InteropAuthorizer} from './InteropAuthorizer';
 import {InteropBaseAuthorizerStrategy} from './strategy/InteropBaseAuthorizerStrategy';
 
