@@ -2,5 +2,6 @@
         "ReadableAccessGrant",
         "DataGrant",
         "CRUDApplicationRegistration",
-        "CRUDSocialAgentRegistration"
+        "CRUDSocialAgentRegistration",
+        "Error"
 ]

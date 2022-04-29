@@ -17,7 +17,7 @@ export class UmaFetchFactory extends FetchFactory {
   /**
      * Returns an authenticated fetch for the client.
      */
-  getAuthenticatedFetch(): (input: RequestInfo, init?: RequestInit) => Promise<Response> {
+  getAuthenticatedFetch(clientId: string): (input: RequestInfo, init?: RequestInit) => Promise<Response> {
     const getJwtForRequest = this.getJwtForRequest.bind(this);
     const logger = this.logger;
     return async function fetchBoundToUMA(

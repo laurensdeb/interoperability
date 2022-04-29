@@ -21,7 +21,7 @@ export class Application {
   /**
      * @param {string} clientId
      */
-  constructor(public readonly clientId: string) {
+  constructor(public readonly webId: string, public readonly clientId: string) {
 
   }
 }

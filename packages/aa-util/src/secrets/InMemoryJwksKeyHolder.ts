@@ -1,7 +1,7 @@
 import {exportJWK, generateKeyPair, JSONWebKeySet, JWK, KeyLike} from 'jose';
 import {JwksKeyHolder} from './JwksKeyHolder';
 import {v4} from 'uuid';
-import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
+import { getLoggerFor, Logger } from '../logging/LoggerUtils';
 
 const SUPPORTED_ALGORITHMS = new Set(['ES256', 'ES384', 'ES512', 'RS256', 'RS384', 'RS512']);
 

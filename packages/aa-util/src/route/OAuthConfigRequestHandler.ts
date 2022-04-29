@@ -1,6 +1,6 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {Observable, of} from 'rxjs';
+import {getLoggerFor, Logger} from '../logging/LoggerUtils';
 
 export enum ResponseType {
     // eslint-disable-next-line no-unused-vars

@@ -2,7 +2,7 @@ import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {SignJWT, createLocalJWKSet, jwtVerify} from 'jose';
 import {v4} from 'uuid';
 import {InvalidGrantError} from '../error/InvalidGrantError';
-import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
+import {JwksKeyHolder} from '@laurensdeb/authorization-agent-helpers';
 import {parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isString} from '../util/StringGuard';
 import {TicketFactory} from './TicketFactory';

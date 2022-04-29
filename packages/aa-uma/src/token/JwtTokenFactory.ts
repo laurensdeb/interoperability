@@ -2,7 +2,7 @@ import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {createLocalJWKSet, jwtVerify, SignJWT} from 'jose';
 import {v4} from 'uuid';
-import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
+import {JwksKeyHolder} from '@laurensdeb/authorization-agent-helpers';
 import {parseModes} from '@laurensdeb/authorization-agent-helpers';
 import {isString} from '../util/StringGuard';
 import {SerializedToken, TokenFactory} from './TokenFactory';

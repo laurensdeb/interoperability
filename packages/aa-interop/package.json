@@ -54,7 +54,8 @@
       "@janeirodigital/interop-data-model": "1.0.0-rc.7",
       "@janeirodigital/interop-namespaces": "1.0.0-rc.7",
       "@solid/access-token-verifier": "^1.2.0",
-      "uuid": "^8.3.2"
+      "uuid": "^8.3.2",
+      "rxjs": "^7.5.4"
     },
     "files": [
         ".componentsignore",

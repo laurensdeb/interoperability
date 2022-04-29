@@ -25,7 +25,33 @@ export * from './authz/strategy/registration/agent/SocialAgentRegistrationStrate
 // Authz/Strategy/Registration/Data
 export * from './authz/strategy/registration/data/DataRegistrationStrategy';
 
+// Agent
+
+// Agent/Authn
+export * from './agent/authn/TokenVerifier';
+export * from './agent/authn/DummyTokenVerifier';
+export * from './agent/authn/DpopTokenVerifier';
+
+// Agent/Discovery
+export * from './agent/discovery/AgentRegistrationDiscoveryService';
+export * from './agent/discovery/AgentRegistrationDiscoveryServiceImpl';
+export * from './agent/discovery/error/RegistrationRequiredError';
+
+// Agent/IdP
+export * from './agent/idp/DpopBoundTokenFactory';
+export * from './agent/idp/SolidOidcTokenFactory';
+export * from './agent/idp/StaticIdpConfigHandler';
+
 // Factory
 export * from './factory/AuthorizationAgentFactory';
 export * from './factory/ClientIdStrategy';
 export * from './factory/Base64ClientIdStrategy';
+export * from './factory/InteropFetchFactory';
+
+// Http
+export * from './http/WebIdHandler';
+export * from './http/AgentRegistrationDiscoveryHandler';
+
+// Util
+export * from './util/constructLinkHeader';
+export * from './util/getRegistrationForAgent';

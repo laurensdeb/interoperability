@@ -1,7 +1,7 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {getLoggerFor, Logger} from '../logging/LoggerUtils';
 
 export const statusCodes: { [code: number]: string } = {
   400: 'Bad Request',

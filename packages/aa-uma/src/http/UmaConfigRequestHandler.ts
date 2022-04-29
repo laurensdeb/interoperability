@@ -1,6 +1,6 @@
 import {ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM}
   from '@solid/access-token-verifier/dist/constant/ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM';
-import {OAuthConfigRequestHandler, OAuthConfiguration, ResponseType} from './OAuthConfigRequestHandler';
+import {OAuthConfigRequestHandler, OAuthConfiguration, ResponseType} from '@laurensdeb/authorization-agent-helpers';
 
 
 export type UmaConfiguration = OAuthConfiguration & {uma_profiles_supported: string[],

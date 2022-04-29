@@ -146,7 +146,7 @@ export class PermissionRegistrationHandler implements HttpHandler {
     }
     // TODO: prevent replay.
 
-    const jwt = authorization.replace('Bearer ', '');
+    const jwt = /^Bearer\s+(.*)/ui.exec(authorization!)![1];
 
     for (const resourceServer of this.resourceServers) {
       const publicKey = await jose.importSPKI(resourceServer.ecPublicKey, resourceServer.ecAlgorithm);
