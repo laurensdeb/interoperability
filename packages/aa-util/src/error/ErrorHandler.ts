@@ -70,7 +70,7 @@ export class JsonHttpErrorHandler implements HttpHandler {
     return this.nestedHandler.handle(context).pipe(
         catchError((error) => {
           this.logger.error(`Returned error for ${context.request.method} '${context.request.url}':` +
-          ` ${(error as Error).name} ${(error as Error).message}`);
+          ` ${(error as Error).name} ${(error as Error).message}`, error);
           return of({
             status: statusCodes[error?.statusCode] ? error.statusCode : 500,
             headers: {'content-type': 'application/json'},

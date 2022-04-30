@@ -10,5 +10,5 @@
  * @return {string}
  */
 export function constructAnchorLinkHeader(ref: string, rel: string, anchor?: string): string {
-  return `<${ref}>; ${anchor??`anchor="${anchor}"; `}rel="${rel}"`;
+  return `<${ref}>; ${anchor?`anchor="${anchor}"; `:``}rel="${rel}"`;
 }

@@ -16,11 +16,10 @@ export interface StaticIdpArgs {
  */
 export class StaticIdpConfigHandler extends OAuthConfigRequestHandler {
   /**
-     * @param {string} baseUrl
      * @param {StaticIdpArgs} args
      */
-  constructor(baseUrl: string, private readonly args: StaticIdpArgs) {
-    super(baseUrl);
+  constructor(private readonly args: StaticIdpArgs) {
+    super();
   }
   /**
    * Return configuration for the static IdP

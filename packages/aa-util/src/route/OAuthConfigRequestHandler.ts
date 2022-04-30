@@ -28,14 +28,6 @@ export type OAuthConfiguration = {
 export abstract class OAuthConfigRequestHandler<T extends OAuthConfiguration = OAuthConfiguration> extends HttpHandler {
   protected readonly logger: Logger = getLoggerFor(this);
   /**
-    * An HttpHandler used for returning the configuration
-    * of the UMA Authorization Service.
-     * @param {string} baseUrl - Base URL of the AS
-     */
-  constructor(protected readonly baseUrl: string) {
-    super();
-  }
-  /**
      * Returns OAuth Configuration for the AS
      * @return {T} - AS Configuration
      */

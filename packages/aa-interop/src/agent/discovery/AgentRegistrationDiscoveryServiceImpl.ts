@@ -1,4 +1,5 @@
-import {NotFoundHttpError, NotImplementedHttpError} from '@digita-ai/handlersjs-http';
+import {NotFoundHttpError, NotImplementedHttpError, UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
+import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {Application, AuthenticatedClient, SocialAgent} from '../../authz/strategy/Types';
 import {AuthorizationAgentFactory} from '../../factory/AuthorizationAgentFactory';
 import {ClientIdStrategy} from '../../factory/ClientIdStrategy';
@@ -14,6 +15,8 @@ import {RegistrationRequiredError} from './error/RegistrationRequiredError';
  * registries.
  */
 export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDiscoveryService {
+  private readonly logger: Logger = getLoggerFor(this);
+
   /**
      * @param {TokenVerifier} verifier
      * @param {ClientIdStrategy} clientIdStrategy
@@ -32,19 +35,19 @@ export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDisc
      * @return {Promise<DiscoveryResponse>}
      */
   async handle(req: DiscoveryRequest): Promise<DiscoveryResponse> {
-    // Determine owner WebID
+    this.logger.debug('Handling discovery request.');
     let webId;
     try {
       webId = await this.clientIdStrategy.getWebIdForClientId(req.request_uri);
     } catch (e: any) {
+      this.logger.debug(`Unable to discovery authorization agent for WebID: ${(e as Error).message}`, e);
       throw new NotFoundHttpError();
     }
 
-    // Authenticate Client
-    if (!req.headers.authorization || !/^DPoP /ui.test(req.headers.authorization)) {
-      throw new NotImplementedHttpError('No DPoP-bound Authorization header specified.');
+    if (!req.headers.authorization || !/^(DPoP|Bearer) /ui.test(req.headers.authorization)) {
+      throw new NotImplementedHttpError('No valid Authorization header specified.');
     }
-    const token = /^DPoP\s+(.*)/ui.exec(req.headers.authorization!)![1];
+    const token = /^(DPoP|Bearer)\s+(.*)/ui.exec(req.headers.authorization!)![2];
 
     const agent = await this.verifier.authenticate({
       method: 'HEAD',
@@ -53,10 +56,15 @@ export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDisc
       url: req.request_uri,
     });
 
-    // Create Authorization Agent
-    const aa = await this.authorizationAgentFactory.getAuthorizationAgent(webId);
+    let aa;
+    try {
+      aa = await this.authorizationAgentFactory.getAuthorizationAgent(webId);
+    } catch (e) {
+      const msg = `No authorization agent for WebID ${webId}`;
+      this.logger.debug(msg, e);
+      throw new NotFoundHttpError(msg);
+    }
 
-    // Find Application/Social Agent Registration
     const client = this.getAuthenticatedClientForAuthenticationResult(agent, webId);
     const registration = await getRegistrationForAgent(aa, client);
     if (!registration) {
@@ -64,8 +72,6 @@ export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDisc
           {redirect_user: 'https://example.com'});
     }
 
-    // If none found: throw RegistrationRequiredError with Redirect URI following some strategy
-    // Else return URI
     return {agent_registration: registration.iri,
       agent_iri: this.getAgentIri(client)};
   }
@@ -89,7 +95,7 @@ export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDisc
       owner: string): AuthenticatedClient {
     if (owner === res.webId) {
       if (!res.clientId) {
-        throw new Error('Cannot authenticate agent without clientId as Application');
+        throw new UnauthorizedHttpError('Cannot authenticate owner without clientId as Application');
       }
       return new Application(res.webId, res.clientId);
     }

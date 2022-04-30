@@ -27,10 +27,8 @@ export class SolidOidcTokenFactory extends DpopBoundTokenFactory {
     const kid = await this.keyholder.getDefaultKey();
     const jwk = await exportJWK(this.keyholder.getPublicKey(kid));
     const dpop = await new SignJWT({htu, htm})
-        .setProtectedHeader({alg: this.keyholder.getAlg(), jwk})
+        .setProtectedHeader({alg: this.keyholder.getAlg(), typ: 'dpop+jwt', jwk})
         .setIssuedAt()
-        .setIssuer(this.issuer.getUri())
-        .setAudience(SOLID)
         .setExpirationTime('1m')
         .setJti(v4())
         .sign(this.keyholder.getPrivateKey(kid));
@@ -50,10 +48,10 @@ export class SolidOidcTokenFactory extends DpopBoundTokenFactory {
     const kid = await this.keyholder.getDefaultKey();
     const dpop = await this.getDpop(uri, method);
     const jwt = await new SignJWT({...client, sub: client.webid, cnf: {jkt: dpop.jkt}})
-        .setProtectedHeader({alg: this.keyholder.getAlg(), kid})
+        .setProtectedHeader({alg: this.keyholder.getAlg(), typ: 'JWT', kid})
         .setIssuedAt()
         .setIssuer(this.issuer.getUri())
-        .setAudience(SOLID)
+        .setAudience([SOLID, client.azp])
         .setExpirationTime('1m')
         .setJti(v4())
         .sign(this.keyholder.getPrivateKey(kid));

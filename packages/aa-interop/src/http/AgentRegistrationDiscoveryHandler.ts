@@ -1,4 +1,5 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse, UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
+import {getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {Observable, throwError, from, map} from 'rxjs';
 import {AgentRegistrationDiscoveryService} from '../agent/discovery/AgentRegistrationDiscoveryService';
 import {constructAnchorLinkHeader} from '../util/constructLinkHeader';
@@ -15,6 +16,7 @@ import {constructAnchorLinkHeader} from '../util/constructLinkHeader';
  * @link https://solid.github.io/data-interoperability-panel/specification/#agent-registration-discovery
  */
 export class AgentRegistrationDiscoveryHander extends HttpHandler {
+  private readonly logger: Logger = getLoggerFor(this);
   /**
      * @param {AgentRegistrationDiscoveryService} service
      */
@@ -29,8 +31,9 @@ export class AgentRegistrationDiscoveryHander extends HttpHandler {
      * @return {Observable<HttpHandlerResponse>}
      */
   handle(context: HttpHandlerContext): Observable<HttpHandlerResponse> {
+    this.logger.debug(`Received Agent Registration discovery request at '${context.request.url.toString()}'`);
     if (!context.request.headers.authorization) {
-      throwError(() => new UnauthorizedHttpError('Missing "Authorization"-header in request.'));
+      return throwError(() => new UnauthorizedHttpError('Missing "Authorization"-header in request.'));
     }
     return from(this.service.handle({
       headers: context.request.headers,

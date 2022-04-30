@@ -1,5 +1,6 @@
 import {FetchFactory, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {DpopBoundTokenFactory} from '../agent/idp/DpopBoundTokenFactory';
+import {fetch} from 'cross-fetch';
 
 export const FetchType = typeof fetch;
 
@@ -28,7 +29,7 @@ export class InteropFetchFactory extends FetchFactory {
         init?: RequestInit,
     ): Promise<Response> {
       const token = await tokenFactory.getToken(url.toString(), (init && init!.method) ? init.method : 'GET',
-          {webid: clientId, azp: clientId});
+          {webid: `${clientId}/profile`, azp: `${clientId}/profile`});
       return fetch(url, {
         ...init,
         headers: {

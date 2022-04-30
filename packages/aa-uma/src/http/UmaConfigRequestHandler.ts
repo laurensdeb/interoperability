@@ -12,6 +12,14 @@ export type UmaConfiguration = OAuthConfiguration & {uma_profiles_supported: str
  */
 export class UmaConfigRequestHandler extends OAuthConfigRequestHandler<UmaConfiguration> {
   /**
+    * An HttpHandler used for returning the configuration
+    * of the UMA Authorization Service.
+     * @param {string} baseUrl - Base URL of the AS
+     */
+  constructor(protected readonly baseUrl: string) {
+    super();
+  }
+  /**
    * Returns UMA Configuration for the AS
    * @return {UmaConfiguration} - AS Configuration
    */

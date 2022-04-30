@@ -1,11 +1,16 @@
 {
     "@context": [
       "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/components/context.jsonld"
+      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-helpers/^1.0.0/components/context.jsonld"
     ],
     "@graph": [
         {
-            "@id": "urn:authorization-agent:oidc:default:JwksRoute",
+            "@id": "urn:authorization-agent:default:DefaultKeyholder",
+            "@type": "InMemoryJwksKeyHolder",
+            "alg": "ES256"
+        },
+        {
+            "@id": "urn:authorization-agent:default:JwksRoute",
             "@type": "HttpHandlerRoute",
             "operations": [
                 {
@@ -20,7 +25,7 @@
                  "@id": "urn:authorization-agent:default:DefaultKeyholder"
               }
             },
-            "path": "/oidc/keys"
+            "path": "/aa/idp/keys"
         }
     ]
 }
