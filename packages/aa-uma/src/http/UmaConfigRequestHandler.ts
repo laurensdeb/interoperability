@@ -1,6 +1,6 @@
 import {ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM}
   from '@solid/access-token-verifier/dist/constant/ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM';
-import {OAuthConfigRequestHandler, OAuthConfiguration, ResponseType} from './OAuthConfigRequestHandler';
+import {OAuthConfigRequestHandler, OAuthConfiguration, ResponseType} from '@laurensdeb/authorization-agent-helpers';
 
 
 export type UmaConfiguration = OAuthConfiguration & {uma_profiles_supported: string[],
@@ -11,6 +11,14 @@ export type UmaConfiguration = OAuthConfiguration & {uma_profiles_supported: str
  * of the UMA Authorization Service.
  */
 export class UmaConfigRequestHandler extends OAuthConfigRequestHandler<UmaConfiguration> {
+  /**
+    * An HttpHandler used for returning the configuration
+    * of the UMA Authorization Service.
+     * @param {string} baseUrl - Base URL of the AS
+     */
+  constructor(protected readonly baseUrl: string) {
+    super();
+  }
   /**
    * Returns UMA Configuration for the AS
    * @return {UmaConfiguration} - AS Configuration

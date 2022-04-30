@@ -12,6 +12,7 @@ const argv = yargs(process.argv.slice(2)).options({
 }).parseSync();
 
 const umaPort = 4000;
+const aaPort = 4001;
 
 export const launch: () => Promise<void> =
 async () => {
@@ -21,6 +22,11 @@ async () => {
   variables['urn:authorization-service:variables:host'] = argv.host;
   variables['urn:authorization-service:variables:protocol'] = argv.protocol;
   variables['urn:authorization-service:variables:baseUrl'] = `${argv.protocol}://${argv.host}:${umaPort}/uma`;
+
+  variables['urn:authorization-agent:variables:port'] = aaPort;
+  variables['urn:authorization-agent:variables:host'] = argv.host;
+  variables['urn:authorization-agent:variables:protocol'] = argv.protocol;
+  variables['urn:authorization-agent:variables:baseUrl'] = `${argv.protocol}://${argv.host}:${aaPort}/aa`;
 
   variables['urn:authorization-service:variables:mainModulePath'] = argv.mainModulePath ?
     path.join(process.cwd(),
@@ -42,10 +48,13 @@ async () => {
 
   await manager.configRegistry.register(configPath);
 
-  const server: NodeHttpServer = await
+  const umaServer: NodeHttpServer = await
   manager.instantiate('urn:authorization-service:default:NodeHttpServer',
       {variables});
-  server.start();
+  const aaServer: NodeHttpServer = await manager.instantiate('urn:authorization-agent:default:NodeHttpServer',
+      {variables});
+  umaServer.start();
+  aaServer.start();
 };
 
 launch();

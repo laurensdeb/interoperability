@@ -15,12 +15,14 @@ const mockFetch = (response: Response) => {
   ).mockResolvedValueOnce(response);
 };
 
+const CLIENT_ID = 'https://aa.example.org/client/2ef3b';
+
 describe('a UmaFetchFactory', () => {
   const fetchFactory = new UmaFetchFactory((mockTokenFactory as unknown as TokenFactory), 'https://as.example.org');
   it('returns a fetch function which adds the access token to requests', async () => {
     mockTokenFactory.serialize.mockResolvedValueOnce({token: 'abc', type: 'Bearer'});
 
-    const fetchFn = fetchFactory.getAuthenticatedFetch();
+    const fetchFn = fetchFactory.getAuthenticatedFetch(CLIENT_ID);
 
     const mockedFetch = mockFetch(new Response(JSON.stringify({})));
 
