@@ -1,5 +1,3 @@
-import {AuthenticatedClient} from '../../authz/strategy/Types';
-
 export type AuthenticationRequest = {
     bearer: string,
     dpop?: string,

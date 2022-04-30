@@ -1,5 +1,4 @@
 import {AgentRegistrationDiscoveryHander} from './AgentRegistrationDiscoveryHandler';
-import {HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {lastValueFrom} from 'rxjs';
 
 const MOCK_SERVICE = {

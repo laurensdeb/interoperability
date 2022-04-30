@@ -1,6 +1,7 @@
 import {JwksKeyHolder, RoutePath} from '@laurensdeb/authorization-agent-helpers';
 import {SolidOidcTokenFactory} from './SolidOidcTokenFactory';
-import {generateKeyPair, decodeProtectedHeader, jwtVerify, importJWK, calculateJwkThumbprint, GenerateKeyPairResult, exportJWK} from 'jose';
+import {generateKeyPair, decodeProtectedHeader, jwtVerify, importJWK,
+  calculateJwkThumbprint, GenerateKeyPairResult, exportJWK} from 'jose';
 
 const ALG = 'ES256';
 const BASE_URL = 'https://example.org';

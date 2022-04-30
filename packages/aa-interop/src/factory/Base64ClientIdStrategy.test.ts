@@ -1,4 +1,4 @@
-import { RoutePath } from '@laurensdeb/authorization-agent-helpers';
+import {RoutePath} from '@laurensdeb/authorization-agent-helpers';
 import {Base64ClientIdStrategy} from './Base64ClientIdStrategy';
 
 const MOCK_WEBID = 'https://id.example.org/profile/123';
