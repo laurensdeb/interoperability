@@ -1,7 +1,7 @@
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
-import {Logger, getLoggerFor} from '@laurensdeb/authorization-agent-helpers';
 import {Observable, from} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {getLoggerFor, Logger} from '../logging/LoggerUtils';
 import {JwksKeyHolder} from '../secrets/JwksKeyHolder';
 
 /**

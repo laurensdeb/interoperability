@@ -4,6 +4,7 @@ import {Application, AuthenticatedClient, RequestedPermissions, SocialAgent} fro
 import {InteropBaseAuthorizerStrategy} from './strategy/InteropBaseAuthorizerStrategy';
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AuthorizationAgentFactory} from '../factory/AuthorizationAgentFactory';
+import {getRegistrationForAgent} from '../util/getRegistrationForAgent';
 
 /**
  * An InteropAuthorizer authorizes incoming requests
@@ -73,7 +74,7 @@ export class InteropAuthorizer extends Authorizer {
       if (!client.clientId) {
         throw new Error('Cannot authenticate agent without clientId as Application');
       }
-      return new Application(client.clientId);
+      return new Application(client.webId, client.clientId);
     }
     return new SocialAgent(client.webId);
   }
@@ -115,10 +116,6 @@ export class InteropAuthorizer extends Authorizer {
    */
   private async hasRegistrationForAgent(authorizationAgent: AuthorizationAgent,
       client: AuthenticatedClient): Promise<boolean> {
-    if (client instanceof SocialAgent) {
-      return !!(await authorizationAgent.findSocialAgentRegistration(client.webId));
-    } else {
-      return !!(await authorizationAgent.findApplicationRegistration(client.clientId));
-    }
+    return !!(await getRegistrationForAgent(authorizationAgent, client));
   }
 }

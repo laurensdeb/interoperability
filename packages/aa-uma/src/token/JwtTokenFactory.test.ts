@@ -1,4 +1,4 @@
-import {InMemoryJwksKeyHolder} from '../secrets/InMemoryJwksKeyHolder';
+import {InMemoryJwksKeyHolder} from '@laurensdeb/authorization-agent-helpers';
 import {TokenFactory} from './TokenFactory';
 import {JwtTokenFactory} from './JwtTokenFactory';
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';

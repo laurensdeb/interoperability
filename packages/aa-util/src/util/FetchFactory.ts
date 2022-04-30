@@ -5,5 +5,5 @@ import {fetch} from 'cross-fetch';
  * for accessing some resource
  */
 export abstract class FetchFactory {
-    abstract getAuthenticatedFetch(): typeof fetch;
+    abstract getAuthenticatedFetch(clientId: string): typeof fetch;
 }

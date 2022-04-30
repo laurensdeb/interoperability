@@ -36,6 +36,9 @@
         "source.fixAll.eslint": true
       },
       "files.eol": "\n",
+      "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+      },
     },
     "extensions": {
       "recommendations": [

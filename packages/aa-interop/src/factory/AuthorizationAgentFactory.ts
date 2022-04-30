@@ -35,9 +35,10 @@ export class AuthorizationAgentFactoryImpl extends AuthorizationAgentFactory {
    * @return {Promise<AuthorizationAgent>} - authorization agent
    */
   public async getAuthorizationAgent(webid: string): Promise<AuthorizationAgent> {
-    return await AuthorizationAgent.build(webid, await this.clientIdStrategy.getClientIdForWebId(webid), {
+    const clientId = await this.clientIdStrategy.getClientIdForWebId(webid);
+    return await AuthorizationAgent.build(webid, clientId, {
       randomUUID,
-      fetch: this.fetchFactory.getAuthenticatedFetch(),
+      fetch: this.fetchFactory.getAuthenticatedFetch(clientId),
     });
   }
 }

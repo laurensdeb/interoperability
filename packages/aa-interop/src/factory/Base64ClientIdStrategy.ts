@@ -1,4 +1,5 @@
 import {ClientIdStrategy} from './ClientIdStrategy';
+import {RoutePath} from '@laurensdeb/authorization-agent-helpers';
 
 /**
  * ClientIDStrategy using the Base64 encoded
@@ -6,10 +7,9 @@ import {ClientIdStrategy} from './ClientIdStrategy';
  */
 export class Base64ClientIdStrategy extends ClientIdStrategy {
   /**
-     * @param {string} baseUrl - Base URL of the Authorization Agent
-     * @param {string} aaPath - Subpath where requests to the Authorization Agent are routed to
+     * @param {RoutePath} aaClientPath - Base route under which the Authorization Agent Client IDs are served
      */
-  constructor(private readonly baseUrl:string, private readonly aaPath: string) {
+  constructor(private readonly aaClientPath: RoutePath) {
     super();
   }
 
@@ -20,7 +20,7 @@ export class Base64ClientIdStrategy extends ClientIdStrategy {
    */
   public async getClientIdForWebId(webid: string): Promise<string> {
     const webIdBase = Buffer.from(webid, 'utf-8').toString('base64');
-    return `${this.baseUrl}${this.aaPath}${webIdBase}`;
+    return `${this.aaClientPath.getUri()}${webIdBase}`;
   }
 
   /**
@@ -30,10 +30,10 @@ export class Base64ClientIdStrategy extends ClientIdStrategy {
    * @return {Promise<string>} webid
    */
   public async getWebIdForClientId(clientid: string): Promise<string> {
-    if (!clientid.startsWith(`${this.baseUrl}${this.aaPath}`)) {
+    if (!clientid.startsWith(`${this.aaClientPath.getUri()}`)) {
       throw new Error('ClientID was not generated using this ClientIdStrategy');
     }
-    const webIdBase = clientid.substring(`${this.baseUrl}${this.aaPath}`.length);
+    const webIdBase = clientid.substring(`${this.aaClientPath.getUri()}`.length);
 
     if (!webIdBase || !(/[A-Za-z0-9+/=]/.test(webIdBase))) {
       throw new Error('ClientID was not generated using this ClientIdStrategy');

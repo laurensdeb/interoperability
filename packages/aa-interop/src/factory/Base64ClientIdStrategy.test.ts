@@ -1,3 +1,4 @@
+import {RoutePath} from '@laurensdeb/authorization-agent-helpers';
 import {Base64ClientIdStrategy} from './Base64ClientIdStrategy';
 
 const MOCK_WEBID = 'https://id.example.org/profile/123';
@@ -6,7 +7,7 @@ const MOCK_AA_BASE = 'https://example.org/aa';
 const MOCK_AA_CLIENT_PATH = '/clients/';
 
 describe('A Base64ClientIdStrategy', () => {
-  const clientIdStrategy = new Base64ClientIdStrategy(MOCK_AA_BASE, MOCK_AA_CLIENT_PATH);
+  const clientIdStrategy = new Base64ClientIdStrategy(new RoutePath(MOCK_AA_BASE, MOCK_AA_CLIENT_PATH));
 
   it('should convert a WebID to a ClientID', async () => {
     const clientId = await clientIdStrategy.getClientIdForWebId(MOCK_WEBID);

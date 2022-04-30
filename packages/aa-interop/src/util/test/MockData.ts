@@ -9,7 +9,7 @@ export const APP_CLIENTID = 'https://app.example.org';
 export const MOCK_RESOURCE = 'https://pod.example.org/alice/test/123';
 export const MOCK_POD = 'https://pod.example.org/alice';
 
-export const MOCK_APPLICATION = new Application(APP_CLIENTID);
+export const MOCK_APPLICATION = new Application(WEBID_ALICE, APP_CLIENTID);
 export const MOCK_SOCIAL_AGENT = new SocialAgent(WEBID_BOB);
 
 export const MOCK_REQUEST: RequestedPermissions = {
