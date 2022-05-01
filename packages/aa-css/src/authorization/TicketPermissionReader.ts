@@ -18,7 +18,7 @@ export class TicketPermissionReader extends PermissionReader {
 
     if (input.credentials.ticket?.resource?.path === input.identifier.path && input.credentials.ticket?.modes) {
       result.ticket = this.ticketModesToPermissions(input.credentials.ticket.modes);
-      this.logger.info(`Read permissions from${JSON.stringify(result)}`);
+      this.logger.info(`Read permissions from ${JSON.stringify(result)}`);
     }
 
     return result;

@@ -6,7 +6,7 @@ export * from './uma/UmaClient';
 
 export * from './util/Vocabularies';
 
-export * from './authentication/UmaTicketExtractor';
+export * from './authentication/UmaTokenExtractor';
 export * from './authentication/Credentials';
 
 export * from './authorization/PermissionReader';

@@ -12,8 +12,8 @@
           {
             "@type": "WaterfallHandler",
             "handlers": [
-              { "@type": "UMATicketExtractor",
-                "UMATicketExtractor:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"}
+              { "@type": "UmaTokenExtractor",
+                "UmaTokenExtractor:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"}
               },
               {
                 "@type": "DPoPWebIdExtractor",
