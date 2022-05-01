@@ -1,4 +1,4 @@
-import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
+import {AccessMode, getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {getDataGrantsForClient} from '../../grant/getDataGrantsForClient';
 import {InteropBaseAuthorizerStrategy} from '../../InteropBaseAuthorizerStrategy';
 import {RequestedPermissions, AuthenticatedClient} from '../../Types';
@@ -16,6 +16,7 @@ const PERMITTED_ACCESS_MODES = [AccessMode.read];
  * @link https://solid.github.io/data-interoperability-panel/specification/#data-registration
  */
 export class DataRegistrationStrategy extends InteropBaseAuthorizerStrategy {
+  private readonly logger: Logger = getLoggerFor(this);
   /**
      * Authorizes a request to a Data Registration
      * for an agent with a Data Grant referencing
@@ -26,10 +27,12 @@ export class DataRegistrationStrategy extends InteropBaseAuthorizerStrategy {
      * @return {Promise<Set<AccessMode>>}
      */
   public async authorize(request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
+    this.logger.debug(`Checking if '${request.resource} is registration for Data Grant`);
     const result = new Set<AccessMode>();
 
     const authorizationAgent = await this.getAuthorizationAgentForRequest(request);
     const grants = await getDataGrantsForClient(authorizationAgent, client);
+    this.logger.debug(`Found ${grants?grants.length:'no'} grants for client.`);
 
     if (grants && grants.some((grant) => grant.hasDataRegistration &&
       (grant.hasDataRegistration == request.resource))) {

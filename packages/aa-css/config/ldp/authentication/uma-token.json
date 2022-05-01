@@ -9,8 +9,21 @@
         "@id": "urn:solid-server:default:CredentialsExtractor",
         "@type": "UnionCredentialsExtractor",
         "extractors": [
-          { "@type": "UMATicketExtractor",
-            "UMATicketExtractor:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"}
+          {
+            "@type": "WaterfallHandler",
+            "handlers": [
+              { "@type": "UMATicketExtractor",
+                "UMATicketExtractor:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"}
+              },
+              {
+                "@type": "DPoPWebIdExtractor",
+                "originalUrlExtractor": {
+                  "@type": "OriginalUrlExtractor",
+                  "args_identifierStrategy": { "@id": "urn:solid-server:default:IdentifierStrategy" }
+                }
+              },
+              { "@type": "BearerWebIdExtractor" }
+            ]
           },
           { "@type": "PublicCredentialsExtractor" }
         ]

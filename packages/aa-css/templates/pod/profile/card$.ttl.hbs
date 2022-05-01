@@ -11,7 +11,7 @@
     {{#if name}}foaf:name "{{name}}";{{/if}}
     {{#if oidcIssuer}}solid:oidcIssuer <{{oidcIssuer}}>;{{/if}}
     interop:hasRegistrySet <{{podBaseUrl}}registries/index>;
-    interop:hasAuthorizationAgent <http://localhost:5000>;
+    interop:hasAuthorizationAgent <{{authorizationAgent}}>;
     interop:hasInbox <{{podBaseUrl}}inbox/general> ;
     interop:hasAccessInbox <{{podBaseUrl}}inbox/access> ;
     a foaf:Person, interop:Agent.

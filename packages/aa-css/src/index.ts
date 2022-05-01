@@ -19,3 +19,5 @@ export * from './authorization/permissions/Permissions';
 export * from './http/output/metadata/TicketWwwAuthMetadataWriter';
 
 export * from './util/ExtendedAccountStore';
+
+export * from './pods/CustomGeneratedPodManager';

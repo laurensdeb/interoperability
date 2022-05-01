@@ -1,8 +1,8 @@
 {
     "@context": [
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/components/context.jsonld",
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-interop/^1.0.0/components/context.jsonld",
-      "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-helpers/^1.0.0/components/context.jsonld"
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-uma/^1.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-interop/^1.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@laurensdeb/authorization-agent-helpers/^1.0.0/components/context.jsonld"
     ],
     "@graph": [
         {
@@ -11,22 +11,67 @@
             "clientIdStrategy": {
                 "@type": "Base64ClientIdStrategy",
                 "aaClientPath": {
-                    "@type": "RoutePath", 
-                    "baseUrl": {"@id": "urn:authorization-service:variables:baseUrl"},
+                    "@type": "RoutePath",
+                    "baseUrl": {
+                        "@id": "urn:authorization-service:variables:baseUrl"
+                    },
                     "staticPath": "/clients/"
                 }
             },
             "fetchFactory": {
                 "@type": "UmaFetchFactory",
-                "tokenFactory": {"@id": "urn:authorization-service:TokenFactory"},
-                "asUrl": {"@id": "urn:authorization-service:variables:baseUrl"}
+                "tokenFactory": {
+                    "@id": "urn:authorization-service:TokenFactory"
+                },
+                "asUrl": {
+                    "@id": "urn:authorization-service:variables:baseUrl"
+                }
             }
         },
         {
             "@id": "urn:authorization-service:default:Authorizer",
             "@type": "InteropAuthorizer",
-            "authorizationAgentFactory": {"@id": "urn:authorization-service:default:AuthorizationAgentFactory"},
-            "strategies": []
+            "authorizationAgentFactory": {
+                "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+            },
+            "strategies": [
+                {
+                    "@type": "ApplicationRegistrationStrategy",
+                    "authorizationAgentFactory": {
+                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+                    }
+                },
+                {
+                    "@type": "SocialAgentRegistrationStrategy",
+                    "authorizationAgentFactory": {
+                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+                    }
+                },
+                {
+                    "@type": "AccessGrantStrategy",
+                    "authorizationAgentFactory": {
+                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+                    }
+                },
+                {
+                    "@type": "DataGrantStrategy",
+                    "authorizationAgentFactory": {
+                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+                    }
+                },
+                {
+                    "@type": "DataRegistrationStrategy",
+                    "authorizationAgentFactory": {
+                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+                    }
+                },
+                {
+                    "@type": "DataInstanceStrategy",
+                    "authorizationAgentFactory": {
+                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+                    }
+                }
+            ]
         }
     ]
 }

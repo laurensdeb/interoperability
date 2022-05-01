@@ -84,4 +84,16 @@ describe('An InteropAuthorizer', () => {
     expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();
     expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalledWith(WEBID_BOB);
   });
+
+  it('should ignore when error is thrown in strategy', async () => {
+    MOCK_FIND_SOCIAL_AGENT_REGISTRATION.mockResolvedValueOnce({iri: 'https://example.com'});
+    MOCK_AUTHORIZATION_STRATEGY.authorize.mockRejectedValueOnce(new Error('invalid'));
+    const result = await interopAuthorizer.authorize({webId: WEBID_BOB, clientId: APP_CLIENTID},
+        {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
+
+    expect(result).toEqual(new Set([]));
+    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledTimes(1);
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalledWith(WEBID_BOB);
+  });
 });

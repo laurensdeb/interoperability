@@ -28,7 +28,7 @@
 # The Authorization Agent has read, write and control access to every resource in the pod.
 <#authorization-agent>
     a acl:Authorization;
-    acl:agent <http://localhost:5000/profile>;
+    acl:agent <{{authorizationAgentProfile}}>;
     # Set the access to the root storage folder itself
     acl:accessTo <./>;
     # All resources will inherit this authorization, by default
