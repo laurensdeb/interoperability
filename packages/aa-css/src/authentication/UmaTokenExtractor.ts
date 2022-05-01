@@ -5,7 +5,7 @@ import {AccessMode, CredentialsExtractor, getLoggerFor, HttpRequest,
   NotImplementedHttpError, BadRequestHttpError} from '@solid/community-server';
 import {UmaClient} from '../uma/UmaClient';
 
-export interface UMATicketExtractorArgs {
+export interface UmaTokenExtractorArgs {
   /**
   * UMA Client
   */
@@ -23,16 +23,16 @@ const modesMap: Record<string, AccessMode> = {
 /**
  * Credentials extractor which interprets the contents of the Bearer authorization token as a UMA Access Token.
  */
-export class UMATicketExtractor extends CredentialsExtractor {
+export class UmaTokenExtractor extends CredentialsExtractor {
   protected readonly logger = getLoggerFor(this);
 
   private readonly umaClient: UmaClient;
 
   /**
    * Credentials extractor which interprets the contents of the Bearer authorization token as a UMA Access Token.
-   * @param {UMATicketExtractorArgs} args - properties
+   * @param {UMATokenExtractorArgs} args - properties
    */
-  public constructor(args: UMATicketExtractorArgs) {
+  public constructor(args: UmaTokenExtractorArgs) {
     super();
     this.umaClient = args.umaClient;
   }

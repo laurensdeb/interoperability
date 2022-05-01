@@ -2,7 +2,7 @@ import {BadRequestHttpError, HttpRequest, NotImplementedHttpError} from '@solid/
 import {AccessMode} from '../authorization/permissions/Permissions';
 import {UmaToken} from '../uma/UmaClient';
 import {CredentialGroup} from './Credentials';
-import {UMATicketExtractor} from './UmaTicketExtractor';
+import {UmaTokenExtractor} from './UmaTokenExtractor';
 
 const MockUmaClient = {
   getAsUrl: jest.fn(),
@@ -20,7 +20,7 @@ const mockUmaToken: UmaToken = {webid: WEB_ID, azp: CLIENT,
   resource: RESOURCE, modes: MODES};
 
 describe('A UMATicketExtractor', () => {
-  const ticketExtractor = new UMATicketExtractor({umaClient: MockUmaClient});
+  const ticketExtractor = new UmaTokenExtractor({umaClient: MockUmaClient});
   afterEach((): void => {
     jest.clearAllMocks();
   });
