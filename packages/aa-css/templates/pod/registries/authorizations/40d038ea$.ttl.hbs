@@ -1,0 +1,15 @@
+@prefix interop: <http://www.w3.org/ns/solid/interop#>.
+@prefix pod-grants: <{{podBaseUrl}}registries/authorizations/>.
+@prefix pod-data: <{{podBaseUrl}}data/>.
+@prefix solidtrees: <https://thundr.be/experiments/interop/trees/>.
+@prefix acl: <http://www.w3.org/ns/auth/acl#>.
+
+<>
+  a interop:DataGrant ;
+  interop:dataOwner <{{webId}}> ;
+  interop:grantee <https://example.org/id> ;
+  interop:registeredShapeTree solidtrees:Task.ttl ;
+  interop:hasDataRegistration  pod-data:tasks\/;
+  interop:satisfiesAccessNeed <https://example.org/needs#123> ;
+  interop:accessMode acl:Read, acl:Create ;
+  interop:scopeOfGrant interop:AllFromRegistry .

@@ -21,18 +21,19 @@ export abstract class AgentRegistrationBaseStrategy<T extends Registration, S ex
      * Authorizes a request to SocialAgentRegistration or ApplicationRegistration
      * for its registeredAgent with Read permissions.
      *
+     * @param {AuthorizationAgent} authorizationAgent
      * @param {RequestedPermissions} request
      * @param {AuthenticatedClient} client
      * @return {Promise<Set<AccessMode>>}
      */
-  public async authorize(request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
+  public async authorize(authorizationAgent: AuthorizationAgent,
+      request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
     const result = new Set<AccessMode>();
 
     if (!this.isSupportedClient(client)) {
       return result;
     }
 
-    const authorizationAgent = await this.getAuthorizationAgentForRequest(request);
     const registration = await this.getRegistrationForClient(authorizationAgent, client);
 
     if (!!registration &&

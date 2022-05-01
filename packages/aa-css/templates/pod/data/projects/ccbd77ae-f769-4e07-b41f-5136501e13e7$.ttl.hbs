@@ -1,0 +1,10 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX pm: <https://vocab.example/project-management/>
+PREFIX pod-data: <{{podBaseUrl}}data/>
+
+<#project>
+  a pm:Project ;
+  rdfs:label "P-Ap-1" ;
+  pm:hasTask
+    pod-data:tasks\/576520a6-af5a-4cf9-8b40-8b1512b59c73\#task ,
+    pod-data:tasks\/106a82aa-6911-4a7e-a49b-383cbaa9da66\#task .

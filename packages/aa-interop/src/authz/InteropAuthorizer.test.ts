@@ -15,7 +15,13 @@ const MOCK_AUTHORIZATION_AGENT_FACTORY = {
 };
 
 describe('An InteropAuthorizer', () => {
+  let interopAuthorizer: InteropAuthorizer;
+
   beforeEach(() => {
+    interopAuthorizer = new InteropAuthorizer(
+        [MOCK_AUTHORIZATION_STRATEGY as unknown as InteropBaseAuthorizerStrategy],
+        MOCK_AUTHORIZATION_AGENT_FACTORY);
+
     MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent.mockImplementation(async () => {
       return {
         findSocialAgentRegistration: MOCK_FIND_SOCIAL_AGENT_REGISTRATION,
@@ -27,10 +33,6 @@ describe('An InteropAuthorizer', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
-
-  const interopAuthorizer = new InteropAuthorizer(
-      [MOCK_AUTHORIZATION_STRATEGY as unknown as InteropBaseAuthorizerStrategy],
-      MOCK_AUTHORIZATION_AGENT_FACTORY);
 
   it('should not authorize a request for Application when no clientId is present', async () => {
     const result = await interopAuthorizer.authorize({webId: WEBID_ALICE},
@@ -80,6 +82,31 @@ describe('An InteropAuthorizer', () => {
         {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
 
     expect(result).toEqual(new Set([AccessMode.read]));
+    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledTimes(1);
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalledWith(WEBID_BOB);
+  });
+
+  it('should cache authorization agent', async () => {
+    MOCK_FIND_SOCIAL_AGENT_REGISTRATION.mockResolvedValueOnce({iri: 'https://example.com'});
+    MOCK_AUTHORIZATION_STRATEGY.authorize.mockResolvedValueOnce(new Set([AccessMode.read]));
+    const result = await interopAuthorizer.authorize({webId: WEBID_BOB, clientId: APP_CLIENTID},
+        {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
+    await interopAuthorizer.authorize({webId: WEBID_BOB, clientId: APP_CLIENTID},
+        {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
+    expect(result).toEqual(new Set([AccessMode.read]));
+    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledTimes(1);
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();
+    expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalledWith(WEBID_BOB);
+  });
+
+  it('should ignore when error is thrown in strategy', async () => {
+    MOCK_FIND_SOCIAL_AGENT_REGISTRATION.mockResolvedValueOnce({iri: 'https://example.com'});
+    MOCK_AUTHORIZATION_STRATEGY.authorize.mockRejectedValueOnce(new Error('invalid'));
+    const result = await interopAuthorizer.authorize({webId: WEBID_BOB, clientId: APP_CLIENTID},
+        {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
+
+    expect(result).toEqual(new Set([]));
     expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledTimes(1);
     expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();
     expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalledWith(WEBID_BOB);

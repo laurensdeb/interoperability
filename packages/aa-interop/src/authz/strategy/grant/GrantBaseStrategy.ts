@@ -21,14 +21,15 @@ export abstract class GrantBaseStrategy<T extends Grant>
      * Authorizes a request to a Data Grant or Access Grant
      * for its grantee with Read permissions
      *
+     * @param {AuthorizationAgent} authorizationAgent
      * @param {RequestedPermissions} request
      * @param {AuthenticatedClient} client
      * @return {Promise<Set<AccessMode>>}
      */
-  public async authorize(request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
+  public async authorize(authorizationAgent: AuthorizationAgent,
+      request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
     const result = new Set<AccessMode>();
 
-    const authorizationAgent = await this.getAuthorizationAgentForRequest(request);
     const grants = await this.getGrantsForClient(authorizationAgent, client);
 
     if (!!grants && this.isAuthorizationSubject(grants, request)) {

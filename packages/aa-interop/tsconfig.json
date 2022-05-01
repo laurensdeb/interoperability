@@ -10,7 +10,8 @@
     "sourceMap": true,
     "stripInternal": true,
     "typeRoots": ["types", "node_modules/@types"],
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "experimentalDecorators": true
   },
   "include": ["src"],
   "exclude": ["node_modules",  "**/*.test.ts"]

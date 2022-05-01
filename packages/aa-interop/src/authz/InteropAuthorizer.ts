@@ -5,6 +5,7 @@ import {InteropBaseAuthorizerStrategy} from './strategy/InteropBaseAuthorizerStr
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AuthorizationAgentFactory} from '../factory/AuthorizationAgentFactory';
 import {getRegistrationForAgent} from '../util/getRegistrationForAgent';
+import LRUCache from 'lru-cache';
 
 /**
  * An InteropAuthorizer authorizes incoming requests
@@ -14,6 +15,9 @@ import {getRegistrationForAgent} from '../util/getRegistrationForAgent';
  */
 export class InteropAuthorizer extends Authorizer {
   private readonly logger = getLoggerFor(this);
+  private readonly authorizationAgentCache = new LRUCache<string, AuthorizationAgent>({
+    max: 25,
+  });
 
   /**
    * @param {InteropBaseAuthorizerStrategy[]} strategies - strategies to be evaluated on an incoming request
@@ -44,10 +48,16 @@ export class InteropAuthorizer extends Authorizer {
 
       // 2. Else pass through each of the authorizers to determine whether the request can be authorized
       for (const strategy of this.strategies) {
-        const modes = await strategy.authorize(requestedPermissions, authenticatedClient);
+        let modes;
+        try {
+          modes = await strategy.authorize(authorizationAgent, requestedPermissions, authenticatedClient);
+        } catch (e) {
+          this.logger.warn(`Error in strategy ${typeof strategy}: ${(e as Error).message}`, e);
+          // ignored
+        }
         // Waterfall strategy: We assume each strategy applies to non-overlapping resources
         //                     thus as soon as any returns access modes, we assume the authorize function to return.
-        if (modes.size) {
+        if (modes && modes.size) {
           modes.forEach((mode) => result.add(mode));
           break;
         }
@@ -103,7 +113,12 @@ export class InteropAuthorizer extends Authorizer {
      * @return {Promise<AuthorizationAgent>}
      */
   private async getAuthorizationAgentForRequest(request: RequestedPermissions): Promise<AuthorizationAgent> {
-    return await this.authorizationAgentFactory.getAuthorizationAgent(request.owner);
+    if (this.authorizationAgentCache.has(request.owner)) {
+      return this.authorizationAgentCache.get(request.owner)!;
+    }
+    const res = await this.authorizationAgentFactory.getAuthorizationAgent(request.owner);
+    this.authorizationAgentCache.set(request.owner, res);
+    return res;
   }
 
   /**

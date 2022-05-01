@@ -26,6 +26,7 @@ export class SolidOidcTokenFactory extends DpopBoundTokenFactory {
   public async getDpop(htu: string, htm: string): Promise<DPoP> {
     const kid = await this.keyholder.getDefaultKey();
     const jwk = await exportJWK(this.keyholder.getPublicKey(kid));
+    htu = htu.split('#')[0];
     const dpop = await new SignJWT({htu, htm})
         .setProtectedHeader({alg: this.keyholder.getAlg(), typ: 'dpop+jwt', jwk})
         .setIssuedAt()

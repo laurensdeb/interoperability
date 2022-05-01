@@ -1,5 +1,6 @@
 @prefix interop: <http://www.w3.org/ns/solid/interop#>.
-@prefix pod: <{{podBaseUrl}}>.
+@prefix pod-agents: <{{podBaseUrl}}registries/agents/>.
 
-pod:registries\/agents\/index
+pod-agents:index
+  interop:hasSocialAgentRegistration pod-agents:c4562da9;
   a interop:AgentRegistry .

@@ -10,9 +10,10 @@
       {
         "comment": "Stores all new resources for a pod in the default resource store under the generated identifier.",
         "@id": "urn:solid-server:default:PodManager",
-        "@type": "GeneratedPodManager",
-        "store": { "@id": "urn:solid-server:default:ResourceStore" },
-        "resourcesGenerator": { "@id": "urn:solid-server:default:ResourcesGenerator" }
+        "@type": "CustomGeneratedPodManager",
+        "CustomGeneratedPodManager:_store": { "@id": "urn:solid-server:default:ResourceStore" },
+        "CustomGeneratedPodManager:_resourcesGenerator": { "@id": "urn:solid-server:default:ResourcesGenerator" },
+        "CustomGeneratedPodManager:_aaBaseUrl": "http://localhost:4001/aa/client/"
       }
     ]
   }

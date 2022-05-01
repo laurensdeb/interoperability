@@ -1,13 +1,11 @@
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {MOCK_APPLICATION, MOCK_REQUEST, MOCK_RESOURCE} from '../../../util/test/MockData';
 import {DataInstanceStrategy} from './DataInstanceStrategy';
-import {getDataGrantsForClient} from '../grant/getDataGrantsForClient'; ;
+import {getDataGrantsForClient} from '../grant/getDataGrantsForClient';
+import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
+
 
 jest.mock('../grant/getDataGrantsForClient');
-
-const MOCK_AA_FACTORY = {
-  getAuthorizationAgent: jest.fn(),
-};
 
 const MOCK_AUTHORIZATION_AGENT = {
   findSocialAgentRegistration: jest.fn(),
@@ -29,11 +27,8 @@ const yieldMockDataGrant = (instances: any[]) => {
 };
 
 describe('A DataInstanceStrategy', () => {
-  const strategy = new DataInstanceStrategy(MOCK_AA_FACTORY);
+  const strategy = new DataInstanceStrategy();
 
-  beforeEach(() => {
-    MOCK_AA_FACTORY.getAuthorizationAgent.mockImplementation(async () => MOCK_AUTHORIZATION_AGENT);
-  });
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -42,7 +37,8 @@ describe('A DataInstanceStrategy', () => {
     (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce([
       yieldMockDataGrant([{iri: MOCK_RESOURCE, accessMode: [AccessMode.read, AccessMode.write]}]),
     ]);
-    expect(await strategy.authorize(MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([AccessMode.read]));
+    expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([AccessMode.read]));
 
     expect(getDataGrantsForClient).toHaveBeenCalled();
     expect(getDataGrantsForClient).toHaveBeenCalledWith(MOCK_AUTHORIZATION_AGENT, MOCK_APPLICATION);
@@ -52,7 +48,8 @@ describe('A DataInstanceStrategy', () => {
     (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce([
       yieldMockDataGrant([{iri: MOCK_RESOURCE, accessMode: [AccessMode.read, AccessMode.write, 'http://www.w3.org/ns/auth/acl#Update']}]),
     ]);
-    expect(await strategy.authorize(MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([AccessMode.read]));
+    expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([AccessMode.read]));
 
     expect(getDataGrantsForClient).toHaveBeenCalled();
     expect(getDataGrantsForClient).toHaveBeenCalledWith(MOCK_AUTHORIZATION_AGENT, MOCK_APPLICATION);
@@ -62,7 +59,8 @@ describe('A DataInstanceStrategy', () => {
     (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce([
       yieldMockDataGrant([{iri: 'https://pod.example.org/bob/123', accessMode: [AccessMode.read, AccessMode.write]}]),
     ]);
-    expect(await strategy.authorize(MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([]));
+    expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([]));
 
     expect(getDataGrantsForClient).toHaveBeenCalled();
     expect(getDataGrantsForClient).toHaveBeenCalledWith(MOCK_AUTHORIZATION_AGENT, MOCK_APPLICATION);
@@ -70,7 +68,8 @@ describe('A DataInstanceStrategy', () => {
 
   it('should not authorize when no data grants exist', async () => {
     (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce([]);
-    expect(await strategy.authorize(MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([]));
+    expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([]));
 
     expect(getDataGrantsForClient).toHaveBeenCalled();
     expect(getDataGrantsForClient).toHaveBeenCalledWith(MOCK_AUTHORIZATION_AGENT, MOCK_APPLICATION);
@@ -78,7 +77,8 @@ describe('A DataInstanceStrategy', () => {
 
   it('should not authorize when no access grant exist', async () => {
     (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce(undefined);
-    expect(await strategy.authorize(MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([]));
+    expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([]));
 
     expect(getDataGrantsForClient).toHaveBeenCalled();
     expect(getDataGrantsForClient).toHaveBeenCalledWith(MOCK_AUTHORIZATION_AGENT, MOCK_APPLICATION);

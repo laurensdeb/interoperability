@@ -54,7 +54,8 @@
         "winston-transport": "^4.5.0",
         "jose": "^4.5.1",
         "uuid": "^8.3.2",
-        "rxjs": "^7.5.4"
+        "rxjs": "^7.5.4",
+        "typescript-memoize": "^1.1.0"
     },
     "files": [
         ".componentsignore",

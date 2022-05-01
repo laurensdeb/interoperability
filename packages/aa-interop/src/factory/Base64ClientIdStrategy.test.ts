@@ -2,7 +2,7 @@ import {RoutePath} from '@laurensdeb/authorization-agent-helpers';
 import {Base64ClientIdStrategy} from './Base64ClientIdStrategy';
 
 const MOCK_WEBID = 'https://id.example.org/profile/123';
-const MOCK_CLIENTID = 'https://example.org/aa/clients/aHR0cHM6Ly9pZC5leGFtcGxlLm9yZy9wcm9maWxlLzEyMw==';
+const MOCK_CLIENTID = 'https://example.org/aa/clients/aHR0cHM6Ly9pZC5leGFtcGxlLm9yZy9wcm9maWxlLzEyMw%3D%3D';
 const MOCK_AA_BASE = 'https://example.org/aa';
 const MOCK_AA_CLIENT_PATH = '/clients/';
 
@@ -13,7 +13,7 @@ describe('A Base64ClientIdStrategy', () => {
     const clientId = await clientIdStrategy.getClientIdForWebId(MOCK_WEBID);
     expect(clientId).toBeTruthy();
     expect(typeof clientId).toEqual('string');
-    expect(clientId).toEqual('https://example.org/aa/clients/aHR0cHM6Ly9pZC5leGFtcGxlLm9yZy9wcm9maWxlLzEyMw==');
+    expect(clientId).toEqual('https://example.org/aa/clients/aHR0cHM6Ly9pZC5leGFtcGxlLm9yZy9wcm9maWxlLzEyMw%3D%3D');
   });
 
   it('should convert a ClientID to a WebID', async () => {

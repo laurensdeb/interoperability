@@ -21,7 +21,7 @@
                     "issuer": {
                         "@type": "RoutePath",
                         "baseUrl": {
-                            "@id": "urn:authorization-service:variables:baseUrl"
+                            "@id": "urn:authorization-agent:variables:baseUrl"
                         },
                         "staticPath": "/idp"
                     }

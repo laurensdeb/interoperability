@@ -1,0 +1,10 @@
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX interop: <http://www.w3.org/ns/solid/interop#>
+PREFIX solidtrees: <https://thundr.be/experiments/interop/trees/>
+
+<>
+  a interop:DataRegistration ;
+  interop:registeredBy <{{webId}}> ;
+  interop:registeredWith <https://solidmin.example/#app> ;
+  interop:registeredAt "2020-10-17T11:42:36.000Z"^^xsd:dateTime ;
+  interop:registeredShapeTree solidtrees:Project.ttl .

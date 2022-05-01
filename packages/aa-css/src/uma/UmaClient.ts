@@ -1,4 +1,3 @@
-
 export type UmaToken = {
     webid: string,
     azp: string,
@@ -8,6 +7,7 @@ export type UmaToken = {
 
 export interface UmaConfig {
     jwks_uri: string;
+    jwks: any;
     issuer: string;
     permission_registration_endpoint: string;
     }

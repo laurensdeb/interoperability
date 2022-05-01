@@ -20,7 +20,7 @@ export class Base64ClientIdStrategy extends ClientIdStrategy {
    */
   public async getClientIdForWebId(webid: string): Promise<string> {
     const webIdBase = Buffer.from(webid, 'utf-8').toString('base64');
-    return `${this.aaClientPath.getUri()}${webIdBase}`;
+    return `${this.aaClientPath.getUri()}${encodeURIComponent(webIdBase)}`;
   }
 
   /**
@@ -33,7 +33,7 @@ export class Base64ClientIdStrategy extends ClientIdStrategy {
     if (!clientid.startsWith(`${this.aaClientPath.getUri()}`)) {
       throw new Error('ClientID was not generated using this ClientIdStrategy');
     }
-    const webIdBase = clientid.substring(`${this.aaClientPath.getUri()}`.length);
+    const webIdBase = decodeURIComponent(clientid.substring(`${this.aaClientPath.getUri()}`.length));
 
     if (!webIdBase || !(/[A-Za-z0-9+/=]/.test(webIdBase))) {
       throw new Error('ClientID was not generated using this ClientIdStrategy');

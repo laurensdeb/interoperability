@@ -23,9 +23,7 @@ export type JWTVerifyOptions = {
    */
 export async function verifyUMAToken(token: string, config: UmaConfig, options: JWTVerifyOptions): Promise<UmaToken> {
   // Validate token JWT against JWKS
-  const JWKS = jose.createRemoteJWKSet(new URL(config.jwks_uri));
-
-  const {payload} = await jose.jwtVerify(token, JWKS, {
+  const {payload} = await jose.jwtVerify(token, config.jwks, {
     issuer: config.issuer,
     audience: AUD,
     maxTokenAge: options.maxTokenAge,
