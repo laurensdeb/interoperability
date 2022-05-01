@@ -1,5 +1,5 @@
 import {OAuthConfigRequestHandler, OAuthConfiguration, RoutePath} from '@laurensdeb/authorization-agent-helpers';
-import { Memoize } from 'typescript-memoize';
+import {Memoize} from 'typescript-memoize';
 
 export interface StaticIdpArgs {
     /**

@@ -1,5 +1,3 @@
-import * as jose from 'jose';
-
 export type UmaToken = {
     webid: string,
     azp: string,

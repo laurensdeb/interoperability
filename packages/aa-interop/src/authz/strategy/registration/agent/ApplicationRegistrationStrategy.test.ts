@@ -1,6 +1,6 @@
 import {ApplicationRegistrationStrategy} from './ApplicationRegistrationStrategy';
 import {APP_CLIENTID, MOCK_APPLICATION, MOCK_REQUEST,
-  MOCK_RESOURCE, MOCK_SOCIAL_AGENT, WEBID_ALICE} from '../../../../util/test/MockData';
+  MOCK_RESOURCE, MOCK_SOCIAL_AGENT} from '../../../../util/test/MockData';
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 

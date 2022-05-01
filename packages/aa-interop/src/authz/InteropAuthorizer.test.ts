@@ -93,7 +93,7 @@ describe('An InteropAuthorizer', () => {
     const result = await interopAuthorizer.authorize({webId: WEBID_BOB, clientId: APP_CLIENTID},
         {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
     await interopAuthorizer.authorize({webId: WEBID_BOB, clientId: APP_CLIENTID},
-          {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
+        {sub: {iri: MOCK_RESOURCE}, owner: WEBID_ALICE, requested: new Set([AccessMode.read])});
     expect(result).toEqual(new Set([AccessMode.read]));
     expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledTimes(1);
     expect(MOCK_FIND_SOCIAL_AGENT_REGISTRATION).toHaveBeenCalled();

@@ -1,8 +1,9 @@
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {MOCK_APPLICATION, MOCK_REQUEST, MOCK_RESOURCE} from '../../../util/test/MockData';
 import {DataInstanceStrategy} from './DataInstanceStrategy';
-import {getDataGrantsForClient} from '../grant/getDataGrantsForClient'; import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
-;
+import {getDataGrantsForClient} from '../grant/getDataGrantsForClient';
+import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
+
 
 jest.mock('../grant/getDataGrantsForClient');
 

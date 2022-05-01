@@ -1,7 +1,7 @@
 import {ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM}
   from '@solid/access-token-verifier/dist/constant/ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM';
 import {OAuthConfigRequestHandler, OAuthConfiguration, ResponseType} from '@laurensdeb/authorization-agent-helpers';
-import { Memoize } from 'typescript-memoize';
+import {Memoize} from 'typescript-memoize';
 
 
 export type UmaConfiguration = OAuthConfiguration & {uma_profiles_supported: string[],

@@ -31,6 +31,6 @@ export async function fetchUMAConfig(asUrl: string): Promise<UmaConfig> {
       !isString(configuration[value]) ).map((value) => `"${value}"`).join(', ')}`);
   }
 
-  return {jwks_uri: configuration.jwks_uri, jwks: jose.createRemoteJWKSet(new URL(configuration.jwks_uri)), issuer: configuration.issuer,
-    permission_registration_endpoint: configuration.permission_registration_endpoint};
+  return {jwks_uri: configuration.jwks_uri, jwks: jose.createRemoteJWKSet(new URL(configuration.jwks_uri)),
+    issuer: configuration.issuer, permission_registration_endpoint: configuration.permission_registration_endpoint};
 }

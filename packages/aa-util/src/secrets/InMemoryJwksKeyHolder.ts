@@ -52,6 +52,10 @@ export class InMemoryJwksKeyHolder extends JwksKeyHolder {
     return [...this.keys.keys()];
   }
 
+  /**
+   * Check whether the keyholder was initialized,
+   * if not generate a new keypair.
+   */
   private async init(): Promise<void> {
     if (!this.currentKid) {
       await this.generateKeypair();
