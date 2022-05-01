@@ -2,6 +2,7 @@ import {isString} from '../../util/StringGuard';
 import {UmaConfig} from '../UmaClient';
 import fetch from 'cross-fetch';
 import {ISSUER, JWKS_URI, PERMISSION_REGISTRATION_ENDPOINT, UMA_DISCOVERY} from './Constants';
+import * as jose from 'jose';
 
 const REQUIRED_CONFIG_KEYS = [ISSUER, JWKS_URI, PERMISSION_REGISTRATION_ENDPOINT];
 /**
@@ -30,6 +31,6 @@ export async function fetchUMAConfig(asUrl: string): Promise<UmaConfig> {
       !isString(configuration[value]) ).map((value) => `"${value}"`).join(', ')}`);
   }
 
-  return {jwks_uri: configuration.jwks_uri, issuer: configuration.issuer,
+  return {jwks_uri: configuration.jwks_uri, jwks: jose.createRemoteJWKSet(new URL(configuration.jwks_uri)), issuer: configuration.issuer,
     permission_registration_endpoint: configuration.permission_registration_endpoint};
 }

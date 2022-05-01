@@ -36,40 +36,22 @@
             },
             "strategies": [
                 {
-                    "@type": "ApplicationRegistrationStrategy",
-                    "authorizationAgentFactory": {
-                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
-                    }
+                    "@type": "ApplicationRegistrationStrategy"
                 },
                 {
-                    "@type": "SocialAgentRegistrationStrategy",
-                    "authorizationAgentFactory": {
-                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
-                    }
+                    "@type": "SocialAgentRegistrationStrategy"
                 },
                 {
-                    "@type": "AccessGrantStrategy",
-                    "authorizationAgentFactory": {
-                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
-                    }
+                    "@type": "AccessGrantStrategy"
                 },
                 {
-                    "@type": "DataGrantStrategy",
-                    "authorizationAgentFactory": {
-                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
-                    }
+                    "@type": "DataGrantStrategy"
                 },
                 {
-                    "@type": "DataRegistrationStrategy",
-                    "authorizationAgentFactory": {
-                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
-                    }
+                    "@type": "DataRegistrationStrategy"
                 },
                 {
-                    "@type": "DataInstanceStrategy",
-                    "authorizationAgentFactory": {
-                        "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
-                    }
+                    "@type": "DataInstanceStrategy"
                 }
             ]
         }

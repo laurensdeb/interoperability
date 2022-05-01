@@ -1,6 +1,7 @@
 import {ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM}
   from '@solid/access-token-verifier/dist/constant/ASYMMETRIC_CRYPTOGRAPHIC_ALGORITHM';
 import {OAuthConfigRequestHandler, OAuthConfiguration, ResponseType} from '@laurensdeb/authorization-agent-helpers';
+import { Memoize } from 'typescript-memoize';
 
 
 export type UmaConfiguration = OAuthConfiguration & {uma_profiles_supported: string[],
@@ -23,6 +24,7 @@ export class UmaConfigRequestHandler extends OAuthConfigRequestHandler<UmaConfig
    * Returns UMA Configuration for the AS
    * @return {UmaConfiguration} - AS Configuration
    */
+  @Memoize()
   public getConfig(): UmaConfiguration {
     return {
       jwks_uri: `${this.baseUrl}/keys`,

@@ -1,3 +1,4 @@
+import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AccessMode, getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {getDataGrantsForClient} from '../../grant/getDataGrantsForClient';
 import {InteropBaseAuthorizerStrategy} from '../../InteropBaseAuthorizerStrategy';
@@ -22,15 +23,16 @@ export class DataRegistrationStrategy extends InteropBaseAuthorizerStrategy {
      * for an agent with a Data Grant referencing
      * the registration.
      *
+     * @param {AuthorizationAgent} authorizationAgent
      * @param {RequestedPermissions} request
      * @param {AuthenticatedClient} client
      * @return {Promise<Set<AccessMode>>}
      */
-  public async authorize(request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
+  public async authorize(authorizationAgent: AuthorizationAgent,
+      request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
     this.logger.debug(`Checking if '${request.resource} is registration for Data Grant`);
     const result = new Set<AccessMode>();
 
-    const authorizationAgent = await this.getAuthorizationAgentForRequest(request);
     const grants = await getDataGrantsForClient(authorizationAgent, client);
     this.logger.debug(`Found ${grants?grants.length:'no'} grants for client.`);
 

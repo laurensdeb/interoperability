@@ -4,6 +4,7 @@ import {PermissionTicketRequest, UmaClient, UmaConfig, UmaToken} from './UmaClie
 import {fetchPermissionTicket} from './util/PermissionTicketFetcher';
 import {fetchUMAConfig} from './util/UmaConfigFetcher';
 import {verifyUMAToken} from './util/UmaTokenVerifier';
+import {MemoizeExpiring} from 'typescript-memoize';
 
 export interface UmaClientArgs {
     /**
@@ -120,6 +121,7 @@ export class UmaClientImpl extends UmaClient {
    * Fetch UMA Configuration of AS
    * @return {Promise<UmaConfig>} - UMA Configuration
    */
+  @MemoizeExpiring(60000)
   public async fetchUMAConfig(): Promise<UmaConfig> {
     return await fetchUMAConfig(this.asUrl);
   }

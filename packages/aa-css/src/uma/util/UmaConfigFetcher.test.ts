@@ -2,12 +2,19 @@
 import fetch from 'node-fetch';
 import {fetchUMAConfig} from './UmaConfigFetcher';
 
+jest.mock('jose', () => {
+  return {
+    createRemoteJWKSet: jest.fn(),
+  };
+});
+
 jest.mock('node-fetch', () => jest.fn());
 
 const MOCK_AS_URL = 'https://as.example.org';
 const MOCK_CONFIG = {
   issuer: MOCK_AS_URL,
   jwks_uri: `${MOCK_AS_URL}/jwks`,
+  jwks: undefined,
   permission_registration_endpoint: `${MOCK_AS_URL}/register`,
 };
 

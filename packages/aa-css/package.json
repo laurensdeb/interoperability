@@ -54,9 +54,11 @@
     "dependencies": {
         "@solid/community-server": "^4.0.0",
         "componentsjs": "4.5.0",
+        "typescript-memoize": "^1.1.0",
         "cross-fetch": "^3.1.5",
         "n3": "^1.16.0",
-        "rdf-js": "^4.0.2"
+        "rdf-js": "^4.0.2",
+        "jose": "4.8.0"
     },
     "files": [
         ".componentsignore",

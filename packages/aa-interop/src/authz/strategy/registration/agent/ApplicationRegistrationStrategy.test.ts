@@ -6,20 +6,12 @@ import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 
 const MOCK_FIND_APPLICATION_REGISTRATION = jest.fn();
 
-const MOCK_AUTHORIZATION_AGENT_FACTORY = {
-  getAuthorizationAgent: jest.fn(),
+const MOCK_AUTHORIZATION_AGENT = {
+  findApplicationRegistration: MOCK_FIND_APPLICATION_REGISTRATION,
 };
 
 describe('An ApplicationRegistrationStrategy', () =>{
-  const strategy = new ApplicationRegistrationStrategy(MOCK_AUTHORIZATION_AGENT_FACTORY);
-
-  beforeEach(() => {
-    MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent.mockImplementation(async () => {
-      return {
-        findApplicationRegistration: MOCK_FIND_APPLICATION_REGISTRATION,
-      } as unknown as AuthorizationAgent;
-    });
-  });
+  const strategy = new ApplicationRegistrationStrategy();
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -31,11 +23,9 @@ describe('An ApplicationRegistrationStrategy', () =>{
       registeredAgent: APP_CLIENTID,
     });
 
-    const result = await strategy.authorize(MOCK_REQUEST, MOCK_APPLICATION);
+    const result = await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION);
     expect(result).toEqual(new Set([AccessMode.read]));
-
-    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalled();
-    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledWith(WEBID_ALICE);
 
     expect(MOCK_FIND_APPLICATION_REGISTRATION).toHaveBeenCalled();
     expect(MOCK_FIND_APPLICATION_REGISTRATION).toHaveBeenCalledWith(APP_CLIENTID);
@@ -45,11 +35,9 @@ describe('An ApplicationRegistrationStrategy', () =>{
   it('should not authorize an Application\'s request if no application registration exists', async () =>{
     MOCK_FIND_APPLICATION_REGISTRATION.mockResolvedValueOnce(undefined);
 
-    const result = await strategy.authorize(MOCK_REQUEST, MOCK_APPLICATION);
+    const result = await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION);
     expect(result).toEqual(new Set());
-
-    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalled();
-    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledWith(WEBID_ALICE);
 
     expect(MOCK_FIND_APPLICATION_REGISTRATION).toHaveBeenCalled();
     expect(MOCK_FIND_APPLICATION_REGISTRATION).toHaveBeenCalledWith(APP_CLIENTID);
@@ -61,10 +49,9 @@ describe('An ApplicationRegistrationStrategy', () =>{
       registeredAgent: APP_CLIENTID,
     });
 
-    const result = await strategy.authorize(MOCK_REQUEST, MOCK_SOCIAL_AGENT);
+    const result = await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_SOCIAL_AGENT);
     expect(result).toEqual(new Set());
-
-    expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledTimes(0);
 
     expect(MOCK_FIND_APPLICATION_REGISTRATION).toHaveBeenCalledTimes(0);
   });

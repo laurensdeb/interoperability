@@ -1,3 +1,4 @@
+import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
 import {getDataGrantsForClient} from '../grant/getDataGrantsForClient';
 import {InteropBaseAuthorizerStrategy} from '../InteropBaseAuthorizerStrategy';
@@ -17,13 +18,14 @@ export class DataInstanceStrategy extends InteropBaseAuthorizerStrategy {
      * for an agent with a Data Grant referencing
      * the instance or its registration.
      *
+     * @param {AuthorizationAgent} authorizationAgent
      * @param {RequestedPermissions} request
      * @param {AuthenticatedClient} client
      * @return {Promise<Set<AccessMode>>}
      */
-  public async authorize(request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
+  public async authorize(authorizationAgent: AuthorizationAgent,
+      request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
     const result = new Set<AccessMode>();
-    const authorizationAgent = await this.getAuthorizationAgentForRequest(request);
     const dataGrants = await getDataGrantsForClient(authorizationAgent, client);
     if (!dataGrants) {
       return result;

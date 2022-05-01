@@ -1,5 +1,5 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
-import {FetchFactory} from '@laurensdeb/authorization-agent-helpers';
+import {FetchFactory, getLoggerFor, Logger} from '@laurensdeb/authorization-agent-helpers';
 import {ClientIdStrategy} from './ClientIdStrategy';
 import {randomUUID} from 'crypto';
 
@@ -16,6 +16,7 @@ export abstract class AuthorizationAgentFactory {
  * agent for some webid.
  */
 export class AuthorizationAgentFactoryImpl extends AuthorizationAgentFactory {
+  private readonly logger: Logger = getLoggerFor(this);
   private readonly fetchFactory: FetchFactory;
   private readonly clientIdStrategy: ClientIdStrategy;
 
@@ -35,6 +36,7 @@ export class AuthorizationAgentFactoryImpl extends AuthorizationAgentFactory {
    * @return {Promise<AuthorizationAgent>} - authorization agent
    */
   public async getAuthorizationAgent(webid: string): Promise<AuthorizationAgent> {
+    this.logger.debug(`Creating a new authorization agent for webid ${webid}`);
     const clientId = await this.clientIdStrategy.getClientIdForWebId(webid);
     return await AuthorizationAgent.build(webid, clientId, {
       randomUUID,

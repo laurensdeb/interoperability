@@ -51,6 +51,7 @@
         "@laurensdeb/authorization-agent-helpers": "^1.0.0",
         "@laurensdeb/authorization-agent-interfaces": "^1.0.0",
         "@laurensdeb/authorization-agent-interop": "^1.0.0",
+        "typescript-memoize": "^1.1.0",
         "jest": "^27.5.1",
         "jose": "^4.5.1",
         "rxjs": "^7.5.4",

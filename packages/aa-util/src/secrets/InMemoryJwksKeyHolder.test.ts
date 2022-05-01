@@ -1,35 +1,22 @@
 import {InMemoryJwksKeyHolder} from './InMemoryJwksKeyHolder';
 
-describe('Testing on empty holder', () => {
+describe('Testing errors on holder', () => {
   const keyholder = new InMemoryJwksKeyHolder('ES256');
-  test('Keyholder should return algorithm', () => {
-    expect(keyholder.getAlg()).toEqual('ES256');
-  });
-  test('Empty holder should have no Key Ids', async () => {
-    expect(keyholder.getKids()).toStrictEqual([]);
-  });
-  test('Empty holder should have empty JWKS', async () => {
-    expect((await keyholder.getJwks()).keys).toStrictEqual([]);
-  });
-  test('Empty holder should throw error when retrieving private key', () => {
+  test('holder should throw error when retrieving unkown private key', () => {
     expect(() => keyholder.getPrivateKey('abc'))
         .toThrowError('The specified kid \'abc\' does not exist in the holder.');
   });
-  test('Empty holder should throw error when retrieving public key', () => {
+  test('holder should throw error when retrieving unkown public key', () => {
     expect(() => keyholder.getPublicKey('abc'))
         .toThrowError('The specified kid \'abc\' does not exist in the holder.');
   });
-  test('Empty holder should throw error when retrieving JWK', async () => {
+  test('holder should throw error when retrieving unkown JWK', async () => {
     expect.assertions(1);
     try {
       await keyholder.toPublicJwk('abc');
     } catch (e:any) {
       expect(e.message).toEqual('The specified kid \'abc\' does not exist in the holder.');
     }
-  });
-  test('Getting default signing key from holder should create keypair', async () => {
-    expect(await keyholder.getDefaultKey()).toBeTruthy();
-    expect(keyholder.getKids().length).toBeGreaterThan(0);
   });
 });
 
@@ -44,9 +31,11 @@ describe('Validity of constructor arguments', () => {
 describe('Testing operations on filled holder.', () => {
   const keyholder = new InMemoryJwksKeyHolder('ES256');
   let kid:string;
-
-  test('Holder should return kid upon creation', async () => {
-    kid = await keyholder.generateKeypair();
+  test('Keyholder should return algorithm', () => {
+    expect(keyholder.getAlg()).toEqual('ES256');
+  });
+  test('Holder should return default kid upon creation', async () => {
+    kid = await keyholder.getDefaultKey();
     expect(kid).toBeTruthy();
   });
   test('Holder should have one key ID', async () => {

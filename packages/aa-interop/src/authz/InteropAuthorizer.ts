@@ -5,6 +5,7 @@ import {InteropBaseAuthorizerStrategy} from './strategy/InteropBaseAuthorizerStr
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {AuthorizationAgentFactory} from '../factory/AuthorizationAgentFactory';
 import {getRegistrationForAgent} from '../util/getRegistrationForAgent';
+import LRUCache from 'lru-cache';
 
 /**
  * An InteropAuthorizer authorizes incoming requests
@@ -14,6 +15,9 @@ import {getRegistrationForAgent} from '../util/getRegistrationForAgent';
  */
 export class InteropAuthorizer extends Authorizer {
   private readonly logger = getLoggerFor(this);
+  private readonly authorizationAgentCache = new LRUCache<string, AuthorizationAgent>({
+    max: 25,
+  });
 
   /**
    * @param {InteropBaseAuthorizerStrategy[]} strategies - strategies to be evaluated on an incoming request
@@ -46,7 +50,7 @@ export class InteropAuthorizer extends Authorizer {
       for (const strategy of this.strategies) {
         let modes;
         try {
-          modes = await strategy.authorize(requestedPermissions, authenticatedClient);
+          modes = await strategy.authorize(authorizationAgent, requestedPermissions, authenticatedClient);
         } catch (e) {
           this.logger.warn(`Error in strategy ${typeof strategy}: ${(e as Error).message}`, e);
           // ignored
@@ -109,7 +113,12 @@ export class InteropAuthorizer extends Authorizer {
      * @return {Promise<AuthorizationAgent>}
      */
   private async getAuthorizationAgentForRequest(request: RequestedPermissions): Promise<AuthorizationAgent> {
-    return await this.authorizationAgentFactory.getAuthorizationAgent(request.owner);
+    if (this.authorizationAgentCache.has(request.owner)) {
+      return this.authorizationAgentCache.get(request.owner)!;
+    }
+    const res = await this.authorizationAgentFactory.getAuthorizationAgent(request.owner);
+    this.authorizationAgentCache.set(request.owner, res);
+    return res;
   }
 
   /**

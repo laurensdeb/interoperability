@@ -1,3 +1,4 @@
+import * as jose from 'jose';
 
 export type UmaToken = {
     webid: string,
@@ -8,6 +9,7 @@ export type UmaToken = {
 
 export interface UmaConfig {
     jwks_uri: string;
+    jwks: any;
     issuer: string;
     permission_registration_endpoint: string;
     }

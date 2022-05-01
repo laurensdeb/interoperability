@@ -1,4 +1,5 @@
 import {OAuthConfigRequestHandler, OAuthConfiguration, RoutePath} from '@laurensdeb/authorization-agent-helpers';
+import { Memoize } from 'typescript-memoize';
 
 export interface StaticIdpArgs {
     /**
@@ -25,6 +26,7 @@ export class StaticIdpConfigHandler extends OAuthConfigRequestHandler {
    * Return configuration for the static IdP
    * @return {OAuthConfiguration}
    */
+  @Memoize()
   getConfig(): OAuthConfiguration {
     return {
       issuer: this.args.issuer.getUri(),
