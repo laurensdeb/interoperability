@@ -1,0 +1,20 @@
+{
+  "@context":[
+    "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^4.0.0/components/context.jsonld",
+    "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-css/^1.0.0/components/context.jsonld"
+  ],
+  "@graph": [
+    {
+      "comment": "Generates resources based on the templates stored in the template folder.",
+      "@id": "urn:solid-server:default:ResourcesGenerator",
+      "@type": "TemplatedResourcesGenerator",
+      "templateFolder": "templates/pod",
+      "factory": {
+        "@type": "ExtensionBasedMapperFactory"
+      },
+      "templateEngine": {
+        "@type": "HandlebarsTemplateEngine"
+      }
+    }
+  ]
+}

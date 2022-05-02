@@ -1,0 +1,11 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-uma/^1.0.0/components/context.jsonld",
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-service:default:Authorizer",
+            "@type": "AllAuthorizer"
+        }
+    ]
+}

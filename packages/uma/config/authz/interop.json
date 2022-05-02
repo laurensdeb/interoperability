@@ -1,0 +1,59 @@
+{
+    "@context": [
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-uma/^1.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-service:default:AuthorizationAgentFactory",
+            "@type": "AuthorizationAgentFactoryImpl",
+            "clientIdStrategy": {
+                "@type": "Base64ClientIdStrategy",
+                "aaClientPath": {
+                    "@type": "RoutePath",
+                    "baseUrl": {
+                        "@id": "urn:authorization-service:variables:baseUrl"
+                    },
+                    "staticPath": "/clients/"
+                }
+            },
+            "fetchFactory": {
+                "@type": "UmaFetchFactory",
+                "tokenFactory": {
+                    "@id": "urn:authorization-service:TokenFactory"
+                },
+                "asUrl": {
+                    "@id": "urn:authorization-service:variables:baseUrl"
+                }
+            }
+        },
+        {
+            "@id": "urn:authorization-service:default:Authorizer",
+            "@type": "InteropAuthorizer",
+            "authorizationAgentFactory": {
+                "@id": "urn:authorization-service:default:AuthorizationAgentFactory"
+            },
+            "strategies": [
+                {
+                    "@type": "ApplicationRegistrationStrategy"
+                },
+                {
+                    "@type": "SocialAgentRegistrationStrategy"
+                },
+                {
+                    "@type": "AccessGrantStrategy"
+                },
+                {
+                    "@type": "DataGrantStrategy"
+                },
+                {
+                    "@type": "DataRegistrationStrategy"
+                },
+                {
+                    "@type": "DataInstanceStrategy"
+                }
+            ]
+        }
+    ]
+}

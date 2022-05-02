@@ -1,0 +1,20 @@
+{
+    "@context":  [
+        "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^4.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-css/^1.0.0/components/context.jsonld"
+      ],
+    "import": [
+      "files-sai-css:config/identity/pod/resource-generators/templated.json"
+    ],
+    "@graph": [
+      {
+        "comment": "Stores all new resources for a pod in the default resource store under the generated identifier.",
+        "@id": "urn:solid-server:default:PodManager",
+        "@type": "CustomGeneratedPodManager",
+        "CustomGeneratedPodManager:_store": { "@id": "urn:solid-server:default:ResourceStore" },
+        "CustomGeneratedPodManager:_resourcesGenerator": { "@id": "urn:solid-server:default:ResourcesGenerator" },
+        "CustomGeneratedPodManager:_aaBaseUrl": "http://localhost:4001/aa/client/"
+      }
+    ]
+  }
+  

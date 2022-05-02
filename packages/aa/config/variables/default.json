@@ -1,0 +1,21 @@
+{
+    "@context": "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+    "comment": "Variables used throughout the other configs. Can be set using the CLI.",
+    "@graph": [
+      {
+        "comment": "Port of the server.",
+        "@id": "urn:authorization-agent:variables:port",
+        "@type": "Variable"
+      },
+      {
+        "comment": "Base URL of the server.",
+        "@id": "urn:authorization-agent:variables:baseUrl",
+        "@type": "Variable"
+      },
+      {
+        "comment": "Hostname of the server.",
+        "@id": "urn:authorization-agent:variables:host",
+        "@type": "Variable"
+      }
+    ]
+  }

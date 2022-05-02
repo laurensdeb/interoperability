@@ -1,0 +1,34 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-agent:default:IdpConfigRoute",
+            "@type": "HttpHandlerRoute",
+            "operations": [
+                {
+                "@type": "HttpHandlerOperation",
+                "method": "GET",
+                "publish": true
+                }
+            ],
+            "handler": {
+              "@type": "StaticIdpConfigHandler",
+              "args_issuer": {
+                "@type": "RoutePath",
+                "baseUrl": { "@id": "urn:authorization-agent:variables:baseUrl" },
+                "staticPath": "/idp"
+              },
+              "args_jwks_uri": {
+                "@type": "RoutePath",
+                "baseUrl": { "@id": "urn:authorization-agent:variables:baseUrl" },
+                "staticPath": "/idp/keys"
+              }
+            },
+            "path":  "/aa/idp/.well-known/openid-configuration"
+        }
+    ]
+}

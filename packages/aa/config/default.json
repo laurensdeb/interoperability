@@ -1,0 +1,60 @@
+{
+    "@context": [
+        "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "import": [
+        "sai-aa:config/http/webid.json",
+        "sai-aa:config/idp/default.json",
+        "sai-aa:config/interop/default.json",
+        "sai-aa:config/variables/default.json"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-agent:default:NodeHttpServer",
+            "@type": "NodeHttpServer",
+            "port": {
+                "@id": "urn:authorization-agent:variables:port"
+            },
+            "host": {
+                "@id": "urn:authorization-agent:variables:host"
+            },
+            "nodeHttpStreamsHandler": {
+                "@id": "urn:authorization-agent:default:NodeHttpRequestResponseHandler",
+                "@type": "NodeHttpRequestResponseHandler",
+                "httpHandler": {
+                    "@id": "urn:authorization-agent:default:RoutedHttpRequestHandler",
+                    "@type": "RoutedHttpRequestHandler",
+                    "handlerControllerList": [
+                        {
+                            "@id": "urn:authorization-agent:default:HttpHandlerController",
+                            "@type": "HttpHandlerController",
+                            "label": "ControllerList",
+                            "routes": [
+                                {
+                                    "@id": "urn:authorization-agent:default:WebIdRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-agent:default:AgentRegistrationDiscoveryRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-agent:default:JwksRoute"
+                                },
+                                {
+                                    "@id": "urn:authorization-agent:default:IdpConfigRoute"
+                                }
+                            ]
+                        }
+                    ],
+                    "defaultHandler": {
+                        "@type": "DefaultRouteHandler"
+                    }
+                }
+            }
+        },
+        {
+            "comment": "Configuration for the Interop AA."
+        }
+    ]
+}

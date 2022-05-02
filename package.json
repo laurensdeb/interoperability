@@ -3,8 +3,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "npm ci && lerna bootstrap",
-    "clean": "npm run clean:locks && npm run clean:modules",
-    "clean:locks": "npm i --package-locks-only && lerna exec 'npm i --package-locks-only'",
+    "clean": "npm run clean:modules",
     "clean:modules": "lerna clean && shx rm -rf ./node_modules/",
     "lint:all": "lerna run lint --parallel",
     "lint:fix:all": "lerna run lint:fix --parallel",
