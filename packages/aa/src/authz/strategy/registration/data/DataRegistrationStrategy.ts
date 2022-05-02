@@ -40,6 +40,15 @@ export class DataRegistrationStrategy extends InteropBaseAuthorizerStrategy {
       (grant.hasDataRegistration == request.resource))) {
       PERMITTED_ACCESS_MODES.forEach((mode) => result.add(mode));
     }
+    if (grants) {
+      for (const grant of grants) {
+        if (grant.hasDataRegistration && grant.hasDataRegistration === request.resource) {
+          PERMITTED_ACCESS_MODES.forEach((mode) => result.add(mode));
+          grant.accessMode.filter((mode) => mode === AccessMode.append)
+              .forEach((mode) => result.add(mode as AccessMode));
+        }
+      }
+    }
 
     return result;
   }

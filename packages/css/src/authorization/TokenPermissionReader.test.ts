@@ -1,8 +1,8 @@
 import {AccessMode} from './permissions/Permissions';
-import {TicketPermissionReader} from './TicketPermissionReader';
+import {TokenPermissionReader} from './TokenPermissionReader';
 
-describe('A TicketPermissionReader', () => {
-  const permissionReader = new TicketPermissionReader();
+describe('A TokenPermissionReader', () => {
+  const permissionReader = new TokenPermissionReader();
 
   const resource = {path: 'https://example.org/123'};
   const resourceAlt = {path: 'https://example.org/456'};
