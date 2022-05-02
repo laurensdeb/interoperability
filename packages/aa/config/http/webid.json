@@ -1,0 +1,29 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-agent:default:WebIdRoute",
+            "@type": "HttpHandlerRoute",
+            "operations": [
+                {
+                "@type": "HttpHandlerOperation",
+                "method": "GET",
+                "publish": true
+                }
+            ],
+            "handler": {
+              "@type": "WebIdHandler",
+              "oidcIssuer": {
+                  "@type": "RoutePath",
+                  "baseUrl": {"@id": "urn:authorization-agent:variables:baseUrl"},
+                  "staticPath": "/idp"
+              }
+            },
+            "path":  "/aa/client/:id/profile"
+        }
+    ]
+}

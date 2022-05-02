@@ -1,0 +1,15 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "import": [
+        "sai-aa:config/interop/discovery/default.json"
+    ],
+    "@graph": [
+        {
+            "comment": "Configures the Authorization Agent API as specified under the Interoperability specification"
+        }
+    ]
+}

@@ -1,0 +1,73 @@
+{
+    "@context": [
+        "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-agent:default:AuthorizationAgentFactory",
+            "@type": "AuthorizationAgentFactoryImpl",
+            "clientIdStrategy": {
+                "@id": "urn:authorization-agent:default:ClientIdStrategy"
+            },
+            "fetchFactory": {
+                "@type": "InteropFetchFactory",
+                "tokenFactory": {
+                    "@type": "SolidOidcTokenFactory",
+                    "keyholder": {
+                        "@id": "urn:authorization-agent:default:DefaultKeyholder"
+                    },
+                    "issuer": {
+                        "@type": "RoutePath",
+                        "baseUrl": {
+                            "@id": "urn:authorization-agent:variables:baseUrl"
+                        },
+                        "staticPath": "/idp"
+                    }
+                }
+            }
+        },
+        {
+            "@id": "urn:authorization-agent:default:ClientIdStrategy",
+            "@type": "Base64ClientIdStrategy",
+            "aaClientPath": {
+                "@type": "RoutePath",
+                "baseUrl": {
+                    "@id": "urn:authorization-agent:variables:baseUrl"
+                },
+                "staticPath": "/client/"
+            }
+        },
+        {
+            "@id": "urn:authorization-agent:default:AgentRegistrationDiscoveryRoute",
+            "@type": "HttpHandlerRoute",
+            "operations": [
+                {
+                    "@type": "HttpHandlerOperation",
+                    "method": "HEAD",
+                    "publish": true
+                }
+            ],
+            "handler": {
+                "@type": "JsonHttpErrorHandler",
+                "nestedHandler": {
+                    "@type": "AgentRegistrationDiscoveryHander",
+                    "service": {
+                        "@type": "AgentRegistrationDiscoveryServiceImpl",
+                        "verifier": {
+                            "@type": "DummyTokenVerifier"
+                        },
+                        "clientIdStrategy": {
+                            "@id": "urn:authorization-agent:default:ClientIdStrategy"
+                        },
+                        "authorizationAgentFactory": {
+                            "@id": "urn:authorization-agent:default:AuthorizationAgentFactory"
+                        }
+                    }
+                }
+            },
+            "path": "/aa/client/:id"
+        }
+    ]
+}

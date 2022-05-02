@@ -1,0 +1,14 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/components/context.jsonld",
+    ],
+    "import": [
+        "sai-aa:config/idp/keys/default.json",
+        "sai-aa:config/idp/discovery/default.json"
+    ],
+    "@graph": [
+        {
+            "comment": "Configuration for the Interop AA's IdP authenticating the AA's using a 'service account'-style scheme."
+        }
+    ]
+}

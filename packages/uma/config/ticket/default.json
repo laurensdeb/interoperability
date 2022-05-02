@@ -1,0 +1,40 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@digita-ai/handlersjs-http/^0.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-uma/^1.0.0/components/context.jsonld",
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-helpers/^1.0.0/components/context.jsonld"
+    ],
+    "@graph": [
+        {
+            "@id": "urn:authorization-service:default:PermissionRegistrationRoute",
+            "@type": "HttpHandlerRoute",
+            "operations": [
+                {
+                "@type": "HttpHandlerOperation",
+                "method": "POST",
+                "publish": true
+                }
+            ],
+            "handler": {
+              "@type": "JsonHttpErrorHandler",
+              "nestedHandler": {
+              "@type": "PermissionRegistrationHandler",
+              "resourceServers": [{
+                  "@type": "RequestingPartyRegistration",
+                  "baseUri": "http://localhost:3000",
+                  "ecPublicKey": "-----BEGIN PUBLIC KEY-----MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEGJkzO34pMnTx4uxoTD0+dvB4gVaXs9X+qkguzUCNT9ZzbZ/onTZrvQDLVAdH++c7sS/vmfrNuACUeNhLr9aYFA==-----END PUBLIC KEY-----",
+                  "ecAlgorithm": "ES256"
+                }],
+                "ticketFactory": {
+                  "@type": "JwtTicketFactory",
+                  "issuer": { "@id": "urn:authorization-service:variables:baseUrl" },
+                  "params_expirationTime": "15m",
+                  "keyholder": {"@id": "urn:authorization-service:default:DefaultKeyholder"}
+                },
+                "baseUrl": { "@id": "urn:authorization-service:variables:baseUrl" }
+              }
+            },
+            "path":  "/uma/register"
+        }
+    ]
+}

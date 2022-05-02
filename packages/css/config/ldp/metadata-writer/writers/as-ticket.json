@@ -1,0 +1,15 @@
+{
+    "@context": [
+        "https://linkedsoftwaredependencies.org/bundles/npm/@solid/community-server/^4.0.0/components/context.jsonld",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-css/^1.0.0/components/context.jsonld"
+      ],
+    "@graph": [
+      {
+        "comment": "Returns the UMA ticket in case of an unauthorized request.",
+        "@id": "urn:solid-server:default:MetadataWriter_TicketWwwAuth",
+        "@type": "TicketWwwAuthMetadataWriter",
+        "TicketWwwAuthMetadataWriter:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"},
+        "TicketWwwAuthMetadataWriter:_args_accountStore": {"@id": "urn:solid-server:auth:password:AccountStore"}
+      }
+    ]
+  }

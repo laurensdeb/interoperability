@@ -1,4 +1,4 @@
-# Authorization Agent & Authorization Service for Community Solid Server
+# Solid Application Interoperability playground for Community Solid Server
 [![CI/CD](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/laurensdeb/authorization-agent/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/laurensdeb/interoperability/branch/main/graph/badge.svg?token=YNT84QJT7G)](https://codecov.io/gh/laurensdeb/interoperability)
 
 This repository implements experimental [UMA](https://docs.kantarainitiative.org/uma/wg/rec-oauth-uma-grant-2.0.html) support for the Community Solid Server, as
@@ -14,12 +14,12 @@ like consent.
 
 ## Structure
 The repository is structured as a [Lerna monorepo](https://lerna.js.org/), where different packages are used for the different functionality domains of the project:
-- [`packages/aa-css`](packages/aa-css): Modules for introducing a UMA Authorization Service as an Authorizer in the Community Solid Server (version 4.0.0).
-- [`packages/aa-uma`](packages/aa-uma): Modules implementing the necessary routes and API for a UMA Authorization Service.
-- [`packages/aa-http`](packages/aa-http): HTTP server application for running the UMA AS and Authorization Agent modules as a server daemon.
-- [`packages/aa-util`](packages/aa-util): Utility functions & classes
-- [`packages/aa-interop`](packages/aa-interop): Implements modules for authorizing using the Application Interoperability specification and for providing Agent Registration discovery via an Authorization Agent.
-- [`packages/aa-interfaces`](packages/aa-interfaces): Interfaces for the Authorizer functionality of the UMA Authorization Service, to be used when implementing a new Authorizer strategy.
+- [`packages/css`](packages/css): Modules for introducing a UMA Authorization Service as an Authorizer in the Community Solid Server (version 4.0.0).
+- [`packages/uma`](packages/uma): Modules implementing the necessary routes and API for a UMA Authorization Service.
+- [`packages/http`](packages/http): HTTP server application for running the UMA AS and Authorization Agent modules as a server daemon.
+- [`packages/util`](packages/util): Utility functions & classes
+- [`packages/aa`](packages/interop): Implements modules for authorizing using the Application Interoperability specification and for providing Agent Registration discovery via an Authorization Agent.
+- [`packages/interfaces`](packages/aa-interfaces): Interfaces for the Authorizer functionality of the UMA Authorization Service, to be used when implementing a new Authorizer strategy.
 
 ## Getting started
 In order to run this project you need to perform the following steps. Firstly, also ensure that you are using [`nvm`](https://github.com/nvm-sh/nvm) to manage your node version.

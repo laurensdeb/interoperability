@@ -1,0 +1,61 @@
+{
+	"name": "@thundr-be/sai-http",
+	"version": "1.0.0",
+	"author": "Laurens Debackere <Laurens.Debackere@thundr.be> (https://thundr.be)",
+	"license": "MIT",
+	"private": true,
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "require": "./dist/index.js"
+        }
+    },
+	"lsd:module": "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-http",
+	"lsd:components": "dist/components/components.jsonld",
+	"lsd:contexts": {
+		"https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-http/^1.0.0/components/context.jsonld": "dist/components/context.jsonld"
+	},
+	"lsd:importPaths": {
+		"https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-http/^1.0.0/components/": "dist/components/",
+		"https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-http/^1.0.0/config/": "config/",
+		"https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-http/^1.0.0/dist/": "dist/"
+	},
+  "scripts": {
+    "build": "npm run build:ts && npm run build:components",
+    "build:components": "componentsjs-generator -s src -r sai-http -c dist/components -i .componentsignore --lenient",
+    "prepare": "npm run build",
+    "build:ts": "tsc",
+    "start": "node dist/main.js",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "watch": "nodemon --watch \"dist/**/*.js\" --exec npm start"
+  },
+	"devDependencies": {
+		"@tsconfig/node16": "^1.0.2",
+		"@types/express": "^4.17.13",
+		"@types/yargs": "17.0.8",
+		"@typescript-eslint/eslint-plugin": "^5.12.1",
+		"@typescript-eslint/parser": "^5.12.1",
+		"componentsjs-generator": "3.0.0-beta.7",
+		"eslint": "^8.10.0",
+		"eslint-config-google": "^0.14.0",
+		"nodemon": "^2.0.15",
+		"typescript": "^4.5.5"
+	},
+	"dependencies": {
+		"@digita-ai/handlersjs-http": "0.8.5",
+		"@digita-ai/handlersjs-logging": "0.8.5",
+		"componentsjs": "5.0.0-beta.7",
+		"yargs": "17.3.1",
+		"@thundr-be/sai-uma": "^1.0.0",
+		"@thundr-be/sai-aa": "^1.0.0",
+		"@thundr-be/sai-helpers": "^1.0.0"
+		},
+	"files": [
+		"config",
+		"dist"
+	]
+}

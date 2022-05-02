@@ -6,27 +6,27 @@
       },
       {
         "name": "server",
-        "path": "./packages/aa-http"
+        "path": "./packages/http"
       },
       {
         "name": "uma",
-        "path": "./packages/aa-uma"
+        "path": "./packages/uma"
       },
       {
-        "name": "interop",
-        "path": "./packages/aa-interop"
+        "name": "authorization-agent",
+        "path": "./packages/aa"
       },
       {
         "name": "util",
-        "path": "./packages/aa-util"
+        "path": "./packages/util"
       },
       {
         "name": "interfaces",
-        "path": "./packages/aa-interfaces"
+        "path": "./packages/interfaces"
       },
       {
         "name": "css",
-        "path": "./packages/aa-css"
+        "path": "./packages/css"
       }
     ],
     "settings": {

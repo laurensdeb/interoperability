@@ -1,0 +1,14 @@
+{
+    "@context": [
+      "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-http/^1.0.0/components/context.jsonld"
+    ],
+    "import": [
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-uma/^1.0.0/config/default.json",
+        "https://linkedsoftwaredependencies.org/bundles/npm/@thundr-be/sai-aa/^1.0.0/config/default.json"
+    ],
+    "@graph": [
+        {
+            "comment": "A default combined UMA AS / Interop AA deployment"
+        }
+    ]
+}
