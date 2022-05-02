@@ -1,5 +1,5 @@
 import {ResourceIdentifier} from './ResourceIdentifier';
-import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
+import {AccessMode} from '@thundr-be/sai-helpers';
 
 /**
  * A UmaAccessToken is a type of RPT that is supported by the UmaGrantProcessor.

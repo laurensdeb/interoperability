@@ -1,5 +1,5 @@
 import {ResourceIdentifier} from './ResourceIdentifier';
-import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
+import {AccessMode} from '@thundr-be/sai-helpers';
 
 export interface Ticket {
     sub: ResourceIdentifier;

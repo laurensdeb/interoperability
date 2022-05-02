@@ -1,4 +1,4 @@
-import {AccessMode} from '@laurensdeb/authorization-agent-helpers';
+import {AccessMode} from '@thundr-be/sai-helpers';
 import {Ticket} from './Ticket';
 import {Principal} from './AccessToken';
 
