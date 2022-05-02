@@ -10,7 +10,7 @@ export * from './authentication/UmaTokenExtractor';
 export * from './authentication/Credentials';
 
 export * from './authorization/PermissionReader';
-export * from './authorization/TicketPermissionReader';
+export * from './authorization/TokenPermissionReader';
 export * from './authorization/UmaUnionPermissionReader';
 export * from './authorization/UmaPermissionBasedAuthorizer';
 export * from './authorization/error/UnauthorizedHttpError';

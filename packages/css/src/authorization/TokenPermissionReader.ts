@@ -3,9 +3,9 @@ import {PermissionReader, PermissionReaderInput} from './PermissionReader';
 import {PermissionSet} from './permissions/Permissions';
 
 /**
- * PermissionReader using input from Ticket to authorize the request.
+ * PermissionReader using input from UMA Token to authorize the request.
  */
-export class TicketPermissionReader extends PermissionReader {
+export class TokenPermissionReader extends PermissionReader {
   protected readonly logger = getLoggerFor(this);
 
   /**

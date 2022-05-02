@@ -3,7 +3,7 @@ import {BadRequestHttpError} from '@digita-ai/handlersjs-http';
 import {HttpHandler, HttpHandlerContext, HttpHandlerResponse} from '@digita-ai/handlersjs-http';
 import {throwError} from 'rxjs';
 import {from, map, Observable} from 'rxjs';
-import {GrantTypeProcessor} from '../token/GrantTypeProcessor';
+import {GrantTypeProcessor} from '../grant/GrantTypeProcessor';
 
 
 const GRANT_TYPE = 'grant_type';

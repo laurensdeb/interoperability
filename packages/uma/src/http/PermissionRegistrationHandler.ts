@@ -3,7 +3,7 @@ import {BadRequestHttpError, HttpHandler, HttpHandlerContext,
   UnauthorizedHttpError, UnsupportedMediaTypeHttpError} from '@digita-ai/handlersjs-http';
 import {from, map, Observable, throwError} from 'rxjs';
 import * as jose from 'jose';
-import {TicketFactory} from '../token/TicketFactory';
+import {TicketFactory} from '../ticket/TicketFactory';
 import {isString} from '../util/StringGuard';
 import {AccessMode, parseModes} from '@thundr-be/sai-helpers';
 import {isUrlString, UrlString} from '../util/UrlGuard';

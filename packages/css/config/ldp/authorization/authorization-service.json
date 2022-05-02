@@ -23,12 +23,12 @@
           {
             "comment": "This PermissionReader makes sure that for auxiliary resources, the main reader gets called with the associated identifier.",
             "@type": "AuxiliaryReader",
-            "resourceReader": { "@id": "urn:solid-server:default:TicketPermissionReader" },
+            "resourceReader": { "@id": "urn:solid-server:default:TokenPermissionReader" },
             "auxiliaryStrategy": { "@id": "urn:solid-server:default:AuxiliaryStrategy" }
           },
           {
-            "@type": "TicketPermissionReader",
-            "@id": "urn:solid-server:default:TicketPermissionReader"
+            "@type": "TokenPermissionReader",
+            "@id": "urn:solid-server:default:TokenPermissionReader"
           },
           {
             "comment": "This PermissionReader makes sure that for auxiliary resources, the main reader gets called with the associated identifier.",

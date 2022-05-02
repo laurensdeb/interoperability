@@ -56,7 +56,6 @@ export class SolidOidcTokenFactory extends DpopBoundTokenFactory {
         .setExpirationTime('1m')
         .setJti(v4())
         .sign(this.keyholder.getPrivateKey(kid));
-    this.logger.debug('Issued new JWT Token', jwt);
     return {id_token: jwt, dpop: dpop.token};
   }
 }

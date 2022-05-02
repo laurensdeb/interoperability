@@ -1,10 +1,10 @@
 import {BadRequestHttpError, HttpHandlerContext} from '@digita-ai/handlersjs-http';
 import {AccessMode} from '@thundr-be/sai-helpers';
 import {Authorizer, Principal, Authorization, Ticket} from '@thundr-be/sai-interfaces';
-import {ClaimTokenProcessor, ClaimTokenRequest} from './authn/ClaimTokenProcessor';
-import {TicketFactory} from './TicketFactory';
-import {TokenFactory} from './TokenFactory';
-import {GrantTypeProcessor, TokenResponse} from './GrantTypeProcessor';
+import {ClaimTokenProcessor, ClaimTokenRequest} from '../authn/ClaimTokenProcessor';
+import {TicketFactory} from '../ticket/TicketFactory';
+import {TokenFactory} from '../token/TokenFactory';
+import {GrantTypeProcessor, TokenResponse} from '../grant/GrantTypeProcessor';
 import {getLoggerFor, Logger} from '@thundr-be/sai-helpers';
 import {RequestDeniedError} from '../error/RequestDeniedError';
 import {NeedInfoError} from '../error/NeedInfoError';

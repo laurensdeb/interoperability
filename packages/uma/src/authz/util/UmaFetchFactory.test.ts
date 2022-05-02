@@ -1,4 +1,4 @@
-import {TokenFactory} from '../../TokenFactory';
+import {TokenFactory} from '../../token/TokenFactory';
 import {UmaFetchFactory} from './UmaFetchFactory';
 import {fetch as crossFetch, Response} from 'cross-fetch';
 const mockTokenFactory = {serialize: jest.fn(), deserialize: jest.fn()};
