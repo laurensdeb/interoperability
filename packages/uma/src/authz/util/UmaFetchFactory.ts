@@ -1,6 +1,6 @@
 import {AccessMode, FetchFactory, getLoggerFor} from '@thundr-be/sai-helpers';
 import {fetch} from 'cross-fetch';
-import {TokenFactory} from '../../TokenFactory';
+import {TokenFactory} from '../../token/TokenFactory';
 
 /**
  *
