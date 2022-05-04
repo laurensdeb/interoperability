@@ -26,9 +26,6 @@
                   "@id": "urn:solid-server:default:IdentifierStrategy"
                 }
               }
-            },
-            {
-              "@type": "BearerWebIdExtractor"
             }
           ]
         },
