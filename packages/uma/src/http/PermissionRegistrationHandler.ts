@@ -13,6 +13,7 @@ import {Logger, getLoggerFor} from '@thundr-be/sai-helpers';
  * Registration for a Requesting Party (i.e. Pod Server)
  */
 export class RequestingPartyRegistration {
+  private publicKey: jose.KeyLike | undefined;
   /**
    * Registration for a Requesting Party (i.e. Pod Server)
    *
@@ -23,6 +24,17 @@ export class RequestingPartyRegistration {
   constructor(public readonly baseUri: string,
       public readonly ecPublicKey: string,
      public readonly ecAlgorithm: 'ES256' | 'ES384' | 'ES512') {}
+
+  /**
+   * Get Public Key
+   * @return {Promise<jose.KeyLike>} public key
+   */
+  public async getPublicKey(): Promise<jose.KeyLike> {
+    if (!this.publicKey) {
+      this.publicKey = await jose.importSPKI(this.ecPublicKey, this.ecAlgorithm);
+    }
+    return this.publicKey;
+  }
 }
 
 export type PermissionRegistrationResponse = {
@@ -149,7 +161,7 @@ export class PermissionRegistrationHandler implements HttpHandler {
     const jwt = /^Bearer\s+(.*)/ui.exec(authorization!)![1];
 
     for (const resourceServer of this.resourceServers) {
-      const publicKey = await jose.importSPKI(resourceServer.ecPublicKey, resourceServer.ecAlgorithm);
+      const publicKey = await resourceServer.getPublicKey();
       try {
         await jose.jwtVerify(jwt, publicKey, {
           audience: this.baseUrl,
