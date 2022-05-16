@@ -1,5 +1,7 @@
 import {NotFoundHttpError, NotImplementedHttpError, UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
+import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {getLoggerFor, Logger} from '@thundr-be/sai-helpers';
+import LRUCache from 'lru-cache';
 import {Application, AuthenticatedClient, SocialAgent} from '../../authz/strategy/Types';
 import {AuthorizationAgentFactory} from '../../factory/AuthorizationAgentFactory';
 import {ClientIdStrategy} from '../../factory/ClientIdStrategy';
@@ -16,6 +18,9 @@ import {RegistrationRequiredError} from './error/RegistrationRequiredError';
  */
 export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDiscoveryService {
   private readonly logger: Logger = getLoggerFor(this);
+  private readonly authorizationAgentCache = new LRUCache<string, AuthorizationAgent>({
+    max: 25,
+  });
 
   /**
      * @param {TokenVerifier} verifier
@@ -58,7 +63,7 @@ export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDisc
 
     let aa;
     try {
-      aa = await this.authorizationAgentFactory.getAuthorizationAgent(webId);
+      aa = await this.getAuthorizationAgentForWebID(webId);
     } catch (e) {
       const msg = `No authorization agent for WebID ${webId}`;
       this.logger.debug(msg, e);
@@ -84,6 +89,22 @@ export class AgentRegistrationDiscoveryServiceImpl extends AgentRegistrationDisc
    */
   private getAgentIri(client: AuthenticatedClient): string {
     return client instanceof SocialAgent ? client.webId : client.clientId;
+  }
+
+  /**
+     * This method returns an Authorization Agent which
+     * is applicable to the webid currently being processed.
+     *
+     * @param {string} webid
+     * @return {Promise<AuthorizationAgent>}
+     */
+  private async getAuthorizationAgentForWebID(webid: string): Promise<AuthorizationAgent> {
+    if (this.authorizationAgentCache.has(webid)) {
+      return this.authorizationAgentCache.get(webid)!;
+    }
+    const res = await this.authorizationAgentFactory.getAuthorizationAgent(webid);
+    this.authorizationAgentCache.set(webid, res);
+    return res;
   }
 
   /**

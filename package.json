@@ -10,6 +10,7 @@
     "test:all": "lerna run test --parallel",
     "build:all": "lerna run build",
     "start": "lerna run start --parallel",
+    "start:prd": "lerna run start:prd --parallel",
     "commit": "commit",
     "prepare": "husky install"
   },

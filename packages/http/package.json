@@ -28,6 +28,7 @@
     "prepare": "npm run build",
     "build:ts": "tsc",
     "start": "node dist/main.js",
+	"start:prd": "set NODE_ENV=production && npm run start",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "echo \"Error: no test specified\" && exit 0",
