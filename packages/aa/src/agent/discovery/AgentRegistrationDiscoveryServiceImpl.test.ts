@@ -1,5 +1,6 @@
 import {NotFoundHttpError, NotImplementedHttpError, UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
 import {ClientIdStrategy} from '../../factory/ClientIdStrategy';
+import {AgentRegistrationDiscoveryService} from './AgentRegistrationDiscoveryService';
 import {AgentRegistrationDiscoveryServiceImpl} from './AgentRegistrationDiscoveryServiceImpl';
 import {RegistrationRequiredError} from './error/RegistrationRequiredError';
 
@@ -24,9 +25,13 @@ const MOCK_AUTHORIZATION_AGENT = {
   findApplicationRegistration: jest.fn(),
 };
 describe('An AgentRegistrationDiscoveryServiceImpl', () => {
-  const service = new AgentRegistrationDiscoveryServiceImpl(MOCK_TOKEN_VERIFIER,
-      (MOCK_CLIENTID_STRATEGY as unknown as ClientIdStrategy),
-      MOCK_AUTHORIZATION_AGENT_FACTORY);
+  let service:AgentRegistrationDiscoveryService;
+
+  beforeEach(() => {
+    service = new AgentRegistrationDiscoveryServiceImpl(MOCK_TOKEN_VERIFIER,
+        (MOCK_CLIENTID_STRATEGY as unknown as ClientIdStrategy),
+        MOCK_AUTHORIZATION_AGENT_FACTORY);
+  });
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -215,10 +220,10 @@ describe('An AgentRegistrationDiscoveryServiceImpl', () => {
     });
 
     it('should return agent registration iri', async () => {
-      MOCK_CLIENTID_STRATEGY.getWebIdForClientId.mockResolvedValueOnce(MOCK_OWNER);
-      MOCK_TOKEN_VERIFIER.authenticate.mockResolvedValueOnce({webId: MOCK_AGENT_WEBID, clientId: MOCK_AGENT_CLIENT});
-      MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent.mockResolvedValueOnce(MOCK_AUTHORIZATION_AGENT);
-      MOCK_AUTHORIZATION_AGENT.findSocialAgentRegistration.mockResolvedValueOnce({iri: MOCK_REGISTRATION_URI});
+      MOCK_CLIENTID_STRATEGY.getWebIdForClientId.mockResolvedValue(MOCK_OWNER);
+      MOCK_TOKEN_VERIFIER.authenticate.mockResolvedValue({webId: MOCK_AGENT_WEBID, clientId: MOCK_AGENT_CLIENT});
+      MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent.mockResolvedValue(MOCK_AUTHORIZATION_AGENT);
+      MOCK_AUTHORIZATION_AGENT.findSocialAgentRegistration.mockResolvedValue({iri: MOCK_REGISTRATION_URI});
 
       const res = service.handle({
         request_uri: MOCK_REQUEST_URI,
@@ -238,11 +243,17 @@ describe('An AgentRegistrationDiscoveryServiceImpl', () => {
         url: MOCK_REQUEST_URI,
       });
 
-      expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalled();
-      expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledWith(MOCK_OWNER);
-
       expect(MOCK_AUTHORIZATION_AGENT.findSocialAgentRegistration).toHaveBeenCalled();
       expect(MOCK_AUTHORIZATION_AGENT.findSocialAgentRegistration).toHaveBeenCalledWith(MOCK_AGENT_WEBID);
+
+      // Validate caching
+      await expect(service.handle({
+        request_uri: MOCK_REQUEST_URI,
+        headers: {'authorization': 'DPoP 123', 'dpop': '456'},
+      })).resolves.toEqual({agent_registration: MOCK_REGISTRATION_URI, agent_iri: MOCK_AGENT_WEBID});
+
+      expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledTimes(1);
+      expect(MOCK_AUTHORIZATION_AGENT_FACTORY.getAuthorizationAgent).toHaveBeenCalledWith(MOCK_OWNER);
     });
   });
 });
