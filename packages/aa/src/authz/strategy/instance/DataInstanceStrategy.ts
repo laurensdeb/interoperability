@@ -1,5 +1,5 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
-import {AllFromRegistryDataGrant, DataGrant, InheritedDataGrant, SelectedFromRegistryDataGrant} from '@janeirodigital/interop-data-model';
+import {AllFromRegistryDataGrant, DataGrant, SelectedFromRegistryDataGrant} from '@janeirodigital/interop-data-model';
 import {AccessMode} from '@thundr-be/sai-helpers';
 import {getDataGrantsForClient} from '../grant/getDataGrantsForClient';
 import {InteropBaseAuthorizerStrategy} from '../InteropBaseAuthorizerStrategy';
