@@ -1,4 +1,5 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
+import {AllFromRegistryDataGrant, DataGrant, InheritedDataGrant, SelectedFromRegistryDataGrant} from '@janeirodigital/interop-data-model';
 import {AccessMode} from '@thundr-be/sai-helpers';
 import {getDataGrantsForClient} from '../grant/getDataGrantsForClient';
 import {InteropBaseAuthorizerStrategy} from '../InteropBaseAuthorizerStrategy';
@@ -32,7 +33,7 @@ export class DataInstanceStrategy extends InteropBaseAuthorizerStrategy {
     }
 
     for (const dataGrant of dataGrants) {
-      for await (const instance of dataGrant.getDataInstanceIterator()) {
+      for await (const instance of this.getDataInstanceIterator(dataGrant)) {
         if (instance.iri === request.resource) {
           instance.accessMode
               .filter((mode) => Object.values(AccessMode).some((v) => v === mode))
@@ -44,5 +45,34 @@ export class DataInstanceStrategy extends InteropBaseAuthorizerStrategy {
     }
 
     return result;
+  }
+
+  /**
+   * Returns an iterator for the instances of the Data Grant
+   * @param {DataGrant} dataGrant
+   * @return {AsyncIterable<{iri: string, accessMode: string[]}>}
+   */
+  private getDataInstanceIterator(dataGrant: DataGrant): AsyncIterable<{iri: string, accessMode: string[]}> {
+    if (dataGrant instanceof AllFromRegistryDataGrant) {
+      const factory = dataGrant.factory;
+      return {
+        async* [Symbol.asyncIterator]() {
+          const dataRegistration = await factory.readable.dataRegistration(dataGrant.hasDataRegistration);
+          for (const instanceIri of dataRegistration.contains) {
+            yield {iri: instanceIri, accessMode: dataGrant.accessMode};
+          }
+        },
+      };
+    } else if (dataGrant instanceof SelectedFromRegistryDataGrant) {
+      return {
+        async* [Symbol.asyncIterator]() {
+          for (const instanceIri of dataGrant.hasDataInstance) {
+            yield {iri: instanceIri, accessMode: dataGrant.accessMode};
+          }
+        },
+      };
+    }
+    // Unoptimized default path
+    return dataGrant.getDataInstanceIterator();
   }
 }

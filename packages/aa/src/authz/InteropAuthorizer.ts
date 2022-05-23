@@ -47,7 +47,7 @@ export class InteropAuthorizer extends Authorizer {
       }
 
       // 2. Else pass through each of the authorizers to determine whether the request can be authorized
-      for (const strategy of this.strategies) {
+      await Promise.any(this.strategies.map(async (strategy) => {
         let modes;
         try {
           modes = await strategy.authorize(authorizationAgent, requestedPermissions, authenticatedClient);
@@ -55,13 +55,12 @@ export class InteropAuthorizer extends Authorizer {
           this.logger.warn(`Error in strategy ${typeof strategy}: ${(e as Error).message}`, e);
           // ignored
         }
-        // Waterfall strategy: We assume each strategy applies to non-overlapping resources
-        //                     thus as soon as any returns access modes, we assume the authorize function to return.
         if (modes && modes.size) {
           modes.forEach((mode) => result.add(mode));
-          break;
+          return Promise.resolve();
         }
-      }
+        return Promise.reject(new Error('Not a match'));
+      }));
     } catch (e: any) {
       this.logger.warn(`Interoperability Authorization failed: ${(e as Error).message}`, e);
     }

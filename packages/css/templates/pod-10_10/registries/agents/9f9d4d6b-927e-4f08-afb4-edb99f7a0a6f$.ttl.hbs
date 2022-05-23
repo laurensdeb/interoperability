@@ -1,0 +1,12 @@
+@prefix interop: <http://www.w3.org/ns/solid/interop#>.
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+    @prefix pod-agents: <{{podBaseUrl}}registries/agents/>.
+    @prefix pod-grants: <{{podBaseUrl}}registries/authorizations/>.
+    <>
+    a interop:ApplicationRegistration ;
+    interop:registeredBy <{{webId}}> ;
+    interop:registeredWith <{{authorizationAgent}}> ;
+    interop:registeredAt "2022-05-18T15:54:36.246802"^^xsd:dateTime ;
+    interop:updatedAt "2022-05-18T15:54:36.246802"^^xsd:dateTime ;
+    interop:registeredAgent <https://example.org/app/6> ;
+    interop:hasAccessGrant pod-grants:5d7d3885-0337-4bc6-b48c-27b647829fe6 .

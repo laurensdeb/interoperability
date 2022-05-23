@@ -1,0 +1,14 @@
+
+def getAgentRegistration(agent):
+    return '''@prefix interop: <http://www.w3.org/ns/solid/interop#>.
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+    @prefix pod-agents: <{{podBaseUrl}}registries/agents/>.
+    @prefix pod-grants: <{{podBaseUrl}}registries/authorizations/>.
+    <>
+    a interop:SocialAgentRegistration ;
+    interop:registeredBy <{{webId}}> ;
+    interop:registeredWith <https://jarvis.example/> ;
+    interop:registeredAt "2020-04-04T20:15:47.000Z"^^xsd:dateTime ;
+    interop:updatedAt "2020-04-04T21:11:33.000Z"^^xsd:dateTime ;
+    interop:registeredAgent <{agent}> ;
+    interop:hasAccessGrant pod-grants:b6e125b8 .'''.format(agent)

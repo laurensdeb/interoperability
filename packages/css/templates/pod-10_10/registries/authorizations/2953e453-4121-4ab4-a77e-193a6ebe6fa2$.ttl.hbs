@@ -1,0 +1,11 @@
+@prefix interop: <http://www.w3.org/ns/solid/interop#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix pod-grants: <{{podBaseUrl}}registries/authorizations/>.
+<>
+  a interop:AccessGrant ;
+  interop:grantedBy <{{webId}}> ;
+  interop:grantedAt "2020-04-04T20:15:47.000Z"^^xsd:dateTime ;
+  interop:grantee <https://example.org/app/0> ;
+  interop:hasAccessNeedGroup <https://example.org/app/0/needs> ;
+  interop:hasDataGrant
+    pod-grants:2112cad5-eaa9-4d5c-a933-db136faec9c2,pod-grants:06e255d0-69bf-4e76-babf-7bf8d3a05a80,pod-grants:da4414b3-4567-4e10-a5aa-7cd62a6726df,pod-grants:6a44c9c0-35cd-44c5-9ddf-978adf34bd1a,pod-grants:23cc8904-6072-4a64-8bde-2dd60b164f8e,pod-grants:b5cc4d6a-6948-4297-96a9-afd754cf8aa9,pod-grants:4a8aa9b7-f5a5-416b-8d7b-1590f975a25e,pod-grants:8c416d24-743a-4727-9a60-deb6297566b3,pod-grants:18002b0e-b25d-4375-985c-9140f0916954,pod-grants:3a0cc7a9-0b57-4711-99cc-07382e5f22dc .

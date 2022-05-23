@@ -7,9 +7,9 @@
       {
         "comment": "Returns the UMA ticket in case of an unauthorized request.",
         "@id": "urn:solid-server:default:MetadataWriter_TicketWwwAuth",
-        "@type": "TicketWwwAuthMetadataWriter",
-        "TicketWwwAuthMetadataWriter:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"},
-        "TicketWwwAuthMetadataWriter:_args_accountStore": {"@id": "urn:solid-server:auth:password:AccountStore"}
+        "@type": "UmaWwwAuthMetadataWriter",
+        "UmaWwwAuthMetadataWriter:_args_umaClient": {"@id": "urn:solid-server:default:UmaClient"},
+        "UmaWwwAuthMetadataWriter:_args_accountStore": {"@id": "urn:solid-server:auth:password:AccountStore"}
       }
     ]
   }
