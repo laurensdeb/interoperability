@@ -9,6 +9,8 @@ module.exports = {
   'coveragePathIgnorePatterns': [
     '<rootDir>/node_modules',
     'src/index.ts',
+    'src/agent/policy/', 
+    'src/agent/registration/'
   ],
   'coverageReporters': [
     'json',

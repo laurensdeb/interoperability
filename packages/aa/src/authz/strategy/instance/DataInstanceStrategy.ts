@@ -40,6 +40,7 @@ export class DataInstanceStrategy extends InteropBaseAuthorizerStrategy {
               .map((mode) => mode as AccessMode)
               .filter((mode) => request.modes.has(mode))
               .forEach((mode) => result.add(mode));
+          return result;
         }
       }
     }

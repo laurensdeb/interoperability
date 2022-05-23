@@ -3,7 +3,7 @@ import {MOCK_APPLICATION, MOCK_REQUEST, MOCK_RESOURCE} from '../../../util/test/
 import {DataInstanceStrategy} from './DataInstanceStrategy';
 import {getDataGrantsForClient} from '../grant/getDataGrantsForClient';
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
-
+import {AllFromRegistryDataGrant, SelectedFromRegistryDataGrant} from '@janeirodigital/interop-data-model';
 
 jest.mock('../grant/getDataGrantsForClient');
 
@@ -26,6 +26,30 @@ const yieldMockDataGrant = (instances: any[]) => {
   };
 };
 
+
+const yieldMockSelectedFromRegistryDataGrant = (instances: string[], accessMode: string[]) => {
+  const res = Object.create(SelectedFromRegistryDataGrant.prototype);
+  Object.defineProperty(res, 'hasDataInstance', {value: instances});
+  Object.defineProperty(res, 'accessMode', {value: accessMode});
+  return res;
+};
+
+const yieldMockAllFromRegistryDataGrant = (instances: string[], accessMode: string[]) => {
+  const res = Object.create(AllFromRegistryDataGrant.prototype);
+  Object.defineProperty(res, 'accessMode', {value: accessMode});
+  Object.defineProperty(res, 'hasDataRegistration', {value: undefined});
+  Object.defineProperty(res, 'factory', {value: {
+    readable: {
+      dataRegistration: () => {
+        return {
+          contains: instances,
+        };
+      },
+    },
+  }});
+  return res;
+};
+
 describe('A DataInstanceStrategy', () => {
   const strategy = new DataInstanceStrategy();
 
@@ -36,6 +60,28 @@ describe('A DataInstanceStrategy', () => {
   it('should authorize with permissions of grant when a data instance is fetched', async () => {
     (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce([
       yieldMockDataGrant([{iri: MOCK_RESOURCE, accessMode: [AccessMode.read, AccessMode.write]}]),
+    ]);
+    expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([AccessMode.read]));
+
+    expect(getDataGrantsForClient).toHaveBeenCalled();
+    expect(getDataGrantsForClient).toHaveBeenCalledWith(MOCK_AUTHORIZATION_AGENT, MOCK_APPLICATION);
+  });
+
+  it('should authorize with permissions of selected from registry grant when a data instance is fetched', async () => {
+    (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce([
+      yieldMockSelectedFromRegistryDataGrant([MOCK_RESOURCE], [AccessMode.read, AccessMode.write]),
+    ]);
+    expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
+        MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([AccessMode.read]));
+
+    expect(getDataGrantsForClient).toHaveBeenCalled();
+    expect(getDataGrantsForClient).toHaveBeenCalledWith(MOCK_AUTHORIZATION_AGENT, MOCK_APPLICATION);
+  });
+
+  it('should authorize with permissions of all from registry grant when a data instance is fetched', async () => {
+    (getDataGrantsForClient as unknown as jest.Mock).mockResolvedValueOnce([
+      yieldMockAllFromRegistryDataGrant([MOCK_RESOURCE], [AccessMode.read, AccessMode.write]),
     ]);
     expect(await strategy.authorize((MOCK_AUTHORIZATION_AGENT as unknown as AuthorizationAgent),
         MOCK_REQUEST, MOCK_APPLICATION)).toEqual(new Set([AccessMode.read]));
