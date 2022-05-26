@@ -30,7 +30,7 @@ export abstract class GrantBaseStrategy<T extends Grant>
       request: RequestedPermissions, client: AuthenticatedClient): Promise<Set<AccessMode>> {
     const result = new Set<AccessMode>();
 
-    const grants = this.getGrantsForClient(authorizationAgent, client);
+    const grants = await this.getGrantsForClient(authorizationAgent, client);
 
     if (!!grants && this.isAuthorizationSubject(grants, request)) {
       PERMITTED_ACCESS_MODES.forEach((mode) => result.add(mode));
