@@ -4,6 +4,10 @@ import {Application} from '../../Types';
 import {AuthenticatedClient} from '../../Types';
 import {AgentRegistrationBaseStrategy} from './AgentRegistrationBaseStrategy';
 
+import LRUCache from 'lru-cache';
+
+const getAppRegistrationCacheKey = (aa: AuthorizationAgent, client: Application) => `${aa.webId}-${client.clientId}`;
+
 /**
  * The ApplicationRegistrationStrategy is tasked with authorizing
  * access to Application Registrations as defined under the
@@ -16,6 +20,10 @@ import {AgentRegistrationBaseStrategy} from './AgentRegistrationBaseStrategy';
  */
 export class ApplicationRegistrationStrategy
   extends AgentRegistrationBaseStrategy<CRUDApplicationRegistration, Application> {
+  private readonly appRegistrationCache = new LRUCache<string, CRUDApplicationRegistration>({
+    max: 25,
+    ttl: 60 * 1000,
+  });
   /**
    * Determines if the client that is being authorized
    * is in fact supported by the strategy
@@ -39,6 +47,14 @@ export class ApplicationRegistrationStrategy
    */
   protected async getRegistrationForClient(authorizationAgent: AuthorizationAgent,
       client: Application): Promise<CRUDApplicationRegistration | undefined> {
-    return await authorizationAgent.findApplicationRegistration(client.clientId);
+    const key = getAppRegistrationCacheKey(authorizationAgent, client);
+    if (this.appRegistrationCache.has(key)) {
+      return this.appRegistrationCache.get(key);
+    }
+    const res = await authorizationAgent.findApplicationRegistration(client.clientId);
+    if (res) {
+      this.appRegistrationCache.set(key, res);
+    }
+    return res;
   }
 }

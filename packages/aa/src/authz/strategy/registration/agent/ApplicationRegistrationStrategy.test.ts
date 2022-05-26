@@ -11,8 +11,11 @@ const MOCK_AUTHORIZATION_AGENT = {
 };
 
 describe('An ApplicationRegistrationStrategy', () =>{
-  const strategy = new ApplicationRegistrationStrategy();
+  let strategy = new ApplicationRegistrationStrategy();
 
+  beforeEach(() => {
+    strategy = new ApplicationRegistrationStrategy();
+  });
   afterEach(() => {
     jest.resetAllMocks();
   });

@@ -5,18 +5,15 @@ import {getAccessGrantForClient} from './getAccessGrantForClient';
 
 jest.mock('./getAccessGrantForClient');
 
-const MOCK_BOOTSTRAP = jest.fn();
 
 describe('getDataGrantsForClient', () =>{
   it('Should return data grants when access grant exists', async () => {
     (getAccessGrantForClient as unknown as jest.Mock).mockResolvedValueOnce({
-      bootstrap: MOCK_BOOTSTRAP,
       hasDataGrant: [],
     });
     const result = await getDataGrantsForClient(({} as unknown as AuthorizationAgent), MOCK_APPLICATION);
     expect(result).toEqual([]);
 
-    expect(MOCK_BOOTSTRAP).toHaveBeenCalled();
     expect(getAccessGrantForClient).toHaveBeenCalled();
     expect(getAccessGrantForClient).toHaveBeenCalledWith({}, MOCK_APPLICATION);
   });
@@ -25,7 +22,6 @@ describe('getDataGrantsForClient', () =>{
     const result = await getDataGrantsForClient(({} as unknown as AuthorizationAgent), MOCK_APPLICATION);
     expect(result).toEqual(undefined);
 
-    expect(MOCK_BOOTSTRAP).toHaveBeenCalled();
     expect(getAccessGrantForClient).toHaveBeenCalled();
     expect(getAccessGrantForClient).toHaveBeenCalledWith({}, MOCK_APPLICATION);
   });

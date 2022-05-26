@@ -1,6 +1,6 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {DataGrant} from '@janeirodigital/interop-data-model';
-import {AuthenticatedClient} from '../Types';
+import {AuthenticatedClient, SocialAgent} from '../Types';
 import {getAccessGrantForClient} from './getAccessGrantForClient';
 
 /**
@@ -15,7 +15,6 @@ export async function getDataGrantsForClient(authorizationAgent: AuthorizationAg
 Promise<DataGrant[] | undefined> {
   const accessGrant = await getAccessGrantForClient(authorizationAgent, client);
   if (accessGrant) {
-    await accessGrant.bootstrap();
     return accessGrant.hasDataGrant;
   }
   return undefined;

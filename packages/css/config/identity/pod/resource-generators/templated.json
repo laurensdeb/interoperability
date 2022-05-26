@@ -8,7 +8,7 @@
       "comment": "Generates resources based on the templates stored in the template folder.",
       "@id": "urn:solid-server:default:ResourcesGenerator",
       "@type": "TemplatedResourcesGenerator",
-      "templateFolder": "templates/pod-10_10",
+      "templateFolder": "templates/pod-50_100",
       "factory": {
         "@type": "ExtensionBasedMapperFactory"
       },

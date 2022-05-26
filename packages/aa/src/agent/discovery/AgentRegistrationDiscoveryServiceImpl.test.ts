@@ -1,5 +1,6 @@
 import {NotFoundHttpError, NotImplementedHttpError, UnauthorizedHttpError} from '@digita-ai/handlersjs-http';
 import {ClientIdStrategy} from '../../factory/ClientIdStrategy';
+import { AgentRegistrationDiscoveryService } from './AgentRegistrationDiscoveryService';
 import {AgentRegistrationDiscoveryServiceImpl} from './AgentRegistrationDiscoveryServiceImpl';
 import {RegistrationRequiredError} from './error/RegistrationRequiredError';
 
@@ -24,9 +25,13 @@ const MOCK_AUTHORIZATION_AGENT = {
   findApplicationRegistration: jest.fn(),
 };
 describe('An AgentRegistrationDiscoveryServiceImpl', () => {
-  const service = new AgentRegistrationDiscoveryServiceImpl(MOCK_TOKEN_VERIFIER,
-      (MOCK_CLIENTID_STRATEGY as unknown as ClientIdStrategy),
-      MOCK_AUTHORIZATION_AGENT_FACTORY);
+  let service: AgentRegistrationDiscoveryService;
+
+  beforeEach(() => {
+    service = new AgentRegistrationDiscoveryServiceImpl(MOCK_TOKEN_VERIFIER,
+        (MOCK_CLIENTID_STRATEGY as unknown as ClientIdStrategy),
+        MOCK_AUTHORIZATION_AGENT_FACTORY);
+  });
 
   afterEach(() => {
     jest.resetAllMocks();

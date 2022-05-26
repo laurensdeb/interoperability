@@ -36,10 +36,6 @@ export class DataRegistrationStrategy extends InteropBaseAuthorizerStrategy {
     const grants = await getDataGrantsForClient(authorizationAgent, client);
     this.logger.debug(`Found ${grants?grants.length:'no'} grants for client.`);
 
-    if (grants && grants.some((grant) => grant.hasDataRegistration &&
-      (grant.hasDataRegistration == request.resource))) {
-      PERMITTED_ACCESS_MODES.forEach((mode) => result.add(mode));
-    }
     if (grants) {
       for (const grant of grants) {
         if (grant.hasDataRegistration && grant.hasDataRegistration === request.resource) {

@@ -1,8 +1,11 @@
 import {AuthorizationAgent} from '@janeirodigital/interop-authorization-agent';
 import {CRUDSocialAgentRegistration} from '@janeirodigital/interop-data-model';
+import LRUCache from 'lru-cache';
 import {SocialAgent} from '../../Types';
 import {AuthenticatedClient} from '../../Types';
 import {AgentRegistrationBaseStrategy} from './AgentRegistrationBaseStrategy';
+
+const getAgentRegistrationCacheKey = (aa: AuthorizationAgent, client: SocialAgent) => `${aa.webId}-${client.webId}`;
 
 /**
  * The AgentRegistrationStrategy is tasked with authorizing
@@ -16,6 +19,10 @@ import {AgentRegistrationBaseStrategy} from './AgentRegistrationBaseStrategy';
  */
 export class SocialAgentRegistrationStrategy
   extends AgentRegistrationBaseStrategy<CRUDSocialAgentRegistration, SocialAgent> {
+  private readonly agentRegistrationCache = new LRUCache<string, CRUDSocialAgentRegistration>({
+    max: 25,
+    ttl: 60 * 1000,
+  });
   /**
    * Determines if the client that is being authorized
    * is in fact supported by the strategy
@@ -36,6 +43,14 @@ export class SocialAgentRegistrationStrategy
    */
   protected async getRegistrationForClient(authorizationAgent: AuthorizationAgent,
       client: SocialAgent): Promise<CRUDSocialAgentRegistration | undefined> {
-    return await authorizationAgent.findSocialAgentRegistration(client.webId);
+    const key = getAgentRegistrationCacheKey(authorizationAgent, client);
+    if (this.agentRegistrationCache.has(key)) {
+      return this.agentRegistrationCache.get(key);
+    }
+    const res = await authorizationAgent.findSocialAgentRegistration(client.webId);
+    if (res) {
+      this.agentRegistrationCache.set(key, res);
+    }
+    return res;
   }
 }
